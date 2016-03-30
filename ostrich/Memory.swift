@@ -11,10 +11,10 @@ import Foundation
 
 typealias Address = UInt16
 
-class Memory {
+public class Memory {
     var data: NSData
     
-    init(data: NSData) {
+    public init(data: NSData) {
         self.data = data
     }
     

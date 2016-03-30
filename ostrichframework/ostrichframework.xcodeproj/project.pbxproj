@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5871BCDC1CAB97C3002A799C /* Z80.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5871BCDB1CAB97C3002A799C /* Z80.swift */; };
 		FCF9A3321CAB86BD00EA79F0 /* ostrichframework.h in Headers */ = {isa = PBXBuildFile; fileRef = FCF9A3311CAB86BD00EA79F0 /* ostrichframework.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FCF9A3A01CAB8AA900EA79F0 /* Z80.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A3891CAB8AA900EA79F0 /* Z80.swift */; };
 		FCF9A3A11CAB8AA900EA79F0 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A38A1CAB8AA900EA79F0 /* Util.swift */; };
 		FCF9A3A21CAB8AA900EA79F0 /* Memory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A38B1CAB8AA900EA79F0 /* Memory.swift */; };
 		FCF9A3A31CAB8AA900EA79F0 /* Operand.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A38C1CAB8AA900EA79F0 /* Operand.swift */; };
@@ -32,10 +32,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5871BCDB1CAB97C3002A799C /* Z80.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Z80.swift; path = ../../Z80.swift; sourceTree = "<group>"; };
 		FCF9A32E1CAB86BD00EA79F0 /* ostrichframework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ostrichframework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCF9A3311CAB86BD00EA79F0 /* ostrichframework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ostrichframework.h; sourceTree = "<group>"; };
 		FCF9A3331CAB86BD00EA79F0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FCF9A3891CAB8AA900EA79F0 /* Z80.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Z80.swift; path = /Users/ryan.conway/Dropbox/ostrich/ostrich/../Z80.swift; sourceTree = "<absolute>"; };
 		FCF9A38A1CAB8AA900EA79F0 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Util.swift; path = ../../ostrich/Util.swift; sourceTree = "<group>"; };
 		FCF9A38B1CAB8AA900EA79F0 /* Memory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Memory.swift; path = ../../ostrich/Memory.swift; sourceTree = "<group>"; };
 		FCF9A38C1CAB8AA900EA79F0 /* Operand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Operand.swift; path = ../Operand.swift; sourceTree = "<group>"; };
@@ -89,8 +89,8 @@
 			isa = PBXGroup;
 			children = (
 				FCF9A3311CAB86BD00EA79F0 /* ostrichframework.h */,
-				FCF9A3891CAB8AA900EA79F0 /* Z80.swift */,
 				FCF9A38A1CAB8AA900EA79F0 /* Util.swift */,
+				5871BCDB1CAB97C3002A799C /* Z80.swift */,
 				FCF9A38B1CAB8AA900EA79F0 /* Memory.swift */,
 				FCF9A3901CAB8AA900EA79F0 /* Operands */,
 				FCF9A39F1CAB8AA900EA79F0 /* Instructions */,
@@ -221,13 +221,13 @@
 				FCF9A3A41CAB8AA900EA79F0 /* Indexed.swift in Sources */,
 				FCF9A3B11CAB8AA900EA79F0 /* LDI.swift in Sources */,
 				FCF9A3AC1CAB8AA900EA79F0 /* POP.swift in Sources */,
+				5871BCDC1CAB97C3002A799C /* Z80.swift in Sources */,
 				FCF9A3AB1CAB8AA900EA79F0 /* JP.swift in Sources */,
 				FCF9A3B41CAB8AA900EA79F0 /* EX.swift in Sources */,
 				FCF9A3B21CAB8AA900EA79F0 /* EXX.swift in Sources */,
 				FCF9A3AD1CAB8AA900EA79F0 /* PUSH.swift in Sources */,
 				FCF9A3A91CAB8AA900EA79F0 /* RET.swift in Sources */,
 				FCF9A3A61CAB8AA900EA79F0 /* Registers.swift in Sources */,
-				FCF9A3A01CAB8AA900EA79F0 /* Z80.swift in Sources */,
 				FCF9A3A71CAB8AA900EA79F0 /* Instruction.swift in Sources */,
 				FCF9A3AA1CAB8AA900EA79F0 /* ADC.swift in Sources */,
 				FCF9A3A11CAB8AA900EA79F0 /* Util.swift in Sources */,

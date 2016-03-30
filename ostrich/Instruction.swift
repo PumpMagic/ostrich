@@ -10,7 +10,7 @@ import Foundation
 
 
 /// Instructions
-protocol Instruction {
+public protocol Instruction {
     var cycleCount: Int { get }
     
     func runOn(z80: Z80)

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5871BCDE1CAB9A5D002A799C /* ostrichframework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5871BCDD1CAB9A5D002A799C /* ostrichframework.framework */; };
 		FCF9A3C41CAB8C4500EA79F0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A3C31CAB8C4500EA79F0 /* AppDelegate.swift */; };
 		FCF9A3C61CAB8C4500EA79F0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A3C51CAB8C4500EA79F0 /* ViewController.swift */; };
 		FCF9A3C81CAB8C4500EA79F0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FCF9A3C71CAB8C4500EA79F0 /* Assets.xcassets */; };
@@ -25,6 +26,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5871BCDD1CAB9A5D002A799C /* ostrichframework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ostrichframework.framework; path = "../../Library/Developer/Xcode/DerivedData/ostrich-elpxublzryglppglgcrefdgnmrzd/Build/Products/Debug/ostrichframework.framework"; sourceTree = "<group>"; };
 		FCF9A3C01CAB8C4500EA79F0 /* ostrich.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ostrich.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCF9A3C31CAB8C4500EA79F0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FCF9A3C51CAB8C4500EA79F0 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -41,6 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5871BCDE1CAB9A5D002A799C /* ostrichframework.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -57,6 +60,7 @@
 		FCF9A3B71CAB8C4500EA79F0 = {
 			isa = PBXGroup;
 			children = (
+				5871BCDD1CAB9A5D002A799C /* ostrichframework.framework */,
 				FCF9A3C21CAB8C4500EA79F0 /* ostrich */,
 				FCF9A3D41CAB8C4500EA79F0 /* ostrichUITests */,
 				FCF9A3C11CAB8C4500EA79F0 /* Products */,
@@ -377,6 +381,7 @@
 				FCF9A3DC1CAB8C4500EA79F0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		FCF9A3DD1CAB8C4500EA79F0 /* Build configuration list for PBXNativeTarget "ostrichUITests" */ = {
 			isa = XCConfigurationList;
@@ -385,6 +390,7 @@
 				FCF9A3DF1CAB8C4500EA79F0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
