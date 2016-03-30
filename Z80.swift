@@ -75,7 +75,7 @@ public class Z80 {
     // ROM this CPU is wired to - this is a connection, not something owned
     let memory: Memory
 
-    init(memory: Memory) {
+    public init(memory: Memory) {
         self.A = Register8(val: 0)
         self.B = Register8(val: 0)
         self.C = Register8(val: 0)
@@ -123,7 +123,7 @@ public class Z80 {
         self.memory = memory
     }
     
-    func getInstruction() -> Instruction? {
+    public func getInstruction() -> Instruction? {
         let firstByte = memory.read8(PC.read())
         
         var instruction: Instruction? = nil

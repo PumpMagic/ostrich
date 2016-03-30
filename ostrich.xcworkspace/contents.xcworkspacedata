@@ -2,9 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:ostrichframework/ostrichframework.xcodeproj">
+      location = "group:ostrich/ostrich.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:ostrich.xcodeproj">
+      location = "group:ostrichframework/ostrichframework.xcodeproj">
    </FileRef>
 </Workspace>

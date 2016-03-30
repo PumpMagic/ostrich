@@ -8,12 +8,54 @@
 
 /* Begin PBXBuildFile section */
 		FCF9A3321CAB86BD00EA79F0 /* ostrichframework.h in Headers */ = {isa = PBXBuildFile; fileRef = FCF9A3311CAB86BD00EA79F0 /* ostrichframework.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FCF9A3A01CAB8AA900EA79F0 /* Z80.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A3891CAB8AA900EA79F0 /* Z80.swift */; };
+		FCF9A3A11CAB8AA900EA79F0 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A38A1CAB8AA900EA79F0 /* Util.swift */; };
+		FCF9A3A21CAB8AA900EA79F0 /* Memory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A38B1CAB8AA900EA79F0 /* Memory.swift */; };
+		FCF9A3A31CAB8AA900EA79F0 /* Operand.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A38C1CAB8AA900EA79F0 /* Operand.swift */; };
+		FCF9A3A41CAB8AA900EA79F0 /* Indexed.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A38D1CAB8AA900EA79F0 /* Indexed.swift */; };
+		FCF9A3A51CAB8AA900EA79F0 /* Immediates.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A38E1CAB8AA900EA79F0 /* Immediates.swift */; };
+		FCF9A3A61CAB8AA900EA79F0 /* Registers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A38F1CAB8AA900EA79F0 /* Registers.swift */; };
+		FCF9A3A71CAB8AA900EA79F0 /* Instruction.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A3911CAB8AA900EA79F0 /* Instruction.swift */; };
+		FCF9A3A81CAB8AA900EA79F0 /* CP.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A3921CAB8AA900EA79F0 /* CP.swift */; };
+		FCF9A3A91CAB8AA900EA79F0 /* RET.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A3931CAB8AA900EA79F0 /* RET.swift */; };
+		FCF9A3AA1CAB8AA900EA79F0 /* ADC.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A3941CAB8AA900EA79F0 /* ADC.swift */; };
+		FCF9A3AB1CAB8AA900EA79F0 /* JP.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A3951CAB8AA900EA79F0 /* JP.swift */; };
+		FCF9A3AC1CAB8AA900EA79F0 /* POP.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A3961CAB8AA900EA79F0 /* POP.swift */; };
+		FCF9A3AD1CAB8AA900EA79F0 /* PUSH.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A3971CAB8AA900EA79F0 /* PUSH.swift */; };
+		FCF9A3AE1CAB8AA900EA79F0 /* NOP.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A3981CAB8AA900EA79F0 /* NOP.swift */; };
+		FCF9A3AF1CAB8AA900EA79F0 /* DEC.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A3991CAB8AA900EA79F0 /* DEC.swift */; };
+		FCF9A3B01CAB8AA900EA79F0 /* INC.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A39A1CAB8AA900EA79F0 /* INC.swift */; };
+		FCF9A3B11CAB8AA900EA79F0 /* LDI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A39B1CAB8AA900EA79F0 /* LDI.swift */; };
+		FCF9A3B21CAB8AA900EA79F0 /* EXX.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A39C1CAB8AA900EA79F0 /* EXX.swift */; };
+		FCF9A3B31CAB8AA900EA79F0 /* LD.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A39D1CAB8AA900EA79F0 /* LD.swift */; };
+		FCF9A3B41CAB8AA900EA79F0 /* EX.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A39E1CAB8AA900EA79F0 /* EX.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		FCF9A32E1CAB86BD00EA79F0 /* ostrichframework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ostrichframework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCF9A3311CAB86BD00EA79F0 /* ostrichframework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ostrichframework.h; sourceTree = "<group>"; };
 		FCF9A3331CAB86BD00EA79F0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FCF9A3891CAB8AA900EA79F0 /* Z80.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Z80.swift; path = /Users/ryan.conway/Dropbox/ostrich/ostrich/../Z80.swift; sourceTree = "<absolute>"; };
+		FCF9A38A1CAB8AA900EA79F0 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Util.swift; path = ../../ostrich/Util.swift; sourceTree = "<group>"; };
+		FCF9A38B1CAB8AA900EA79F0 /* Memory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Memory.swift; path = ../../ostrich/Memory.swift; sourceTree = "<group>"; };
+		FCF9A38C1CAB8AA900EA79F0 /* Operand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Operand.swift; path = ../Operand.swift; sourceTree = "<group>"; };
+		FCF9A38D1CAB8AA900EA79F0 /* Indexed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Indexed.swift; sourceTree = "<group>"; };
+		FCF9A38E1CAB8AA900EA79F0 /* Immediates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Immediates.swift; sourceTree = "<group>"; };
+		FCF9A38F1CAB8AA900EA79F0 /* Registers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Registers.swift; path = ../Registers.swift; sourceTree = "<group>"; };
+		FCF9A3911CAB8AA900EA79F0 /* Instruction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Instruction.swift; sourceTree = "<group>"; };
+		FCF9A3921CAB8AA900EA79F0 /* CP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CP.swift; sourceTree = "<group>"; };
+		FCF9A3931CAB8AA900EA79F0 /* RET.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RET.swift; sourceTree = "<group>"; };
+		FCF9A3941CAB8AA900EA79F0 /* ADC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ADC.swift; sourceTree = "<group>"; };
+		FCF9A3951CAB8AA900EA79F0 /* JP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JP.swift; sourceTree = "<group>"; };
+		FCF9A3961CAB8AA900EA79F0 /* POP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = POP.swift; sourceTree = "<group>"; };
+		FCF9A3971CAB8AA900EA79F0 /* PUSH.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUSH.swift; sourceTree = "<group>"; };
+		FCF9A3981CAB8AA900EA79F0 /* NOP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NOP.swift; sourceTree = "<group>"; };
+		FCF9A3991CAB8AA900EA79F0 /* DEC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DEC.swift; sourceTree = "<group>"; };
+		FCF9A39A1CAB8AA900EA79F0 /* INC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = INC.swift; sourceTree = "<group>"; };
+		FCF9A39B1CAB8AA900EA79F0 /* LDI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LDI.swift; sourceTree = "<group>"; };
+		FCF9A39C1CAB8AA900EA79F0 /* EXX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EXX.swift; sourceTree = "<group>"; };
+		FCF9A39D1CAB8AA900EA79F0 /* LD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LD.swift; sourceTree = "<group>"; };
+		FCF9A39E1CAB8AA900EA79F0 /* EX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EX.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,9 +89,48 @@
 			isa = PBXGroup;
 			children = (
 				FCF9A3311CAB86BD00EA79F0 /* ostrichframework.h */,
+				FCF9A3891CAB8AA900EA79F0 /* Z80.swift */,
+				FCF9A38A1CAB8AA900EA79F0 /* Util.swift */,
+				FCF9A38B1CAB8AA900EA79F0 /* Memory.swift */,
+				FCF9A3901CAB8AA900EA79F0 /* Operands */,
+				FCF9A39F1CAB8AA900EA79F0 /* Instructions */,
 				FCF9A3331CAB86BD00EA79F0 /* Info.plist */,
 			);
 			path = ostrichframework;
+			sourceTree = "<group>";
+		};
+		FCF9A3901CAB8AA900EA79F0 /* Operands */ = {
+			isa = PBXGroup;
+			children = (
+				FCF9A38C1CAB8AA900EA79F0 /* Operand.swift */,
+				FCF9A38D1CAB8AA900EA79F0 /* Indexed.swift */,
+				FCF9A38E1CAB8AA900EA79F0 /* Immediates.swift */,
+				FCF9A38F1CAB8AA900EA79F0 /* Registers.swift */,
+			);
+			name = Operands;
+			path = ../../ostrich;
+			sourceTree = "<group>";
+		};
+		FCF9A39F1CAB8AA900EA79F0 /* Instructions */ = {
+			isa = PBXGroup;
+			children = (
+				FCF9A3911CAB8AA900EA79F0 /* Instruction.swift */,
+				FCF9A3921CAB8AA900EA79F0 /* CP.swift */,
+				FCF9A3931CAB8AA900EA79F0 /* RET.swift */,
+				FCF9A3941CAB8AA900EA79F0 /* ADC.swift */,
+				FCF9A3951CAB8AA900EA79F0 /* JP.swift */,
+				FCF9A3961CAB8AA900EA79F0 /* POP.swift */,
+				FCF9A3971CAB8AA900EA79F0 /* PUSH.swift */,
+				FCF9A3981CAB8AA900EA79F0 /* NOP.swift */,
+				FCF9A3991CAB8AA900EA79F0 /* DEC.swift */,
+				FCF9A39A1CAB8AA900EA79F0 /* INC.swift */,
+				FCF9A39B1CAB8AA900EA79F0 /* LDI.swift */,
+				FCF9A39C1CAB8AA900EA79F0 /* EXX.swift */,
+				FCF9A39D1CAB8AA900EA79F0 /* LD.swift */,
+				FCF9A39E1CAB8AA900EA79F0 /* EX.swift */,
+			);
+			name = Instructions;
+			path = ../../ostrich;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -130,6 +211,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FCF9A3AF1CAB8AA900EA79F0 /* DEC.swift in Sources */,
+				FCF9A3A21CAB8AA900EA79F0 /* Memory.swift in Sources */,
+				FCF9A3A51CAB8AA900EA79F0 /* Immediates.swift in Sources */,
+				FCF9A3B31CAB8AA900EA79F0 /* LD.swift in Sources */,
+				FCF9A3AE1CAB8AA900EA79F0 /* NOP.swift in Sources */,
+				FCF9A3A81CAB8AA900EA79F0 /* CP.swift in Sources */,
+				FCF9A3A31CAB8AA900EA79F0 /* Operand.swift in Sources */,
+				FCF9A3A41CAB8AA900EA79F0 /* Indexed.swift in Sources */,
+				FCF9A3B11CAB8AA900EA79F0 /* LDI.swift in Sources */,
+				FCF9A3AC1CAB8AA900EA79F0 /* POP.swift in Sources */,
+				FCF9A3AB1CAB8AA900EA79F0 /* JP.swift in Sources */,
+				FCF9A3B41CAB8AA900EA79F0 /* EX.swift in Sources */,
+				FCF9A3B21CAB8AA900EA79F0 /* EXX.swift in Sources */,
+				FCF9A3AD1CAB8AA900EA79F0 /* PUSH.swift in Sources */,
+				FCF9A3A91CAB8AA900EA79F0 /* RET.swift in Sources */,
+				FCF9A3A61CAB8AA900EA79F0 /* Registers.swift in Sources */,
+				FCF9A3A01CAB8AA900EA79F0 /* Z80.swift in Sources */,
+				FCF9A3A71CAB8AA900EA79F0 /* Instruction.swift in Sources */,
+				FCF9A3AA1CAB8AA900EA79F0 /* ADC.swift in Sources */,
+				FCF9A3A11CAB8AA900EA79F0 /* Util.swift in Sources */,
+				FCF9A3B01CAB8AA900EA79F0 /* INC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,6 +381,7 @@
 				FCF9A3381CAB86BD00EA79F0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
