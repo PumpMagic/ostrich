@@ -23,8 +23,28 @@ class ViewController: NSViewController {
         
         print(header)
         
-        let myRom = Memory(data: codeAndData)
+        //@todo zero-pad codeAndData with loadAddress bytes?
+        
+        /* LOAD - The ripped code and data is read into the player program's address space
+             starting at the load address and proceeding until end-of-file or address $7fff
+             is reached. After loading, Page 0 is in Bank 0 (which never changes), and Page
+             1 is in Bank 1 (which can be changed during init or play). Finally, the INIT
+             is called with the first song defined in the header. */
+        print("Executing LOAD...")
+        let myRom = Memory(data: codeAndData, startingAddress: header.loadAddress)
         let myZ80 = Z80(memory: myRom)
+        
+        myZ80.setSP(header.stackPointer)
+        myZ80.setPC(header.loadAddress)
+        
+        /* INIT - Called at the end of the LOAD process, or when a new song is selected.
+             All of the registers are initialized, RAM is cleared, and the init address is
+             called with the song number set in the accumulator. Note that the song number
+             in the accumulator is zero-based (the first song is 0). The init code must end
+             with a RET instruction. */
+        print("Executing INIT...")
+        
+        myZ80.setPC(header.initAddress)
         
         var iteration = 1
         repeat {
@@ -58,11 +78,9 @@ class ViewController: NSViewController {
         apu.pulse1.frequency = 1002
         apu.pulse1.volume = 2
         usleep(2000000)
-        */
-        
-        
-        
+         
         exit(1)
+        */
     }
 }
 

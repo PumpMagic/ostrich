@@ -9,8 +9,8 @@
 import Foundation
 
 
+/// Return: leave a function by populating the PC with the top of the stack
 struct RET: Instruction {
-    // Return: leave a function by populating the PC with the top of the stack
     // pCL ← (sp), pCH ← (sp+1)
     
     let condition: Condition?

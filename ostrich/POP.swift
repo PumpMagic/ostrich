@@ -9,7 +9,7 @@
 import Foundation
 
 
-/// Pop
+/// Pop: pop the top of the stack onto something, and adjust the stack pointer
 struct POP<T: protocol<Writeable, OperandType> where T.WriteType == UInt16>: Instruction {
     // qqH ← (SP+1), qqL ← (SP)
     // also increments SP by two
@@ -22,6 +22,7 @@ struct POP<T: protocol<Writeable, OperandType> where T.WriteType == UInt16>: Ins
         
         let val = z80.memory.read16(z80.SP.read())
         
+        //@todo don't use instructions as parts of instructions! they mess with flags
         let ins = LD(dest: operand, src: Immediate16(val: val))
         ins.runOn(z80)
         

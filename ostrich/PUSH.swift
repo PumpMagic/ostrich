@@ -9,7 +9,7 @@
 import Foundation
 
 
-/// Push
+/// Push: put something onto the stack, and adjust the stack pointer
 struct PUSH<T: protocol<Readable, OperandType> where T.ReadType == UInt16>: Instruction {
     // (SP – 2) ← qqL, (SP – 1) ← qqH
     // also decrements SP by two
@@ -27,6 +27,7 @@ struct PUSH<T: protocol<Readable, OperandType> where T.ReadType == UInt16>: Inst
         let val = operand.read()
         let (high, low) = getBytes(val)
         
+        //@todo don't use instructions as parts of instructions! they mess with flags
         let ins1 = DEC(operand: z80.SP)
         let ins2 = LD(dest: Register16Indirect8(register: z80.SP, memory: z80.memory), src: Immediate8(val: high))
         let ins3 = DEC(operand: z80.SP)

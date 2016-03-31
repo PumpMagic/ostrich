@@ -17,6 +17,7 @@ struct LDI: Instruction {
     func runOn(z80: Z80) {
         print("Running LDI")
         
+        //@todo don't use instructions as parts of instructions! they mess with flags
         let ins1 = LD(dest: Register16Indirect8(register: z80.DE, memory: z80.memory), src: Register16Indirect8(register: z80.HL, memory: z80.memory))
         let ins2 = INC(operand: z80.DE)
         let ins3 = INC(operand: z80.HL)

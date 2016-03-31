@@ -8,7 +8,7 @@
 
 import Foundation
 
-
+    
 /// A reference to a register and an 8-bit offset that together form a target address.
 /// Reading this type computes this address and reads it as a `UInt16`.
 /// @warn this type's `memory` member will be insufficient when bank switching is implemented

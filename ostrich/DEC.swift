@@ -9,13 +9,14 @@
 import Foundation
 
 
+/// Decrement
 struct DEC<T: protocol<Writeable, Readable, OperandType> where T.ReadType == T.WriteType, T.WriteType: IntegerType>: Instruction {
     let operand: T
     
     let cycleCount = 0
     
     func runOn(z80: Z80) {
-        print("Running DEC")
+        print("Running DEC. Operand before: \(operand.read())")
         
         //@todo handle overflow
         let oldValue = operand.read()
@@ -23,6 +24,8 @@ struct DEC<T: protocol<Writeable, Readable, OperandType> where T.ReadType == T.W
         operand.write(newValue)
         
         self.modifyFlags(z80, operandKind: operand.operandType, oldValue: oldValue, newValue: newValue)
+        
+        print("\t Operand after: \(operand.read())")
     }
     
     func modifyFlags(z80: Z80, operandKind: OperandKind, oldValue: T.ReadType, newValue: T.ReadType) {

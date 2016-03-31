@@ -36,6 +36,7 @@ enum OperandKind {
     case Memory16Like
     case Immediate8Like
     case Immediate16Like
+    case ImmediateDisplaced16Like
     case Indexed16Like
     
     func is8Bit() -> Bool{

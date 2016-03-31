@@ -22,6 +22,12 @@ struct JP<T: protocol<Readable, OperandType> where T.ReadType == UInt16>: Instru
     func runOn(z80: Z80) {
         print(String(format: "Running JP: target 0x%04X", dest.read()))
         
+        if let condition = condition {
+            print("(conditionally: if \(condition))")
+        } else {
+            print("(unconditionally)")
+        }
+        
         // Only jump if the condition is absent or met
         let conditionSatisfied = condition?.evaluate() ?? true
         

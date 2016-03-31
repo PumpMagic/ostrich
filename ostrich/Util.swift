@@ -53,3 +53,41 @@ func bitIsHigh(num: UInt16, bit: UInt8) -> Bool {
     
     return false
 }
+
+/// Test a zero-based bit of an 8-bit number
+func bitIsHigh(num: UInt8, bit: UInt8) -> Bool {
+    let mask = UInt8(0x01 << bit)
+    if num & mask != 0 {
+        return true
+    }
+    
+    return false
+}
+
+func setBit(num: UInt8, bit: UInt8) -> UInt8 {
+    let mask = UInt8(0x01 << bit)
+    
+    return num | mask
+}
+
+func clearBit(num: UInt8, bit: UInt8) -> UInt8 {
+    let mask = ~(UInt8(0x01 << bit))
+    
+    return num & mask
+}
+
+// Perform a right rotate in a way that doesn't depend on Swift's sign-specific shifting behavior
+func rotateRight(num: UInt8) -> UInt8 {
+    // Shift the number
+    let shifted = num >> 1
+    
+    // Loop the number's least-significant bit back to the most-significant bit
+    let newValue: UInt8
+    if bitIsHigh(num, bit: 0) {
+        newValue = setBit(shifted, bit: 7)
+    } else {
+        newValue = clearBit(shifted, bit: 7)
+    }
+    
+    return newValue
+}

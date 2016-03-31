@@ -14,12 +14,14 @@ import Foundation
  */
 public class Z80 {
     // main registers
-    let A: Register8 // accumulator
+    /// A, AKA the Accumulator
+    let A: Register8
     let B: Register8
     let C: Register8
     let D: Register8
     let E: Register8
-    let F: Register8 // flags
+    /// F, aka the Flags
+    let F: Register8
     let H: Register8
     let L: Register8
     
@@ -123,6 +125,18 @@ public class Z80 {
         self.memory = memory
     }
     
+    public func setSP(sp: Address) {
+        self.SP.write(sp)
+    }
+    
+    public func setPC(pc: Address) {
+        self.PC.write(pc)
+    }
+    
+    public func setA(a: UInt8) {
+        self.A.write(a)
+    }
+    
     public func getInstruction() -> Instruction? {
         let firstByte = memory.read8(PC.read())
         
@@ -130,27 +144,80 @@ public class Z80 {
         var instructionLength: UInt16 = 1
         
         switch firstByte {
+        // Esoteric commands
         case 0x00:
             // NOP
             instruction = NOP()
             instructionLength = 1
             
+        case 0x3F:
+            // CCF
+            instruction = CCF()
+            instructionLength = 1
+            
+        case 0x0F:
+            // RRCA
+            instruction = RRCA()
+            instructionLength = 1
+            
+        // Loads
         case 0x3E:
             // LD A, n
             let val = memory.read8(PC.read()+1)
             instruction = LD(dest: self.A, src: Immediate8(val: val))
-            instructionLength += 1
+            instructionLength = 1
             
         case 0x66:
-            // LD (HL), n
+            // LD H, (HL)
             instruction = LD(dest: self.H, src: Register16Indirect8(register: self.HL, memory: self.memory))
-            instructionLength += 1
+            instructionLength = 1
             
+        case 0x21:
+            // LD HL, nn
+            let val = memory.read16(PC.read()+1)
+            instruction = LD(dest: self.HL, src: Immediate16(val: val))
+            instructionLength = 3
+            
+        case 0x12:
+            // LD (DE), A
+            instruction = LD(dest: Register16Indirect8(register: self.DE, memory: self.memory), src: self.A)
+            instructionLength = 1
+            
+        // Jumps
         case 0xC3:
             // JP nn
             let addr = memory.read16(PC.read()+1)
             instruction = JP(condition: nil, dest: Immediate16(val: addr))
             instructionLength = 3
+            
+        case 0x18:
+            // JR n
+            let displacement = Int8(memory.read8(PC.read()+1))
+            instruction = JP(condition: nil, dest: ImmediateDisplaced16(base: PC.read()+2, displacement: displacement))
+            instructionLength = 2
+            
+        case 0xDF:
+            // RST 0x18
+            instruction = RST(restartAddress: 0x18)
+            instructionLength = 1
+            
+        case 0xE0:
+            // RET PO
+            instruction = RET(condition: Condition(flag: self.PVF, target: false))
+            instructionLength = 1
+            break
+            
+        case 0x10:
+            // DJNZ
+            let displacement = Int8(bitPattern: memory.read8(PC.read()+1))
+            instruction = DJNZ(displacement: displacement)
+            instructionLength = 2
+            
+        // Math
+        case 0x0D:
+            // DEC C
+            instruction = DEC(operand: self.C)
+            instructionLength = 1
             
             /*
         case 0xCE:
@@ -158,13 +225,6 @@ public class Z80 {
             instruction = ADC(operand: Immediate8(val: num))
             instructionLength = 2
             */
-            
-        case 0xE0:
-            // RET PO
-            instruction = RET(condition: Condition(flag: self.PVF, target: false))
-            instructionLength += 1
-            break
-            
             
         case 0xF3:
             let num = memory.read8(PC.read()+1)
@@ -175,6 +235,7 @@ public class Z80 {
             print(String(format: "Unrecognized opcode 0x%02X at PC 0x%04X", firstByte, PC.read()))
         }
         
+        //@warn we should probably only alter the PC if the instruction doesn't do so itself
         PC.write(PC.read() + instructionLength)
         return instruction
     }

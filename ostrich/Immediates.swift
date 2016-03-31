@@ -32,3 +32,18 @@ struct Immediate16: Readable, OperandType {
         return OperandKind.Immediate16Like
     }
 }
+
+//@warn this doesn't feel like a "real" operand type. like JR should just have an associated displacement
+/// An immediate and a displacement that form an immediate when added
+struct ImmediateDisplaced16: Readable, OperandType {
+    let base: UInt16
+    let displacement: Int8
+    
+    func read() -> UInt16 {
+        return UInt16(Int(base) + Int(displacement))
+    }
+    
+    var operandType: OperandKind {
+        return OperandKind.ImmediateDisplaced16Like
+    }
+}

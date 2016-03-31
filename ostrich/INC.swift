@@ -9,6 +9,7 @@
 import Foundation
 
 
+/// Increment
 struct INC<T: protocol<Writeable, Readable, OperandType> where T.ReadType == T.WriteType, T.WriteType: IntegerType>: Instruction {
     let operand: T
     

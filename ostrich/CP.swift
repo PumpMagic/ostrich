@@ -9,8 +9,8 @@
 import Foundation
 
 
+/// Compare; subtract, but just change the flags
 struct CP<T: protocol<Readable, OperandType>>: Instruction {
-    // Compare; subtract, but just change the flags
     let op: T
     
     let cycleCount = 0

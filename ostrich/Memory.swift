@@ -9,26 +9,36 @@
 import Foundation
 
 
-typealias Address = UInt16
+public typealias Address = UInt16
 
 public class Memory {
     var data: NSData
     
-    public init(data: NSData) {
+    /// An offset: specifies what memory location the first byte of the supplied data occupies
+    let startingAddress: Address
+    
+    public init(data: NSData, startingAddress: Address) {
         self.data = data
+        self.startingAddress = startingAddress
+    }
+    
+    public convenience init(data: NSData) {
+        self.init(data: data, startingAddress: 0)
     }
     
     func read8(addr: Address) -> UInt8 {
+        if addr < self.startingAddress {
+            print("FATAL: attempt to access address \(addr) but starting address is \(self.startingAddress)!")
+            exit(1)
+        }
+        if Int(addr) > Int(self.startingAddress) + Int(self.data.length) {
+            print("FATAL: attempt to access address \(addr) but our highest address is \(Int(self.startingAddress) + Int(self.data.length))")
+            exit(1)
+        }
+        
         var readByte: UInt8 = 0
-        /*@todo validate bound beforehand, swift can't catch obj-c exceptions
-         do {
-         try data.getBytes(&readByte, range: NSMakeRange(Int(addr), 1))
-         return readByte
-         } catch NSRangeException {
-         return nil
-         }
-         */
-        data.getBytes(&readByte, range: NSMakeRange(Int(addr), 1))
+        //@todo validate bound beforehand, swift can't catch obj-c exceptions
+        data.getBytes(&readByte, range: NSMakeRange(Int(addr-self.startingAddress), 1))
         return readByte
     }
     
