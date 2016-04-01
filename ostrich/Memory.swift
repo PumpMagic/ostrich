@@ -41,6 +41,10 @@ public class Memory {
         return readByte
     }
     
+    func read8Signed(addr: Address) -> Int8 {
+        return Int8(bitPattern: read8(addr))
+    }
+    
     /// Reads two bytes of memory and returns them in host endianness
     func read16(addr: Address) -> UInt16 {
         let low = read8(addr)

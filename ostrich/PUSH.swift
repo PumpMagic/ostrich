@@ -28,9 +28,9 @@ struct PUSH<T: protocol<Readable, OperandType> where T.ReadType == UInt16>: Inst
         let (high, low) = getBytes(val)
         
         //@todo don't use instructions as parts of instructions! they mess with flags
-        let ins1 = DEC(operand: z80.SP)
+        let ins1 = DEC16(operand: z80.SP)
         let ins2 = LD(dest: Register16Indirect8(register: z80.SP, memory: z80.memory), src: Immediate8(val: high))
-        let ins3 = DEC(operand: z80.SP)
+        let ins3 = DEC16(operand: z80.SP)
         let ins4 = LD(dest: Register16Indirect8(register: z80.SP, memory: z80.memory), src: Immediate8(val: low))
         
         ins1.runOn(z80)

@@ -26,7 +26,7 @@ func getBytes(val: UInt16) -> (UInt8, UInt8) {
 
 /// Get the least significant byte of a host-endian 16-bit number
 func getLow(val: UInt16) -> UInt8 {
-    return UInt8(val)
+    return UInt8(truncatingBitPattern: val)
 }
 
 /// Get the most significant byte of a host-endian 16-bit number

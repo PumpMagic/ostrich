@@ -19,9 +19,9 @@ struct LDI: Instruction {
         
         //@todo don't use instructions as parts of instructions! they mess with flags
         let ins1 = LD(dest: Register16Indirect8(register: z80.DE, memory: z80.memory), src: Register16Indirect8(register: z80.HL, memory: z80.memory))
-        let ins2 = INC(operand: z80.DE)
-        let ins3 = INC(operand: z80.HL)
-        let ins4 = DEC(operand: z80.BC)
+        let ins2 = INC16(operand: z80.DE)
+        let ins3 = INC16(operand: z80.HL)
+        let ins4 = DEC16(operand: z80.BC)
         
         ins1.runOn(z80)
         ins2.runOn(z80)

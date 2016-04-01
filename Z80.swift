@@ -220,14 +220,15 @@ public class Z80 {
             instruction = DEC8(operand: self.C)
             instructionLength = 1
             
+        case 0x0E:
+            // LD C, N
+            let val = memory.read8(PC.read()+1)
+            instruction = LD(dest: self.C, src: Immediate8(val: val))
+            instructionLength = 2
+            
         case 0x0F:
             // RRCA
             instruction = RRCA()
-            instructionLength = 1
-            
-        case 0x09:
-            // ADD HL, BC
-            instruction = ADD16(op1: self.HL, op2: self.BC)
             instructionLength = 1
             
         case 0x10:
@@ -236,9 +237,25 @@ public class Z80 {
             instruction = DJNZ(displacement: displacement)
             instructionLength = 2
             
+        case 0x11:
+            // LD DE, nn
+            let val = memory.read16(PC.read()+1)
+            instruction = LD(dest: self.DE, src: Immediate16(val: val))
+            instructionLength = 3
+            
         case 0x12:
             // LD (DE), A
             instruction = LD(dest: self.DE.asIndirectInto(self.memory), src: self.A)
+            instructionLength = 1
+            
+        case 0x13:
+            // INC DE
+            instruction = INC16(operand: self.DE)
+            instructionLength = 1
+            
+        case 0x14:
+            // INC D
+            instruction = INC8(operand: self.D)
             instructionLength = 1
             
         case 0x18:
@@ -252,20 +269,55 @@ public class Z80 {
             instruction = ADD16(op1: self.HL, op2: self.DE)
             instructionLength = 1
             
+        case 0x1C:
+            // INC E
+            instruction = INC8(operand: self.E)
+            instructionLength = 1
+            
         case 0x21:
             // LD HL, nn
             let val = memory.read16(PC.read()+1)
             instruction = LD(dest: self.HL, src: Immediate16(val: val))
             instructionLength = 3
             
+        case 0x23:
+            // INC HL
+            instruction = INC16(operand: self.HL)
+            instructionLength = 1
+            
+        case 0x24:
+            // INC H
+            instruction = INC8(operand: self.H)
+            instructionLength = 1
+            
         case 0x29:
             // ADD HL, HL
             instruction = ADD16(op1: self.HL, op2: self.HL)
             instructionLength = 1
             
+        case 0x2C:
+            // INC L
+            instruction = INC8(operand: self.L)
+            instructionLength = 1
+            
+        case 0x33:
+            // INC SP
+            instruction = INC16(operand: self.SP)
+            instructionLength = 1
+            
+        case 0x34:
+            // INC (HL)
+            instruction = INC8(operand: self.HL.asIndirectInto(memory))
+            instructionLength = 1
+            
         case 0x39:
             // ADD HL, SP
             instruction = ADD16(op1: self.HL, op2: self.SP)
+            instructionLength = 1
+            
+        case 0x3C:
+            // INC A
+            instruction = INC8(operand: self.A)
             instructionLength = 1
             
         case 0x3E:
@@ -385,10 +437,23 @@ public class Z80 {
                 // ADD IX, DE
                 instruction = ADD16(op1: self.IX, op2: self.DE)
                 instructionLength = 2
+                
+            case 0x23:
+                // INC IX
+                instruction = INC16(operand: self.IX)
+                instructionLength = 2
+                
             case 0x29:
                 // ADD IX, IX
                 instruction = ADD16(op1: self.IX, op2: self.IX)
                 instructionLength = 2
+                
+            case 0x34:
+                // INC (IX+d)
+                let displacement = memory.read8Signed(PC.read()+2)
+                instruction = INC8(operand: Indexed8(register: self.IX, displacement: displacement, memory: self.memory))
+                instructionLength = 3
+                
             case 0x39:
                 // ADD IX, SP
                 instruction = ADD16(op1: self.IX, op2: self.SP)

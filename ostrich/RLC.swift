@@ -42,7 +42,7 @@ struct RLC<T: protocol<Writeable, Readable, OperandType> where T.ReadType == T.W
     }
 }
 
-/// Right rotate with carry A
+/// Left rotate with carry A
 struct RLCA: Instruction {
     //@warn the Z80 manual's example has something that doesn't look like a proper right rotate
     // it's probably an error in the manual, so this instruction implements an actual rotate...
