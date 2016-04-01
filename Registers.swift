@@ -83,6 +83,11 @@ class Register16: RegisterType, OperandType {
     var operandType: OperandKind {
         return OperandKind.Register16Like
     }
+    
+    /// Utility method for obtaining an indirect value out of this register
+    func asIndirectInto(memory: Memory) -> Register16Indirect8<Register16> {
+        return Register16Indirect8(register: self, memory: memory)
+    }
 }
 
 /// A virtual 16-bit register, computed from two 8-bit registers
@@ -102,13 +107,19 @@ class Register16Computed: RegisterType, OperandType {
         return make16(high: highVal, low: lowVal)
     }
     
+    /// Write assuming host endianness
     func write(val: UInt16) {
-        self.high.write(0)
-        self.low.write(0)
+        self.high.write(getHigh(val))
+        self.low.write(getLow(val))
     }
     
     var operandType: OperandKind {
         return OperandKind.Register16ComputedLike
+    }
+    
+    /// Utility method for obtaining an indirect value out of this register
+    func asIndirectInto(memory: Memory) -> Register16Indirect8<Register16Computed> {
+        return Register16Indirect8(register: self, memory: memory)
     }
 }
 

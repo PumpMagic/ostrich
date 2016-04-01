@@ -8,10 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		580216CC1CAD0B2B00913FCE /* ADD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580216CB1CAD0B2B00913FCE /* ADD.swift */; };
+		5854A08F1CAE29EE0044A766 /* RRC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5854A08E1CAE29EE0044A766 /* RRC.swift */; };
+		5854A0911CAE34610044A766 /* RLC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5854A0901CAE34610044A766 /* RLC.swift */; };
 		5871BCDC1CAB97C3002A799C /* Z80.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5871BCDB1CAB97C3002A799C /* Z80.swift */; };
 		58BB13941CACD63600D7FD06 /* CCF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BB13931CACD63600D7FD06 /* CCF.swift */; };
 		58BB13961CACD95D00D7FD06 /* RST.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BB13951CACD95D00D7FD06 /* RST.swift */; };
-		58BB13981CACE30900D7FD06 /* RRCA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BB13971CACE30900D7FD06 /* RRCA.swift */; };
 		58BB139A1CACF0FA00D7FD06 /* DJNZ.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BB13991CACF0FA00D7FD06 /* DJNZ.swift */; };
 		FCF9A3321CAB86BD00EA79F0 /* ostrichframework.h in Headers */ = {isa = PBXBuildFile; fileRef = FCF9A3311CAB86BD00EA79F0 /* ostrichframework.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FCF9A3A11CAB8AA900EA79F0 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A38A1CAB8AA900EA79F0 /* Util.swift */; };
@@ -38,10 +39,11 @@
 
 /* Begin PBXFileReference section */
 		580216CB1CAD0B2B00913FCE /* ADD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ADD.swift; sourceTree = "<group>"; };
+		5854A08E1CAE29EE0044A766 /* RRC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RRC.swift; sourceTree = "<group>"; };
+		5854A0901CAE34610044A766 /* RLC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLC.swift; sourceTree = "<group>"; };
 		5871BCDB1CAB97C3002A799C /* Z80.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Z80.swift; path = ../../Z80.swift; sourceTree = "<group>"; };
 		58BB13931CACD63600D7FD06 /* CCF.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCF.swift; sourceTree = "<group>"; };
 		58BB13951CACD95D00D7FD06 /* RST.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RST.swift; sourceTree = "<group>"; };
-		58BB13971CACE30900D7FD06 /* RRCA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RRCA.swift; sourceTree = "<group>"; };
 		58BB13991CACF0FA00D7FD06 /* DJNZ.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DJNZ.swift; sourceTree = "<group>"; };
 		FCF9A32E1CAB86BD00EA79F0 /* ostrichframework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ostrichframework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCF9A3311CAB86BD00EA79F0 /* ostrichframework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ostrichframework.h; sourceTree = "<group>"; };
@@ -140,7 +142,8 @@
 				FCF9A3981CAB8AA900EA79F0 /* NOP.swift */,
 				FCF9A3961CAB8AA900EA79F0 /* POP.swift */,
 				FCF9A3971CAB8AA900EA79F0 /* PUSH.swift */,
-				58BB13971CACE30900D7FD06 /* RRCA.swift */,
+				5854A0901CAE34610044A766 /* RLC.swift */,
+				5854A08E1CAE29EE0044A766 /* RRC.swift */,
 				58BB13951CACD95D00D7FD06 /* RST.swift */,
 				FCF9A3931CAB8AA900EA79F0 /* RET.swift */,
 			);
@@ -231,7 +234,6 @@
 				FCF9A3A51CAB8AA900EA79F0 /* Immediates.swift in Sources */,
 				FCF9A3B31CAB8AA900EA79F0 /* LD.swift in Sources */,
 				FCF9A3AE1CAB8AA900EA79F0 /* NOP.swift in Sources */,
-				58BB13981CACE30900D7FD06 /* RRCA.swift in Sources */,
 				FCF9A3A81CAB8AA900EA79F0 /* CP.swift in Sources */,
 				FCF9A3A31CAB8AA900EA79F0 /* Operand.swift in Sources */,
 				FCF9A3A41CAB8AA900EA79F0 /* Indexed.swift in Sources */,
@@ -243,6 +245,8 @@
 				5871BCDC1CAB97C3002A799C /* Z80.swift in Sources */,
 				FCF9A3AB1CAB8AA900EA79F0 /* JP.swift in Sources */,
 				FCF9A3B41CAB8AA900EA79F0 /* EX.swift in Sources */,
+				5854A08F1CAE29EE0044A766 /* RRC.swift in Sources */,
+				5854A0911CAE34610044A766 /* RLC.swift in Sources */,
 				FCF9A3B21CAB8AA900EA79F0 /* EXX.swift in Sources */,
 				FCF9A3AD1CAB8AA900EA79F0 /* PUSH.swift in Sources */,
 				FCF9A3A91CAB8AA900EA79F0 /* RET.swift in Sources */,

@@ -37,7 +37,6 @@ public class Memory {
         }
         
         var readByte: UInt8 = 0
-        //@todo validate bound beforehand, swift can't catch obj-c exceptions
         data.getBytes(&readByte, range: NSMakeRange(Int(addr-self.startingAddress), 1))
         return readByte
     }

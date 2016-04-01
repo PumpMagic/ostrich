@@ -11,14 +11,14 @@ import Foundation
 
 /// Add with carry
 struct ADC<T: protocol<Readable, OperandType>>: Instruction {
+    // A <- A + s + CY
     let operand: T
     
-    let cycleCount = 0 //@todo
+    let cycleCount = 0
     
     func runOn(z80: Z80) {
-        print("ADC")
+        print("Running ADC")
         
-        // Add with carry; A <- A + s + CY
         /*
          switch operand {
          case .Operand8Bit(let op8):

@@ -9,40 +9,47 @@
 import Foundation
 
 
-/// Decrement
-struct DEC<T: protocol<Writeable, Readable, OperandType> where T.ReadType == T.WriteType, T.WriteType: IntegerType>: Instruction {
+// DEC is split into 8-bit and 16-bit groups here because it only affects flags when working with
+// 8-bit operands
+
+
+/// Decrement an 8-bit operand
+struct DEC8<T: protocol<Writeable, Readable, OperandType> where T.ReadType == T.WriteType, T.WriteType: IntegerType, T.ReadType == UInt8>: Instruction {
     let operand: T
     
     let cycleCount = 0
     
     func runOn(z80: Z80) {
-        print("Running DEC. Operand before: \(operand.read())")
-        
-        //@todo handle overflow
         let oldValue = operand.read()
         let newValue = oldValue &- 1
         operand.write(newValue)
         
-        self.modifyFlags(z80, operandKind: operand.operandType, oldValue: oldValue, newValue: newValue)
-        
-        print("\t Operand after: \(operand.read())")
+        self.modifyFlags(z80, oldValue: oldValue, newValue: newValue)
     }
     
-    func modifyFlags(z80: Z80, operandKind: OperandKind, oldValue: T.ReadType, newValue: T.ReadType) {
-        // DEC affects flags only when working with 8-bit operands
-        if (operandKind.is8Bit()) {
-            // S is set if result is negative; otherwise, it is reset.
-            // Z is set if result is 0; otherwise, it is reset.
-            // H is set if borrow from bit 4, otherwise, it is reset.
-            // P/V is set if m was 80h before operation; otherwise, it is reset. N is set.
-            // N is set.
-            // C is not affected.
-            
-            z80.SF.write(newValue & 0x80 == 0x80)
-            z80.ZF.write(newValue == 0x00)
-            z80.HF.write(oldValue == 0x10)
-            z80.PVF.write(oldValue == 0x80)
-            z80.NF.write(true)
-        }
+    func modifyFlags(z80: Z80, oldValue: T.ReadType, newValue: T.ReadType) {
+        // S is set if result is negative; otherwise, it is reset.
+        // Z is set if result is 0; otherwise, it is reset.
+        // H is set if borrow from bit 4, otherwise, it is reset.
+        // P/V is set if m was 80h before operation; otherwise, it is reset.
+        // N is set.
+        // C is not affected.
+        
+        z80.SF.write(numberIsNegative(newValue))
+        z80.ZF.write(newValue == 0x00)
+        z80.HF.write(oldValue == 0x10)
+        z80.PVF.write(oldValue == 0x80)
+        z80.NF.write(true)
+    }
+}
+
+/// Decrement a 16-bit operand
+struct DEC16<T: protocol<Writeable, Readable, OperandType> where T.ReadType == T.WriteType, T.WriteType: IntegerType, T.ReadType == UInt16>: Instruction {
+    let operand: T
+    
+    let cycleCount = 0
+    
+    func runOn(z80: Z80) {
+        operand.write(operand.read() &- 1)
     }
 }
