@@ -38,7 +38,7 @@ class ViewController: NSViewController {
         myZ80.setPC(header.loadAddress)
         
         print("Calling INIT...")
-        myZ80.callInto(header.initAddress)
+        myZ80.injectCall(header.initAddress)
         
         /* INIT - Called at the end of the LOAD process, or when a new song is selected.
              All of the registers are initialized, RAM is cleared, and the init address is
@@ -50,7 +50,7 @@ class ViewController: NSViewController {
         myZ80.runUntilRET()
         var iteration = 1
         repeat {
-            guard let instruction = myZ80.getInstruction() else {
+            guard let instruction = myZ80.fetchInstruction() else {
                 print("Okay, bye")
                 exit(1)
             }

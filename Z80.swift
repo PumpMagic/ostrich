@@ -38,13 +38,17 @@ public class Z80 {
     // index registers
     let IX: Register16
     let IY: Register16
+    
+    /// stack pointer
     let SP: Register16
     
     // other registers
-    let I: Register8 // interrupt vector
-    let R: Register8 // refresh
+    /// interrupt page address
+    let I: Register8
+    /// memory refresh
+    let R: Register8
     
-    // program counter
+    /// program counter
     let PC: Register16
     
     // flags - computed from F
@@ -61,13 +65,13 @@ public class Z80 {
     /// Carry flag
     let CF: Flag
     
-    // computed main registers
+    // logical 16-bit main registers
     let AF: Register16Computed
     let BC: Register16Computed
     let DE: Register16Computed
     let HL: Register16Computed
     
-    // computed alternate registers
+    // logical 16-bit alternate registers
     let AFp: Register16Computed
     let BCp: Register16Computed
     let DEp: Register16Computed
@@ -76,6 +80,10 @@ public class Z80 {
     
     // ROM this CPU is wired to - this is a connection, not something owned
     let memory: Memory
+    
+    
+    //@todo emulate all necessary pins (see user manual pg. 17)
+    // at least add an interrupt() and maybe nmi()
 
     public init(memory: Memory) {
         self.A = Register8(val: 0)
@@ -103,7 +111,7 @@ public class Z80 {
         self.I = Register8(val: 0)
         self.R = Register8(val: 0)
         
-        self.PC = Register16(val: 0x100) //@todo don't init this here?
+        self.PC = Register16(val: 0x100) //@todo don't init this here
         
         self.SF = Flag(reg: F, bitNumber: 7)
         self.ZF = Flag(reg: F, bitNumber: 6)
@@ -125,6 +133,7 @@ public class Z80 {
         self.memory = memory
     }
     
+    // Utility methods
     public func setSP(sp: Address) {
         self.SP.write(sp)
     }
@@ -137,7 +146,7 @@ public class Z80 {
         self.A.write(a)
     }
     
-    public func callInto(addr: Address) {
+    public func injectCall(addr: Address) {
         let instruction = CALL(condition: nil, dest: Immediate16(val: addr))
         instruction.runOn(self)
     }
@@ -147,7 +156,7 @@ public class Z80 {
         print("Running until RET...")
         var iteration = 1
         repeat {
-            guard let instruction = self.getInstruction() else {
+            guard let instruction = self.fetchInstruction() else {
                 print("Okay, bye")
                 exit(1)
             }
@@ -163,6 +172,7 @@ public class Z80 {
         } while true
     }
     
+    /// Stack pointer and program counter debug string
     var pcsp: String { return "\tSP: \(self.SP.read().hexString)\n\tPC: \(self.PC.read().hexString)" }
     
     
@@ -190,8 +200,8 @@ public class Z80 {
     }
     
     
-    
-    public func getInstruction() -> Instruction? {
+    //@todo make this internal and add a public run() or clock() or something
+    public func fetchInstruction() -> Instruction? {
         let firstByte = memory.read8(PC.read())
         
         var instruction: Instruction? = nil

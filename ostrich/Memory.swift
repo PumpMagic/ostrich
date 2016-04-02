@@ -11,6 +11,10 @@ import Foundation
 
 public typealias Address = UInt16
 
+//@todo rename this to ROM and make some Addressable protocol or something
+//make some MemoryMap class with Read() -> UInt8? and Write(UInt8) that Addressables can register themselves with
+//memory maps are accomplished in hardware by tying certain bits of the address bus to peripherals' enable pins
+//we don't need to get that detailed
 public class Memory {
     var data: NSData
     
