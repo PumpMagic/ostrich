@@ -137,6 +137,32 @@ public class Z80 {
         self.A.write(a)
     }
     
+    public func callInto(addr: Address) {
+        let instruction = CALL(condition: nil, dest: Immediate16(val: addr))
+        instruction.runOn(self)
+    }
+    
+    public func runUntilRET() {
+        //@todo this is a hacky convenience function, how can we better detect a RET without inspecting type?
+        print("Running until RET...")
+        var iteration = 1
+        repeat {
+            guard let instruction = self.getInstruction() else {
+                print("Okay, bye")
+                exit(1)
+            }
+            print("\(iteration): \(instruction)")
+            instruction.runOn(self)
+            iteration += 1
+            let inspectedType = String(Mirror(reflecting: instruction).subjectType)
+            if inspectedType == "RET" {
+                return
+            } else {
+                print("Inspected type: \(inspectedType)")
+            }
+        } while true
+    }
+    
     var pcsp: String { return "\tSP: \(self.SP.read().hexString)\n\tPC: \(self.PC.read().hexString)" }
     
     
