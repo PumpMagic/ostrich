@@ -17,5 +17,6 @@ struct CP<T: protocol<Readable, OperandType>>: Instruction {
     
     func runOn(z80: Z80) {
         print("CP: Implement me!")
+        exit(1)
     }
 }

@@ -17,18 +17,16 @@ struct DJNZ: Instruction {
     
     let cycleCount = 0
     
-    let displacement: Int8
+    let displacementMinusTwo: Int8
     
     func runOn(z80: Z80) {
-        print("Running DJNZ")
-        
         let newValue = z80.B.read() &- 1
         
         z80.B.write(newValue)
         
         if newValue != 0 {
             //@todo bounds check
-            z80.PC.write(UInt16(Int32(z80.PC.read() + 2) + Int32(displacement)))
+            z80.PC.write(UInt16(Int32(z80.PC.read()) + Int32(displacementMinusTwo) + 2))
         }
     }
     

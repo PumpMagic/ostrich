@@ -165,3 +165,19 @@ func parity(num: UInt8) -> Bool {
     }
     return false
 }
+
+
+protocol HexStringConvertible {
+    /// Representation of this number as 0x%0#X
+    var hexString: String { get }
+}
+
+extension UInt8: HexStringConvertible {
+    /// Representation of this number as 0x%02X
+    var hexString: String { return String(format: "0x%02X", self) }
+}
+
+extension UInt16: HexStringConvertible {
+    /// Representation of this number as 0x%04X
+    var hexString: String { return String(format: "0x%04X", self) }
+}

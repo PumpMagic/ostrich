@@ -19,18 +19,11 @@ struct RST: Instruction {
     let restartAddress: Address
     
     func runOn(z80: Z80) {
-        let currentPC = z80.PC.read()
-        let currentSP = z80.SP.read()
+        print("Before RST: \n\(z80.pcsp)")
         
-        print(String(format: "Running RST. SP before: 0x%04X", currentSP))
-        print(String(format: "\tPC before: 0x%04X", currentPC))
-        
-        Memory16Translator(addr: currentSP-2, memory: z80.memory).write(currentPC)
-        z80.SP.write(currentSP - 2)
-        
+        z80.push(z80.PC.read())
         z80.PC.write(restartAddress)
         
-        print(String(format: "\tSP after: 0x%04X", z80.SP.read()))
-        print(String(format: "\tPC after: 0x%04X", z80.PC.read()))
+        print("After RST: \n\(z80.pcsp)")
     }
 }

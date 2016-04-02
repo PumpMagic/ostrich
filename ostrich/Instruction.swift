@@ -16,7 +16,7 @@ public protocol Instruction {
     func runOn(z80: Z80)
 }
 
-/// Condition
+/// Condition: a flag and a target value
 struct Condition {
     let flag: Flag
     let target: Bool

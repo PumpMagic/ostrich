@@ -15,16 +15,10 @@ struct POP<T: protocol<Writeable, OperandType> where T.WriteType == UInt16>: Ins
     // also increments SP by two
     // supports 16-bit registers and indexed addresses as write sources
     let operand: T
-    let cycleCount = 0 //@todo
+    let cycleCount = 0
     
     func runOn(z80: Z80) {
-        print("POP")
-        
-        let val = z80.memory.read16(z80.SP.read())
-        
-        //@todo don't use instructions as parts of instructions! they mess with flags
-        let ins = LD(dest: operand, src: Immediate16(val: val))
-        ins.runOn(z80)
+        operand.write(z80.pop())
         
         // Never affects flag bits
     }

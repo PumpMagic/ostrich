@@ -14,8 +14,6 @@ struct EXX: Instruction {
     let cycleCount = 0
     
     func runOn(z80: Z80) {
-        print("Running EXX")
-        
         let bcValue = z80.BC.read()
         let bcpValue = z80.BCp.read()
         let deValue = z80.DE.read()

@@ -11,6 +11,7 @@
 		5854A08F1CAE29EE0044A766 /* RRC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5854A08E1CAE29EE0044A766 /* RRC.swift */; };
 		5854A0911CAE34610044A766 /* RLC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5854A0901CAE34610044A766 /* RLC.swift */; };
 		5871BCDC1CAB97C3002A799C /* Z80.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5871BCDB1CAB97C3002A799C /* Z80.swift */; };
+		58B69ACA1CAF87A70003793B /* CALL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B69AC91CAF87A70003793B /* CALL.swift */; };
 		58BB13941CACD63600D7FD06 /* CCF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BB13931CACD63600D7FD06 /* CCF.swift */; };
 		58BB13961CACD95D00D7FD06 /* RST.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BB13951CACD95D00D7FD06 /* RST.swift */; };
 		58BB139A1CACF0FA00D7FD06 /* DJNZ.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BB13991CACF0FA00D7FD06 /* DJNZ.swift */; };
@@ -42,6 +43,7 @@
 		5854A08E1CAE29EE0044A766 /* RRC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RRC.swift; sourceTree = "<group>"; };
 		5854A0901CAE34610044A766 /* RLC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLC.swift; sourceTree = "<group>"; };
 		5871BCDB1CAB97C3002A799C /* Z80.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Z80.swift; path = ../../Z80.swift; sourceTree = "<group>"; };
+		58B69AC91CAF87A70003793B /* CALL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CALL.swift; sourceTree = "<group>"; };
 		58BB13931CACD63600D7FD06 /* CCF.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCF.swift; sourceTree = "<group>"; };
 		58BB13951CACD95D00D7FD06 /* RST.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RST.swift; sourceTree = "<group>"; };
 		58BB13991CACF0FA00D7FD06 /* DJNZ.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DJNZ.swift; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 				FCF9A3911CAB8AA900EA79F0 /* Instruction.swift */,
 				FCF9A3941CAB8AA900EA79F0 /* ADC.swift */,
 				580216CB1CAD0B2B00913FCE /* ADD.swift */,
+				58B69AC91CAF87A70003793B /* CALL.swift */,
 				58BB13931CACD63600D7FD06 /* CCF.swift */,
 				FCF9A3921CAB8AA900EA79F0 /* CP.swift */,
 				FCF9A3991CAB8AA900EA79F0 /* DEC.swift */,
@@ -142,10 +145,10 @@
 				FCF9A3981CAB8AA900EA79F0 /* NOP.swift */,
 				FCF9A3961CAB8AA900EA79F0 /* POP.swift */,
 				FCF9A3971CAB8AA900EA79F0 /* PUSH.swift */,
+				FCF9A3931CAB8AA900EA79F0 /* RET.swift */,
 				5854A0901CAE34610044A766 /* RLC.swift */,
 				5854A08E1CAE29EE0044A766 /* RRC.swift */,
 				58BB13951CACD95D00D7FD06 /* RST.swift */,
-				FCF9A3931CAB8AA900EA79F0 /* RET.swift */,
 			);
 			name = Instructions;
 			path = ../../ostrich;
@@ -230,6 +233,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FCF9A3A31CAB8AA900EA79F0 /* Operand.swift in Sources */,
+				58B69ACA1CAF87A70003793B /* CALL.swift in Sources */,
 				FCF9A3A71CAB8AA900EA79F0 /* Instruction.swift in Sources */,
 				FCF9A3AF1CAB8AA900EA79F0 /* DEC.swift in Sources */,
 				FCF9A3A21CAB8AA900EA79F0 /* Memory.swift in Sources */,

@@ -15,18 +15,10 @@ struct LDI: Instruction {
     let cycleCount = 0
     
     func runOn(z80: Z80) {
-        print("Running LDI")
-        
-        //@todo don't use instructions as parts of instructions! they mess with flags
-        let ins1 = LD(dest: Register16Indirect8(register: z80.DE, memory: z80.memory), src: Register16Indirect8(register: z80.HL, memory: z80.memory))
-        let ins2 = INC16(operand: z80.DE)
-        let ins3 = INC16(operand: z80.HL)
-        let ins4 = DEC16(operand: z80.BC)
-        
-        ins1.runOn(z80)
-        ins2.runOn(z80)
-        ins3.runOn(z80)
-        ins4.runOn(z80)
+        z80.DE.asIndirectInto(z80.memory).write(z80.HL.asIndirectInto(z80.memory).read())
+        z80.DE.write(z80.DE.read() + 1)
+        z80.HL.write(z80.HL.read() + 1)
+        z80.BC.write(z80.BC.read() - 1)
         
         self.modifyFlags(z80)
     }

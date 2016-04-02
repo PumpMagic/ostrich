@@ -14,8 +14,6 @@ struct NOP: Instruction {
     let cycleCount = 0 //@todo
     
     func runOn(z80: Z80) {
-        print("Running NOP")
-        
         // Never affects flag bits
     }
 }

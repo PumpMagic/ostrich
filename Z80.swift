@@ -48,13 +48,13 @@ public class Z80 {
     let PC: Register16
     
     // flags - computed from F
-    /// Sign flag
+    /// Sign flag. True: positive. False: negative.
     let SF: Flag
     /// Zero flag
     let ZF: Flag
     /// Half-carry flag
     let HF: Flag
-    /// Parity/overflow flag. Parity 0: odd number of high bits. Parity 1: even number of high bits.
+    /// Parity/overflow flag. False: odd number of high bits. True: even number of high bits.
     let PVF: Flag
     /// Add/subtract flag
     let NF: Flag
@@ -136,6 +136,34 @@ public class Z80 {
     public func setA(a: UInt8) {
         self.A.write(a)
     }
+    
+    var pcsp: String { return "\tSP: \(self.SP.read().hexString)\n\tPC: \(self.PC.read().hexString)" }
+    
+    
+    
+    // Convenience stack functions
+    /// Push a two-byte value onto the stack.
+    /// Adjusts the stack pointer accordingly.
+    func push(val: UInt16) {
+        let oldAddr = self.SP.read()
+        let newAddr = oldAddr - 2
+        
+        self.SP.write(newAddr)
+        
+        Memory16Translator(addr: newAddr, memory: self.memory).write(val)
+    }
+    
+    /// Pop a two-byte value off the stack.
+    /// Adjusts the stack pointer accordingly.
+    func pop() -> UInt16 {
+        let addr = self.SP.read()
+        let val = self.memory.read16(addr)
+        
+        self.SP.write(addr + 2)
+        return val
+    }
+    
+    
     
     public func getInstruction() -> Instruction? {
         let firstByte = memory.read8(PC.read())
@@ -233,8 +261,8 @@ public class Z80 {
             
         case 0x10:
             // DJNZ
-            let displacement = Int8(bitPattern: memory.read8(PC.read()+1))
-            instruction = DJNZ(displacement: displacement)
+            let displacementMinusTwo = Int8(bitPattern: memory.read8(PC.read()+1))
+            instruction = DJNZ(displacementMinusTwo: displacementMinusTwo)
             instructionLength = 2
             
         case 0x11:
@@ -470,6 +498,16 @@ public class Z80 {
             instruction = LD(dest: self.C, src: self.L)
             instructionLength = 1
             
+        case 0x4E:
+            // LD C, (HL)
+            instruction = LD(dest: self.C, src: self.HL.asIndirectInto(memory))
+            instructionLength = 1
+            
+        case 0x4F:
+            // LD C, A
+            instruction = LD(dest: self.C, src: self.A)
+            instructionLength = 1
+            
         case 0x50:
             // LD D, B
             instruction = LD(dest: self.D, src: self.B)
@@ -538,6 +576,16 @@ public class Z80 {
         case 0x5D:
             // LD E, L
             instruction = LD(dest: self.E, src: self.L)
+            instructionLength = 1
+            
+        case 0x5E:
+            // LD E, (HL)
+            instruction = LD(dest: self.E, src: self.HL.asIndirectInto(memory))
+            instructionLength = 1
+            
+        case 0x5F:
+            // LD E, A
+            instruction = LD(dest: self.E, src: self.A)
             instructionLength = 1
             
         case 0x60:
@@ -610,6 +658,16 @@ public class Z80 {
             instruction = LD(dest: self.L, src: self.L)
             instructionLength = 1
             
+        case 0x6E:
+            // LD L, (HL)
+            instruction = LD(dest: self.L, src: self.HL.asIndirectInto(memory))
+            instructionLength = 1
+            
+        case 0x6F:
+            // LD L, A
+            instruction = LD(dest: self.L, src: self.A)
+            instructionLength = 1
+            
         case 0x70:
             // LD (HL), B
             instruction = LD(dest: self.HL.asIndirectInto(self.memory), src: self.B)
@@ -675,6 +733,16 @@ public class Z80 {
             instruction = LD(dest: self.A, src: self.L)
             instructionLength = 1
             
+        case 0x7E:
+            // LD A, (HL)
+            instruction = LD(dest: self.A, src: self.HL.asIndirectInto(memory))
+            instructionLength = 1
+            
+        case 0x7F:
+            // LD A, A
+            instruction = LD(dest: self.A, src: self.A)
+            instructionLength = 1
+            
         case 0x80:
             // ADD A, B
             instruction = ADD8(op1: self.A, op2: self.B)
@@ -708,16 +776,65 @@ public class Z80 {
             instruction = ADD8(op1: self.A, op2: self.A)
             instructionLength = 1
             
+        case 0xC0:
+            // RET nz
+            instruction = RET(condition: Condition(flag: self.ZF, target: false))
+            instructionLength = 1
+            
+        case 0xC2:
+            // JP nz, nn
+            let addr = memory.read16(PC.read()+1)
+            instruction = JP(condition: Condition(flag: self.ZF, target: false), dest: Immediate16(val: addr))
+            instructionLength = 3
+            
+        case 0xC3:
+            // JP nn
+            let addr = memory.read16(PC.read()+1)
+            instruction = JP(condition: nil, dest: Immediate16(val: addr))
+            instructionLength = 3
+            
         case 0xC6:
             // ADD A, n
             let val = memory.read8(PC.read()+1)
             instruction = ADD8(op1: self.A, op2: Immediate8(val: val))
             instructionLength = 2
             
-        case 0xC3:
-            // JP nn
+        case 0xC8:
+            // RET z
+            instruction = RET(condition: Condition(flag: self.ZF, target: true))
+            instructionLength = 1
+            
+        case 0xC9:
+            // RET
+            instruction = RET(condition: nil)
+            instructionLength = 1
+            
+        case 0xCA:
+            // JP z, nn
             let addr = memory.read16(PC.read()+1)
-            instruction = JP(condition: nil, dest: Immediate16(val: addr))
+            instruction = JP(condition: Condition(flag: self.ZF, target: true), dest: Immediate16(val: addr))
+            instructionLength = 3
+            
+        case 0xD0:
+            // RET nc
+            instruction = RET(condition: Condition(flag: self.CF, target: false))
+            instructionLength = 1
+            
+        case 0xD2:
+            // JP nc, nn
+            let addr = memory.read16(PC.read()+1)
+            instruction = JP(condition: Condition(flag: self.CF, target: false), dest: Immediate16(val: addr))
+            instructionLength = 3
+            
+        case 0xD8:
+            // RET c
+            instruction = RET(condition: Condition(flag: self.CF, target: true))
+            instructionLength = 1
+            
+        case 0xDA:
+            // JP c, nn
+            let addr = memory.read16(PC.read()+1)
+            instruction = JP(condition: Condition(flag: self.CF, target: true), dest: Immediate16(val: addr))
             instructionLength = 3
             
         case 0xDF:
@@ -726,15 +843,58 @@ public class Z80 {
             instructionLength = 1
             
         case 0xE0:
-            // RET PO
+            // RET po
             instruction = RET(condition: Condition(flag: self.PVF, target: false))
             instructionLength = 1
-            break
+            
+        case 0xE2:
+            // JP po, nn
+            let addr = memory.read16(PC.read()+1)
+            instruction = JP(condition: Condition(flag: self.PVF, target: false), dest: Immediate16(val: addr))
+            instructionLength = 3
+            
+        case 0xE8:
+            // RET pe
+            instruction = RET(condition: Condition(flag: self.PVF, target: true))
+            instructionLength = 1
+            
+        case 0xE9:
+            // JP (HL)
+            instruction = JP(condition: nil, dest: self.HL)
+            instructionLength = 1
+            
+        case 0xEA:
+            // JP pe, nn
+            let addr = memory.read16(PC.read()+1)
+            instruction = JP(condition: Condition(flag: self.PVF, target: true), dest: Immediate16(val: addr))
+            instructionLength = 3
+            
+        case 0xF0:
+            // RET p
+            instruction = RET(condition: Condition(flag: self.SF, target: true))
+            instructionLength = 1
+            
+        case 0xF2:
+            // JP p, nn
+            let addr = memory.read16(PC.read()+1)
+            instruction = JP(condition: Condition(flag: self.SF, target: false), dest: Immediate16(val: addr))
+            instructionLength = 3
             
         case 0xF3:
             let num = memory.read8(PC.read()+1)
             instruction = CP(op: Immediate8(val: num))
             instructionLength = 2
+            
+        case 0xF8:
+            // RET p
+            instruction = RET(condition: Condition(flag: self.SF, target: false))
+            instructionLength = 1
+            
+        case 0xFA:
+            // JP m, nn
+            let addr = memory.read16(PC.read()+1)
+            instruction = JP(condition: Condition(flag: self.SF, target: true), dest: Immediate16(val: addr))
+            instructionLength = 3
             
             
         case 0xDD:
@@ -781,6 +941,11 @@ public class Z80 {
                 // ADD IX, SP
                 instruction = ADD16(op1: self.IX, op2: self.SP)
                 instructionLength = 2
+                
+            case 0xE9:
+                // JP (IX)
+                instruction = JP(condition: nil, dest: self.IX)
+                instructionLength = 1
                 
             default:
                 let combinedOpcode: UInt16 = make16(high: firstByte, low: secondByte)

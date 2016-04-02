@@ -17,6 +17,13 @@ public class Memory {
     /// An offset: specifies what memory location the first byte of the supplied data occupies
     let startingAddress: Address
     
+    var highestAddress: Address {
+        return UInt16(UInt32(self.startingAddress) + UInt32(self.data.length))
+    }
+    var addressRange: String {
+        return "\(self.startingAddress.hexString) - \(self.highestAddress.hexString)"
+    }
+    
     public init(data: NSData, startingAddress: Address) {
         self.data = data
         self.startingAddress = startingAddress
@@ -27,12 +34,10 @@ public class Memory {
     }
     
     func read8(addr: Address) -> UInt8 {
-        if addr < self.startingAddress {
-            print("FATAL: attempt to access address \(addr) but starting address is \(self.startingAddress)!")
-            exit(1)
-        }
-        if Int(addr) > Int(self.startingAddress) + Int(self.data.length) {
-            print("FATAL: attempt to access address \(addr) but our highest address is \(Int(self.startingAddress) + Int(self.data.length))")
+        if addr < self.startingAddress ||
+            Int(addr) > Int(self.startingAddress) + Int(self.data.length)
+        {
+            print("FATAL: attempt to access address \(addr.hexString) but our range is \(self.addressRange)")
             exit(1)
         }
         
@@ -64,7 +69,7 @@ public class Memory {
 }
 
 /// An 8-bit window into a Memory
-struct Memory8Translator: Readable, Writeable /*@todo are these really operands?, OperandType*/ {
+struct Memory8Translator: Readable, Writeable {
     var addr: Address
     let memory: Memory
     
@@ -82,7 +87,7 @@ struct Memory8Translator: Readable, Writeable /*@todo are these really operands?
 }
 
 /// A 16-bit window into a Memory
-struct Memory16Translator: Readable, Writeable /*@todo are these really operands?, OperandType*/ {
+struct Memory16Translator: Readable, Writeable {
     var addr: Address
     let memory: Memory
     

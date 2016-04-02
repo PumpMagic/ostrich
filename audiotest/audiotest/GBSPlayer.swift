@@ -79,7 +79,7 @@ let GBS_COPYRIGHT_OFFSET = 0x50
 let GBS_COPYRIGHT_LENGTH = 0x20
 let GBS_CODE_AND_DATA_OFFSET = 0x70
 
-struct GBSHeader {
+struct GBSHeader: CustomStringConvertible {
     let id: String
     let version: UInt8
     let numSongs: UInt8
@@ -93,6 +93,27 @@ struct GBSHeader {
     let title: String
     let author: String
     let copyright: String
+    
+    var description: String {
+        get {
+            var str = "GBS header"
+            str += "\n\tid: \(id)"
+            str += String(format: "\n\tversion: 0x%02X", version)
+            str += String(format: "\n\tnumSongs: 0x%02X", numSongs)
+            str += String(format: "\n\tfirstSong: 0x%02X", firstSong)
+            str += String(format: "\n\tloadAddress: 0x%04X", loadAddress)
+            str += String(format: "\n\tinitAddress: 0x%04X", initAddress)
+            str += String(format: "\n\tplayAddress: 0x%04X", playAddress)
+            str += String(format: "\n\tstackPointer: 0x%04X", stackPointer)
+            str += String(format: "\n\ttimerModulo: 0x%02X", timerModulo)
+            str += String(format: "\n\ttimerControl: 0x%02X", timerControl)
+            str += "\n\ttitle: \(title)"
+            str += "\n\tauthor: \(author)"
+            str += "\n\tcopyright: \(copyright)"
+            
+            return str
+        }
+    }
 }
 
 func removeNuls(string: String) -> String {

@@ -36,8 +36,6 @@ struct EX
     }
     
     func runOn(z80: Z80) {
-        print("Running EX")
-        
         let tmp = op2.read()
         
         op2.write(op1.read())

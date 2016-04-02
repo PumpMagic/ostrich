@@ -31,8 +31,6 @@ struct LD
     }
     
     func runOn(z80: Z80) {
-        print("Running LD")
-        
         dest.write(src.read())
         
         // No LD modifies flags.
