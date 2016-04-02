@@ -183,7 +183,7 @@ public class Z80 {
             // LD B, n
             let val = memory.read8(PC.read()+1)
             instruction = LD(dest: self.B, src: Immediate8(val: val))
-            instructionLength = 1
+            instructionLength = 2
             
         case 0x07:
             // RLCA
@@ -221,7 +221,7 @@ public class Z80 {
             instructionLength = 1
             
         case 0x0E:
-            // LD C, N
+            // LD C, n
             let val = memory.read8(PC.read()+1)
             instruction = LD(dest: self.C, src: Immediate8(val: val))
             instructionLength = 2
@@ -258,6 +258,17 @@ public class Z80 {
             instruction = INC8(operand: self.D)
             instructionLength = 1
             
+        case 0x15:
+            // DEC D
+            instruction = DEC8(operand: self.D)
+            instructionLength = 1
+            
+        case 0x16:
+            // LD D, n
+            let val = memory.read8(PC.read()+1)
+            instruction = LD(dest: self.D, src: Immediate8(val: val))
+            instructionLength = 2
+            
         case 0x18:
             // JR n
             let displacement = Int8(memory.read8(PC.read()+1))
@@ -269,9 +280,19 @@ public class Z80 {
             instruction = ADD16(op1: self.HL, op2: self.DE)
             instructionLength = 1
             
+        case 0x1B:
+            // DEC DE
+            instruction = DEC16(operand: self.DE)
+            instructionLength = 1
+            
         case 0x1C:
             // INC E
             instruction = INC8(operand: self.E)
+            instructionLength = 1
+            
+        case 0x1D:
+            // DEC E
+            instruction = DEC8(operand: self.E)
             instructionLength = 1
             
         case 0x21:
@@ -290,15 +311,42 @@ public class Z80 {
             instruction = INC8(operand: self.H)
             instructionLength = 1
             
+        case 0x25:
+            // DEC H
+            instruction = DEC8(operand: self.H)
+            instructionLength = 1
+            
+        case 0x26:
+            // LD H, n
+            let val = memory.read8(PC.read()+1)
+            instruction = LD(dest: self.H, src: Immediate8(val: val))
+            instructionLength = 2
+            
         case 0x29:
             // ADD HL, HL
             instruction = ADD16(op1: self.HL, op2: self.HL)
+            instructionLength = 1
+            
+        case 0x2B:
+            // DEC HL
+            instruction = DEC16(operand: self.HL)
             instructionLength = 1
             
         case 0x2C:
             // INC L
             instruction = INC8(operand: self.L)
             instructionLength = 1
+            
+        case 0x2D:
+            // DEC L
+            instruction = DEC8(operand: self.L)
+            instructionLength = 1
+            
+        case 0x31:
+            // LD SP, nn
+            let val = memory.read16(PC.read()+1)
+            instruction = LD(dest: self.SP, src: Immediate16(val: val))
+            instructionLength = 3
             
         case 0x33:
             // INC SP
@@ -310,14 +358,35 @@ public class Z80 {
             instruction = INC8(operand: self.HL.asIndirectInto(memory))
             instructionLength = 1
             
+        case 0x35:
+            // DEC (HL)
+            instruction = DEC8(operand: self.HL.asIndirectInto(memory))
+            instructionLength = 1
+            
+        case 0x36:
+            // LD (HL), n
+            let val = memory.read8(PC.read()+1)
+            instruction = LD(dest: self.HL.asIndirectInto(memory), src: Immediate8(val: val))
+            instructionLength = 2
+            
         case 0x39:
             // ADD HL, SP
             instruction = ADD16(op1: self.HL, op2: self.SP)
             instructionLength = 1
             
+        case 0x3B:
+            // DEC SP
+            instruction = DEC16(operand: self.SP)
+            instructionLength = 1
+            
         case 0x3C:
             // INC A
             instruction = INC8(operand: self.A)
+            instructionLength = 1
+            
+        case 0x3D:
+            // DEC A
+            instruction = DEC8(operand: self.A)
             instructionLength = 1
             
         case 0x3E:
@@ -336,9 +405,139 @@ public class Z80 {
             instruction = LD(dest: self.B, src: self.B)
             instructionLength = 1
             
+        case 0x41:
+            // LD B, C
+            instruction = LD(dest: self.B, src: self.C)
+            instructionLength = 1
+            
+        case 0x42:
+            // LD B, D
+            instruction = LD(dest: self.B, src: self.D)
+            instructionLength = 1
+            
+        case 0x43:
+            // LD B, E
+            instruction = LD(dest: self.B, src: self.E)
+            instructionLength = 1
+            
+        case 0x44:
+            // LD B, H
+            instruction = LD(dest: self.B, src: self.H)
+            instructionLength = 1
+            
+        case 0x45:
+            // LD B, L
+            instruction = LD(dest: self.B, src: self.L)
+            instructionLength = 1
+            
+        case 0x46:
+            // LD B, (HL)
+            instruction = LD(dest: self.B, src: self.HL.asIndirectInto(memory))
+            instructionLength = 1
+            
+        case 0x47:
+            // LD B, A
+            instruction = LD(dest: self.B, src: self.A)
+            instructionLength = 1
+            
+        case 0x48:
+            // LD C, B
+            instruction = LD(dest: self.C, src: self.B)
+            instructionLength = 1
+            
+        case 0x49:
+            // LD C, C
+            instruction = LD(dest: self.C, src: self.C)
+            instructionLength = 1
+            
+        case 0x4A:
+            // LD C, D
+            instruction = LD(dest: self.C, src: self.D)
+            instructionLength = 1
+            
+        case 0x4B:
+            // LD C, E
+            instruction = LD(dest: self.C, src: self.E)
+            instructionLength = 1
+            
+        case 0x4C:
+            // LD C, H
+            instruction = LD(dest: self.C, src: self.H)
+            instructionLength = 1
+            
+        case 0x4D:
+            // LD C, L
+            instruction = LD(dest: self.C, src: self.L)
+            instructionLength = 1
+            
         case 0x50:
             // LD D, B
             instruction = LD(dest: self.D, src: self.B)
+            instructionLength = 1
+            
+        case 0x51:
+            // LD D, C
+            instruction = LD(dest: self.D, src: self.C)
+            instructionLength = 1
+            
+        case 0x52:
+            // LD D, D
+            instruction = LD(dest: self.D, src: self.D)
+            instructionLength = 1
+            
+        case 0x53:
+            // LD D, E
+            instruction = LD(dest: self.D, src: self.E)
+            instructionLength = 1
+            
+        case 0x54:
+            // LD D, H
+            instruction = LD(dest: self.D, src: self.H)
+            instructionLength = 1
+            
+        case 0x55:
+            // LD D, L
+            instruction = LD(dest: self.D, src: self.L)
+            instructionLength = 1
+            
+        case 0x56:
+            // LD D, (HL)
+            instruction = LD(dest: self.D, src: self.HL.asIndirectInto(memory))
+            instructionLength = 1
+            
+        case 0x57:
+            // LD D, A
+            instruction = LD(dest: self.D, src: self.A)
+            instructionLength = 1
+            
+        case 0x58:
+            // LD E, B
+            instruction = LD(dest: self.E, src: self.B)
+            instructionLength = 1
+            
+        case 0x59:
+            // LD E, C
+            instruction = LD(dest: self.E, src: self.C)
+            instructionLength = 1
+            
+        case 0x5A:
+            // LD E, D
+            instruction = LD(dest: self.E, src: self.D)
+            instructionLength = 1
+            
+        case 0x5B:
+            // LD E, E
+            instruction = LD(dest: self.E, src: self.E)
+            instructionLength = 1
+            
+        case 0x5C:
+            // LD E, H
+            instruction = LD(dest: self.E, src: self.H)
+            instructionLength = 1
+            
+        case 0x5D:
+            // LD E, L
+            instruction = LD(dest: self.E, src: self.L)
             instructionLength = 1
             
         case 0x60:
@@ -346,14 +545,134 @@ public class Z80 {
             instruction = LD(dest: self.H, src: self.B)
             instructionLength = 1
             
+        case 0x61:
+            // LD H, C
+            instruction = LD(dest: self.H, src: self.C)
+            instructionLength = 1
+            
+        case 0x62:
+            // LD H, D
+            instruction = LD(dest: self.H, src: self.D)
+            instructionLength = 1
+            
+        case 0x63:
+            // LD H, E
+            instruction = LD(dest: self.H, src: self.E)
+            instructionLength = 1
+            
+        case 0x64:
+            // LD H, H
+            instruction = LD(dest: self.H, src: self.H)
+            instructionLength = 1
+            
+        case 0x65:
+            // LD H, L
+            instruction = LD(dest: self.H, src: self.L)
+            instructionLength = 1
+            
         case 0x66:
             // LD H, (HL)
             instruction = LD(dest: self.H, src: self.HL.asIndirectInto(self.memory))
             instructionLength = 1
             
+        case 0x67:
+            // LD H, A
+            instruction = LD(dest: self.H, src: self.A)
+            instructionLength = 1
+            
+        case 0x68:
+            // LD L, B
+            instruction = LD(dest: self.L, src: self.B)
+            instructionLength = 1
+            
+        case 0x69:
+            // LD L, C
+            instruction = LD(dest: self.L, src: self.C)
+            instructionLength = 1
+            
+        case 0x6A:
+            // LD L, D
+            instruction = LD(dest: self.L, src: self.D)
+            instructionLength = 1
+            
+        case 0x6B:
+            // LD L, E
+            instruction = LD(dest: self.L, src: self.E)
+            instructionLength = 1
+            
+        case 0x6C:
+            // LD L, H
+            instruction = LD(dest: self.L, src: self.H)
+            instructionLength = 1
+            
+        case 0x6D:
+            // LD L, L
+            instruction = LD(dest: self.L, src: self.L)
+            instructionLength = 1
+            
         case 0x70:
             // LD (HL), B
             instruction = LD(dest: self.HL.asIndirectInto(self.memory), src: self.B)
+            instructionLength = 1
+            
+        case 0x71:
+            // LD (HL), C
+            instruction = LD(dest: self.HL.asIndirectInto(self.memory), src: self.C)
+            instructionLength = 1
+            
+        case 0x72:
+            // LD (HL), D
+            instruction = LD(dest: self.HL.asIndirectInto(self.memory), src: self.D)
+            instructionLength = 1
+            
+        case 0x73:
+            // LD (HL), E
+            instruction = LD(dest: self.HL.asIndirectInto(self.memory), src: self.E)
+            instructionLength = 1
+            
+        case 0x74:
+            // LD (HL), H
+            instruction = LD(dest: self.HL.asIndirectInto(self.memory), src: self.H)
+            instructionLength = 1
+            
+        case 0x75:
+            // LD (HL), L
+            instruction = LD(dest: self.HL.asIndirectInto(self.memory), src: self.L)
+            instructionLength = 1
+            
+        case 0x77:
+            // LD (HL), A
+            instruction = LD(dest: self.HL.asIndirectInto(memory), src: self.A)
+            instructionLength = 1
+            
+        case 0x78:
+            // LD A, B
+            instruction = LD(dest: self.A, src: self.B)
+            instructionLength = 1
+            
+        case 0x79:
+            // LD A, C
+            instruction = LD(dest: self.A, src: self.C)
+            instructionLength = 1
+            
+        case 0x7A:
+            // LD A, D
+            instruction = LD(dest: self.A, src: self.D)
+            instructionLength = 1
+            
+        case 0x7B:
+            // LD A, E
+            instruction = LD(dest: self.A, src: self.E)
+            instructionLength = 1
+            
+        case 0x7C:
+            // LD A, H
+            instruction = LD(dest: self.A, src: self.H)
+            instructionLength = 1
+            
+        case 0x7D:
+            // LD A, L
+            instruction = LD(dest: self.A, src: self.L)
             instructionLength = 1
             
         case 0x80:
@@ -401,13 +720,6 @@ public class Z80 {
             instruction = JP(condition: nil, dest: Immediate16(val: addr))
             instructionLength = 3
             
-        /*
-         case 0xCE:
-         let num = memory.read8(PC.read()+1)
-         instruction = ADC(operand: Immediate8(val: num))
-         instructionLength = 2
-         */
-            
         case 0xDF:
             // RST 0x18
             instruction = RST(restartAddress: 0x18)
@@ -448,10 +760,21 @@ public class Z80 {
                 instruction = ADD16(op1: self.IX, op2: self.IX)
                 instructionLength = 2
                 
+            case 0x2B:
+                // DEC IX
+                instruction = DEC16(operand: self.IX)
+                instructionLength = 2
+                
             case 0x34:
                 // INC (IX+d)
                 let displacement = memory.read8Signed(PC.read()+2)
                 instruction = INC8(operand: Indexed8(register: self.IX, displacement: displacement, memory: self.memory))
+                instructionLength = 3
+                
+            case 0x35:
+                // DEC (IX+d)
+                let displacement = memory.read8Signed(PC.read()+2)
+                instruction = DEC8(operand: Indexed8(register: self.IX, displacement: displacement, memory: self.memory))
                 instructionLength = 3
                 
             case 0x39:

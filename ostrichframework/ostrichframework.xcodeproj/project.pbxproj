@@ -229,13 +229,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FCF9A3A31CAB8AA900EA79F0 /* Operand.swift in Sources */,
+				FCF9A3A71CAB8AA900EA79F0 /* Instruction.swift in Sources */,
 				FCF9A3AF1CAB8AA900EA79F0 /* DEC.swift in Sources */,
 				FCF9A3A21CAB8AA900EA79F0 /* Memory.swift in Sources */,
 				FCF9A3A51CAB8AA900EA79F0 /* Immediates.swift in Sources */,
 				FCF9A3B31CAB8AA900EA79F0 /* LD.swift in Sources */,
 				FCF9A3AE1CAB8AA900EA79F0 /* NOP.swift in Sources */,
 				FCF9A3A81CAB8AA900EA79F0 /* CP.swift in Sources */,
-				FCF9A3A31CAB8AA900EA79F0 /* Operand.swift in Sources */,
 				FCF9A3A41CAB8AA900EA79F0 /* Indexed.swift in Sources */,
 				FCF9A3B11CAB8AA900EA79F0 /* LDI.swift in Sources */,
 				FCF9A3AC1CAB8AA900EA79F0 /* POP.swift in Sources */,
@@ -252,7 +253,6 @@
 				FCF9A3A91CAB8AA900EA79F0 /* RET.swift in Sources */,
 				FCF9A3A61CAB8AA900EA79F0 /* Registers.swift in Sources */,
 				58BB139A1CACF0FA00D7FD06 /* DJNZ.swift in Sources */,
-				FCF9A3A71CAB8AA900EA79F0 /* Instruction.swift in Sources */,
 				FCF9A3AA1CAB8AA900EA79F0 /* ADC.swift in Sources */,
 				FCF9A3A11CAB8AA900EA79F0 /* Util.swift in Sources */,
 				FCF9A3B01CAB8AA900EA79F0 /* INC.swift in Sources */,
