@@ -15,7 +15,7 @@ struct LDI: Instruction {
     let cycleCount = 0
     
     func runOn(z80: Z80) {
-        z80.DE.asIndirectInto(z80.memory).write(z80.HL.asIndirectInto(z80.memory).read())
+        z80.DE.asIndirectInto(z80.bus).write(z80.HL.asIndirectInto(z80.bus).read())
         z80.DE.write(z80.DE.read() + 1)
         z80.HL.write(z80.HL.read() + 1)
         z80.BC.write(z80.BC.read() - 1)

@@ -15,12 +15,12 @@ import Foundation
 class Indexed8<T: RegisterType where T.ReadType == Address>: Readable, Writeable, OperandType {
     let register: T
     let displacement: Int8
-    let memory: Memory
+    let bus: DataBus
     
-    init(register: T, displacement: Int8, memory: Memory) {
+    init(register: T, displacement: Int8, bus: DataBus) {
         self.register = register
         self.displacement = displacement
-        self.memory = memory
+        self.bus = bus
     }
     
     func resolveAddress() -> Address {
@@ -29,11 +29,11 @@ class Indexed8<T: RegisterType where T.ReadType == Address>: Readable, Writeable
     
     func read() -> UInt8 {
         // (I[x/y] + d)
-        return memory.read8(self.resolveAddress())
+        return bus.read(self.resolveAddress())
     }
     
     func write(val: UInt8) {
-        memory.write8(val, to: self.resolveAddress())
+        bus.write(val, to: self.resolveAddress())
     }
     
     var operandType: OperandKind {
@@ -47,12 +47,12 @@ class Indexed8<T: RegisterType where T.ReadType == Address>: Readable, Writeable
 class Indexed16<T: RegisterType where T.ReadType == Address>: Readable, Writeable, OperandType {
     let register: T
     let displacement: Int8
-    let memory: Memory
+    let bus: DataBus
     
-    init(register: T, displacement: Int8, memory: Memory) {
+    init(register: T, displacement: Int8, bus: DataBus) {
         self.register = register
         self.displacement = displacement
-        self.memory = memory
+        self.bus = bus
     }
     
     func resolveAddress() -> Address {
@@ -61,11 +61,11 @@ class Indexed16<T: RegisterType where T.ReadType == Address>: Readable, Writeabl
     
     func read() -> UInt16 {
         // (I[x/y] + d)
-        return memory.read16(self.resolveAddress())
+        return bus.read16(self.resolveAddress())
     }
     
     func write(val: UInt16) {
-        memory.write16(val, to: self.resolveAddress())
+        bus.write16(val, to: self.resolveAddress())
     }
     
     var operandType: OperandKind {

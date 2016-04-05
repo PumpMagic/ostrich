@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		580216CC1CAD0B2B00913FCE /* ADD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580216CB1CAD0B2B00913FCE /* ADD.swift */; };
+		581233391CB36E7400A2D1A5 /* Peripherals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581233381CB36E7400A2D1A5 /* Peripherals.swift */; };
+		5812333B1CB36EC300A2D1A5 /* DataBus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5812333A1CB36EC300A2D1A5 /* DataBus.swift */; };
+		5812333D1CB383C000A2D1A5 /* RAM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5812333C1CB383C000A2D1A5 /* RAM.swift */; };
 		5854A08F1CAE29EE0044A766 /* RRC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5854A08E1CAE29EE0044A766 /* RRC.swift */; };
 		5854A0911CAE34610044A766 /* RLC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5854A0901CAE34610044A766 /* RLC.swift */; };
 		5871BCDC1CAB97C3002A799C /* Z80.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5871BCDB1CAB97C3002A799C /* Z80.swift */; };
@@ -17,7 +20,7 @@
 		58BB139A1CACF0FA00D7FD06 /* DJNZ.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BB13991CACF0FA00D7FD06 /* DJNZ.swift */; };
 		FCF9A3321CAB86BD00EA79F0 /* ostrichframework.h in Headers */ = {isa = PBXBuildFile; fileRef = FCF9A3311CAB86BD00EA79F0 /* ostrichframework.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FCF9A3A11CAB8AA900EA79F0 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A38A1CAB8AA900EA79F0 /* Util.swift */; };
-		FCF9A3A21CAB8AA900EA79F0 /* Memory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A38B1CAB8AA900EA79F0 /* Memory.swift */; };
+		FCF9A3A21CAB8AA900EA79F0 /* ROM.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A38B1CAB8AA900EA79F0 /* ROM.swift */; };
 		FCF9A3A31CAB8AA900EA79F0 /* Operand.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A38C1CAB8AA900EA79F0 /* Operand.swift */; };
 		FCF9A3A41CAB8AA900EA79F0 /* Indexed.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A38D1CAB8AA900EA79F0 /* Indexed.swift */; };
 		FCF9A3A51CAB8AA900EA79F0 /* Immediates.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A38E1CAB8AA900EA79F0 /* Immediates.swift */; };
@@ -40,6 +43,9 @@
 
 /* Begin PBXFileReference section */
 		580216CB1CAD0B2B00913FCE /* ADD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ADD.swift; sourceTree = "<group>"; };
+		581233381CB36E7400A2D1A5 /* Peripherals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Peripherals.swift; sourceTree = "<group>"; };
+		5812333A1CB36EC300A2D1A5 /* DataBus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataBus.swift; sourceTree = "<group>"; };
+		5812333C1CB383C000A2D1A5 /* RAM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RAM.swift; sourceTree = "<group>"; };
 		5854A08E1CAE29EE0044A766 /* RRC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RRC.swift; sourceTree = "<group>"; };
 		5854A0901CAE34610044A766 /* RLC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLC.swift; sourceTree = "<group>"; };
 		5871BCDB1CAB97C3002A799C /* Z80.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Z80.swift; path = ../../Z80.swift; sourceTree = "<group>"; };
@@ -51,7 +57,7 @@
 		FCF9A3311CAB86BD00EA79F0 /* ostrichframework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ostrichframework.h; sourceTree = "<group>"; };
 		FCF9A3331CAB86BD00EA79F0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FCF9A38A1CAB8AA900EA79F0 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Util.swift; path = ../../ostrich/Util.swift; sourceTree = "<group>"; };
-		FCF9A38B1CAB8AA900EA79F0 /* Memory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Memory.swift; path = ../../ostrich/Memory.swift; sourceTree = "<group>"; };
+		FCF9A38B1CAB8AA900EA79F0 /* ROM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ROM.swift; path = ../../ostrich/ROM.swift; sourceTree = "<group>"; };
 		FCF9A38C1CAB8AA900EA79F0 /* Operand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Operand.swift; path = ../Operand.swift; sourceTree = "<group>"; };
 		FCF9A38D1CAB8AA900EA79F0 /* Indexed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Indexed.swift; sourceTree = "<group>"; };
 		FCF9A38E1CAB8AA900EA79F0 /* Immediates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Immediates.swift; sourceTree = "<group>"; };
@@ -83,6 +89,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		581233371CB36AD300A2D1A5 /* Peripherals */ = {
+			isa = PBXGroup;
+			children = (
+				581233381CB36E7400A2D1A5 /* Peripherals.swift */,
+				5812333A1CB36EC300A2D1A5 /* DataBus.swift */,
+				5812333C1CB383C000A2D1A5 /* RAM.swift */,
+				FCF9A38B1CAB8AA900EA79F0 /* ROM.swift */,
+			);
+			name = Peripherals;
+			sourceTree = "<group>";
+		};
 		FCF9A3241CAB86BD00EA79F0 = {
 			isa = PBXGroup;
 			children = (
@@ -105,7 +122,7 @@
 				FCF9A3311CAB86BD00EA79F0 /* ostrichframework.h */,
 				FCF9A38A1CAB8AA900EA79F0 /* Util.swift */,
 				5871BCDB1CAB97C3002A799C /* Z80.swift */,
-				FCF9A38B1CAB8AA900EA79F0 /* Memory.swift */,
+				581233371CB36AD300A2D1A5 /* Peripherals */,
 				FCF9A3901CAB8AA900EA79F0 /* Operands */,
 				FCF9A39F1CAB8AA900EA79F0 /* Instructions */,
 				FCF9A3331CAB86BD00EA79F0 /* Info.plist */,
@@ -234,10 +251,13 @@
 			files = (
 				FCF9A3A31CAB8AA900EA79F0 /* Operand.swift in Sources */,
 				58B69ACA1CAF87A70003793B /* CALL.swift in Sources */,
+				5812333B1CB36EC300A2D1A5 /* DataBus.swift in Sources */,
+				581233391CB36E7400A2D1A5 /* Peripherals.swift in Sources */,
 				FCF9A3A71CAB8AA900EA79F0 /* Instruction.swift in Sources */,
 				FCF9A3AF1CAB8AA900EA79F0 /* DEC.swift in Sources */,
-				FCF9A3A21CAB8AA900EA79F0 /* Memory.swift in Sources */,
+				FCF9A3A21CAB8AA900EA79F0 /* ROM.swift in Sources */,
 				FCF9A3A51CAB8AA900EA79F0 /* Immediates.swift in Sources */,
+				5812333D1CB383C000A2D1A5 /* RAM.swift in Sources */,
 				FCF9A3B31CAB8AA900EA79F0 /* LD.swift in Sources */,
 				FCF9A3AE1CAB8AA900EA79F0 /* NOP.swift in Sources */,
 				FCF9A3A81CAB8AA900EA79F0 /* CP.swift in Sources */,

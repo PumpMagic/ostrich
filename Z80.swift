@@ -78,14 +78,14 @@ public class Z80 {
     let HLp: Register16Computed
     
     
-    // ROM this CPU is wired to - this is a connection, not something owned
-    let memory: Memory
+    
+    let bus: DataBus
     
     
     //@todo emulate all necessary pins (see user manual pg. 17)
     // at least add an interrupt() and maybe nmi()
 
-    public init(memory: Memory) {
+    public init(rom: ROM) {
         self.A = Register8(val: 0)
         self.B = Register8(val: 0)
         self.C = Register8(val: 0)
@@ -130,7 +130,15 @@ public class Z80 {
         self.DEp = Register16Computed(high: self.Dp, low: self.Ep)
         self.HLp = Register16Computed(high: self.Hp, low: self.Lp)
         
-        self.memory = memory
+        //@todo break these constants out
+        let ram = RAM(size: 0xE000 - 0xC000, fillByte: 0, startingAddress: 0xC000)
+        
+        self.bus = DataBus()
+        
+        self.bus.registerReadable(rom, range: rom.addressRange)
+        
+        self.bus.registerReadable(ram, range: ram.addressRange)
+        self.bus.registerWriteable(ram, range: ram.addressRange)
     }
     
     // Utility methods
@@ -186,14 +194,14 @@ public class Z80 {
         
         self.SP.write(newAddr)
         
-        Memory16Translator(addr: newAddr, memory: self.memory).write(val)
+        self.bus.write16(val, to: newAddr)
     }
     
     /// Pop a two-byte value off the stack.
     /// Adjusts the stack pointer accordingly.
     func pop() -> UInt16 {
         let addr = self.SP.read()
-        let val = self.memory.read16(addr)
+        let val = self.bus.read16(addr)
         
         self.SP.write(addr + 2)
         return val
@@ -202,7 +210,7 @@ public class Z80 {
     
     //@todo make this internal and add a public run() or clock() or something
     public func fetchInstruction() -> Instruction? {
-        let firstByte = memory.read8(PC.read())
+        let firstByte = bus.read(PC.read())
         
         var instruction: Instruction? = nil
         var instructionLength: UInt16 = 1
@@ -216,16 +224,16 @@ public class Z80 {
         // Manual: "The first n operand after the op code is the low-order byte."
         //      -> First byte -> C
         //      -> Second byte -> B
-        // So as long as Memory.read16 returns the endianness LD.src expects, we're fine, right?
+        // So as long as DataBus.read16 returns the endianness LD.src expects, we're fine, right?
         case 0x01:
             // LD BC, nn
-            let val = memory.read16(PC.read()+1)
+            let val = bus.read16(PC.read()+1)
             instruction = LD(dest: self.BC, src: Immediate16(val: val))
             instructionLength = 3
             
         case 0x02:
             // LD (BC), A
-            instruction = LD(dest: self.BC.asIndirectInto(self.memory), src: self.A)
+            instruction = LD(dest: self.BC.asIndirectInto(self.bus), src: self.A)
             instructionLength = 1
             
         case 0x03:
@@ -245,7 +253,7 @@ public class Z80 {
             
         case 0x06:
             // LD B, n
-            let val = memory.read8(PC.read()+1)
+            let val = bus.read(PC.read()+1)
             instruction = LD(dest: self.B, src: Immediate8(val: val))
             instructionLength = 2
             
@@ -266,7 +274,7 @@ public class Z80 {
             
         case 0x0A:
             // LD A, (BC)
-            instruction = LD(dest: self.A, src: self.BC.asIndirectInto(memory))
+            instruction = LD(dest: self.A, src: self.BC.asIndirectInto(bus))
             instructionLength = 1
             
         case 0x0B:
@@ -286,7 +294,7 @@ public class Z80 {
             
         case 0x0E:
             // LD C, n
-            let val = memory.read8(PC.read()+1)
+            let val = bus.read(PC.read()+1)
             instruction = LD(dest: self.C, src: Immediate8(val: val))
             instructionLength = 2
             
@@ -297,19 +305,19 @@ public class Z80 {
             
         case 0x10:
             // DJNZ
-            let displacementMinusTwo = Int8(bitPattern: memory.read8(PC.read()+1))
+            let displacementMinusTwo = Int8(bitPattern: bus.read(PC.read()+1))
             instruction = DJNZ(displacementMinusTwo: displacementMinusTwo)
             instructionLength = 2
             
         case 0x11:
             // LD DE, nn
-            let val = memory.read16(PC.read()+1)
+            let val = bus.read16(PC.read()+1)
             instruction = LD(dest: self.DE, src: Immediate16(val: val))
             instructionLength = 3
             
         case 0x12:
             // LD (DE), A
-            instruction = LD(dest: self.DE.asIndirectInto(self.memory), src: self.A)
+            instruction = LD(dest: self.DE.asIndirectInto(self.bus), src: self.A)
             instructionLength = 1
             
         case 0x13:
@@ -329,13 +337,13 @@ public class Z80 {
             
         case 0x16:
             // LD D, n
-            let val = memory.read8(PC.read()+1)
+            let val = bus.read(PC.read()+1)
             instruction = LD(dest: self.D, src: Immediate8(val: val))
             instructionLength = 2
             
         case 0x18:
             // JR n
-            let displacement = Int8(memory.read8(PC.read()+1))
+            let displacement = Int8(bus.read(PC.read()+1))
             instruction = JP(condition: nil, dest: ImmediateDisplaced16(base: PC.read()+2, displacement: displacement))
             instructionLength = 2
             
@@ -361,7 +369,7 @@ public class Z80 {
             
         case 0x21:
             // LD HL, nn
-            let val = memory.read16(PC.read()+1)
+            let val = bus.read16(PC.read()+1)
             instruction = LD(dest: self.HL, src: Immediate16(val: val))
             instructionLength = 3
             
@@ -382,7 +390,7 @@ public class Z80 {
             
         case 0x26:
             // LD H, n
-            let val = memory.read8(PC.read()+1)
+            let val = bus.read(PC.read()+1)
             instruction = LD(dest: self.H, src: Immediate8(val: val))
             instructionLength = 2
             
@@ -408,7 +416,7 @@ public class Z80 {
             
         case 0x31:
             // LD SP, nn
-            let val = memory.read16(PC.read()+1)
+            let val = bus.read16(PC.read()+1)
             instruction = LD(dest: self.SP, src: Immediate16(val: val))
             instructionLength = 3
             
@@ -419,18 +427,18 @@ public class Z80 {
             
         case 0x34:
             // INC (HL)
-            instruction = INC8(operand: self.HL.asIndirectInto(memory))
+            instruction = INC8(operand: self.HL.asIndirectInto(bus))
             instructionLength = 1
             
         case 0x35:
             // DEC (HL)
-            instruction = DEC8(operand: self.HL.asIndirectInto(memory))
+            instruction = DEC8(operand: self.HL.asIndirectInto(bus))
             instructionLength = 1
             
         case 0x36:
             // LD (HL), n
-            let val = memory.read8(PC.read()+1)
-            instruction = LD(dest: self.HL.asIndirectInto(memory), src: Immediate8(val: val))
+            let val = bus.read(PC.read()+1)
+            instruction = LD(dest: self.HL.asIndirectInto(bus), src: Immediate8(val: val))
             instructionLength = 2
             
         case 0x39:
@@ -455,7 +463,7 @@ public class Z80 {
             
         case 0x3E:
             // LD A, n
-            let val = memory.read8(PC.read()+1)
+            let val = bus.read(PC.read()+1)
             instruction = LD(dest: self.A, src: Immediate8(val: val))
             instructionLength = 1
             
@@ -496,7 +504,7 @@ public class Z80 {
             
         case 0x46:
             // LD B, (HL)
-            instruction = LD(dest: self.B, src: self.HL.asIndirectInto(memory))
+            instruction = LD(dest: self.B, src: self.HL.asIndirectInto(bus))
             instructionLength = 1
             
         case 0x47:
@@ -536,7 +544,7 @@ public class Z80 {
             
         case 0x4E:
             // LD C, (HL)
-            instruction = LD(dest: self.C, src: self.HL.asIndirectInto(memory))
+            instruction = LD(dest: self.C, src: self.HL.asIndirectInto(bus))
             instructionLength = 1
             
         case 0x4F:
@@ -576,7 +584,7 @@ public class Z80 {
             
         case 0x56:
             // LD D, (HL)
-            instruction = LD(dest: self.D, src: self.HL.asIndirectInto(memory))
+            instruction = LD(dest: self.D, src: self.HL.asIndirectInto(bus))
             instructionLength = 1
             
         case 0x57:
@@ -616,7 +624,7 @@ public class Z80 {
             
         case 0x5E:
             // LD E, (HL)
-            instruction = LD(dest: self.E, src: self.HL.asIndirectInto(memory))
+            instruction = LD(dest: self.E, src: self.HL.asIndirectInto(bus))
             instructionLength = 1
             
         case 0x5F:
@@ -656,7 +664,7 @@ public class Z80 {
             
         case 0x66:
             // LD H, (HL)
-            instruction = LD(dest: self.H, src: self.HL.asIndirectInto(self.memory))
+            instruction = LD(dest: self.H, src: self.HL.asIndirectInto(self.bus))
             instructionLength = 1
             
         case 0x67:
@@ -696,7 +704,7 @@ public class Z80 {
             
         case 0x6E:
             // LD L, (HL)
-            instruction = LD(dest: self.L, src: self.HL.asIndirectInto(memory))
+            instruction = LD(dest: self.L, src: self.HL.asIndirectInto(bus))
             instructionLength = 1
             
         case 0x6F:
@@ -706,37 +714,37 @@ public class Z80 {
             
         case 0x70:
             // LD (HL), B
-            instruction = LD(dest: self.HL.asIndirectInto(self.memory), src: self.B)
+            instruction = LD(dest: self.HL.asIndirectInto(self.bus), src: self.B)
             instructionLength = 1
             
         case 0x71:
             // LD (HL), C
-            instruction = LD(dest: self.HL.asIndirectInto(self.memory), src: self.C)
+            instruction = LD(dest: self.HL.asIndirectInto(self.bus), src: self.C)
             instructionLength = 1
             
         case 0x72:
             // LD (HL), D
-            instruction = LD(dest: self.HL.asIndirectInto(self.memory), src: self.D)
+            instruction = LD(dest: self.HL.asIndirectInto(self.bus), src: self.D)
             instructionLength = 1
             
         case 0x73:
             // LD (HL), E
-            instruction = LD(dest: self.HL.asIndirectInto(self.memory), src: self.E)
+            instruction = LD(dest: self.HL.asIndirectInto(self.bus), src: self.E)
             instructionLength = 1
             
         case 0x74:
             // LD (HL), H
-            instruction = LD(dest: self.HL.asIndirectInto(self.memory), src: self.H)
+            instruction = LD(dest: self.HL.asIndirectInto(self.bus), src: self.H)
             instructionLength = 1
             
         case 0x75:
             // LD (HL), L
-            instruction = LD(dest: self.HL.asIndirectInto(self.memory), src: self.L)
+            instruction = LD(dest: self.HL.asIndirectInto(self.bus), src: self.L)
             instructionLength = 1
             
         case 0x77:
             // LD (HL), A
-            instruction = LD(dest: self.HL.asIndirectInto(memory), src: self.A)
+            instruction = LD(dest: self.HL.asIndirectInto(bus), src: self.A)
             instructionLength = 1
             
         case 0x78:
@@ -771,7 +779,7 @@ public class Z80 {
             
         case 0x7E:
             // LD A, (HL)
-            instruction = LD(dest: self.A, src: self.HL.asIndirectInto(memory))
+            instruction = LD(dest: self.A, src: self.HL.asIndirectInto(bus))
             instructionLength = 1
             
         case 0x7F:
@@ -805,7 +813,7 @@ public class Z80 {
             instructionLength = 1
         case 0x86:
             // ADD A, (HL)
-            instruction = ADD8(op1: self.A, op2: self.HL.asIndirectInto(self.memory))
+            instruction = ADD8(op1: self.A, op2: self.HL.asIndirectInto(self.bus))
             instructionLength = 1
         case 0x87:
             // ADD A, A
@@ -819,19 +827,19 @@ public class Z80 {
             
         case 0xC2:
             // JP nz, nn
-            let addr = memory.read16(PC.read()+1)
+            let addr = bus.read16(PC.read()+1)
             instruction = JP(condition: Condition(flag: self.ZF, target: false), dest: Immediate16(val: addr))
             instructionLength = 3
             
         case 0xC3:
             // JP nn
-            let addr = memory.read16(PC.read()+1)
+            let addr = bus.read16(PC.read()+1)
             instruction = JP(condition: nil, dest: Immediate16(val: addr))
             instructionLength = 3
             
         case 0xC6:
             // ADD A, n
-            let val = memory.read8(PC.read()+1)
+            let val = bus.read(PC.read()+1)
             instruction = ADD8(op1: self.A, op2: Immediate8(val: val))
             instructionLength = 2
             
@@ -847,7 +855,7 @@ public class Z80 {
             
         case 0xCA:
             // JP z, nn
-            let addr = memory.read16(PC.read()+1)
+            let addr = bus.read16(PC.read()+1)
             instruction = JP(condition: Condition(flag: self.ZF, target: true), dest: Immediate16(val: addr))
             instructionLength = 3
             
@@ -858,7 +866,7 @@ public class Z80 {
             
         case 0xD2:
             // JP nc, nn
-            let addr = memory.read16(PC.read()+1)
+            let addr = bus.read16(PC.read()+1)
             instruction = JP(condition: Condition(flag: self.CF, target: false), dest: Immediate16(val: addr))
             instructionLength = 3
             
@@ -869,7 +877,7 @@ public class Z80 {
             
         case 0xDA:
             // JP c, nn
-            let addr = memory.read16(PC.read()+1)
+            let addr = bus.read16(PC.read()+1)
             instruction = JP(condition: Condition(flag: self.CF, target: true), dest: Immediate16(val: addr))
             instructionLength = 3
             
@@ -885,7 +893,7 @@ public class Z80 {
             
         case 0xE2:
             // JP po, nn
-            let addr = memory.read16(PC.read()+1)
+            let addr = bus.read16(PC.read()+1)
             instruction = JP(condition: Condition(flag: self.PVF, target: false), dest: Immediate16(val: addr))
             instructionLength = 3
             
@@ -901,7 +909,7 @@ public class Z80 {
             
         case 0xEA:
             // JP pe, nn
-            let addr = memory.read16(PC.read()+1)
+            let addr = bus.read16(PC.read()+1)
             instruction = JP(condition: Condition(flag: self.PVF, target: true), dest: Immediate16(val: addr))
             instructionLength = 3
             
@@ -912,12 +920,12 @@ public class Z80 {
             
         case 0xF2:
             // JP p, nn
-            let addr = memory.read16(PC.read()+1)
+            let addr = bus.read16(PC.read()+1)
             instruction = JP(condition: Condition(flag: self.SF, target: false), dest: Immediate16(val: addr))
             instructionLength = 3
             
         case 0xF3:
-            let num = memory.read8(PC.read()+1)
+            let num = bus.read(PC.read()+1)
             instruction = CP(op: Immediate8(val: num))
             instructionLength = 2
             
@@ -928,14 +936,14 @@ public class Z80 {
             
         case 0xFA:
             // JP m, nn
-            let addr = memory.read16(PC.read()+1)
+            let addr = bus.read16(PC.read()+1)
             instruction = JP(condition: Condition(flag: self.SF, target: true), dest: Immediate16(val: addr))
             instructionLength = 3
             
             
         case 0xDD:
             // IX instructions
-            let secondByte = memory.read8(PC.read()+1)
+            let secondByte = bus.read(PC.read()+1)
             switch secondByte {
             case 0x09:
                 // ADD IX, BC
@@ -963,14 +971,14 @@ public class Z80 {
                 
             case 0x34:
                 // INC (IX+d)
-                let displacement = memory.read8Signed(PC.read()+2)
-                instruction = INC8(operand: Indexed8(register: self.IX, displacement: displacement, memory: self.memory))
+                let displacement = bus.readSigned(PC.read()+2)
+                instruction = INC8(operand: Indexed8(register: self.IX, displacement: displacement, bus: self.bus))
                 instructionLength = 3
                 
             case 0x35:
                 // DEC (IX+d)
-                let displacement = memory.read8Signed(PC.read()+2)
-                instruction = DEC8(operand: Indexed8(register: self.IX, displacement: displacement, memory: self.memory))
+                let displacement = bus.readSigned(PC.read()+2)
+                instruction = DEC8(operand: Indexed8(register: self.IX, displacement: displacement, bus: self.bus))
                 instructionLength = 3
                 
             case 0x39:
@@ -992,7 +1000,7 @@ public class Z80 {
             // IY instructions
             //@todo it wouldn't be very hard to make some higher-level code that handles both
             //IX instructions and IY instructions
-            let secondByte = memory.read8(PC.read()+1)
+            let secondByte = bus.read(PC.read()+1)
             switch secondByte {
             case 0x09:
                 // ADD IY, BC

@@ -85,8 +85,8 @@ class Register16: RegisterType, OperandType {
     }
     
     /// Utility method for obtaining an indirect value out of this register
-    func asIndirectInto(memory: Memory) -> Register16Indirect8<Register16> {
-        return Register16Indirect8(register: self, memory: memory)
+    func asIndirectTo(bus: DataBus) -> Register16Indirect8<Register16> {
+        return Register16Indirect8(register: self, bus: bus)
     }
 }
 
@@ -118,8 +118,8 @@ class Register16Computed: RegisterType, OperandType {
     }
     
     /// Utility method for obtaining an indirect value out of this register
-    func asIndirectInto(memory: Memory) -> Register16Indirect8<Register16Computed> {
-        return Register16Indirect8(register: self, memory: memory)
+    func asIndirectInto(bus: DataBus) -> Register16Indirect8<Register16Computed> {
+        return Register16Indirect8(register: self, bus: bus)
     }
 }
 
@@ -127,19 +127,19 @@ class Register16Computed: RegisterType, OperandType {
 /// @warn this type's `memory` member will be insufficient when bank switching is implemented
 class Register16Indirect8<T: RegisterType where T.ReadType == UInt16>: Readable, Writeable, OperandType {
     let register: T
-    let memory: Memory
+    let bus: DataBus
     
-    init(register: T, memory: Memory) {
+    init(register: T, bus: DataBus) {
         self.register = register
-        self.memory = memory
+        self.bus = bus
     }
     
     func read() -> UInt8 {
-        return Memory8Translator(addr: register.read(), memory: memory).read()
+        return bus.read(register.read())
     }
     
     func write(val: UInt8) {
-        Memory8Translator(addr: register.read(), memory: memory).write(val)
+        bus.write(val, to: register.read())
     }
     
     var operandType: OperandKind {

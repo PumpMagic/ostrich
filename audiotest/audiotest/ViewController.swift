@@ -31,14 +31,14 @@ class ViewController: NSViewController {
              1 is in Bank 1 (which can be changed during init or play). Finally, the INIT
              is called with the first song defined in the header. */
         print("Executing LOAD...")
-        let myRom = Memory(data: codeAndData, startingAddress: header.loadAddress)
-        let myZ80 = Z80(memory: myRom)
+        let rom = ROM(data: codeAndData, startingAddress: header.loadAddress)
+        let z80 = Z80(rom: rom)
         
-        myZ80.setSP(header.stackPointer)
-        myZ80.setPC(header.loadAddress)
+        z80.setSP(header.stackPointer)
+        z80.setPC(header.loadAddress)
         
         print("Calling INIT...")
-        myZ80.injectCall(header.initAddress)
+        z80.injectCall(header.initAddress)
         
         /* INIT - Called at the end of the LOAD process, or when a new song is selected.
              All of the registers are initialized, RAM is cleared, and the init address is
@@ -47,15 +47,15 @@ class ViewController: NSViewController {
              with a RET instruction. */
         print("Executing INIT...")
         
-        myZ80.runUntilRET()
+        z80.runUntilRET()
         var iteration = 1
         repeat {
-            guard let instruction = myZ80.fetchInstruction() else {
+            guard let instruction = z80.fetchInstruction() else {
                 print("Okay, bye")
                 exit(1)
             }
             print("\(iteration): \(instruction)")
-            instruction.runOn(myZ80)
+            instruction.runOn(z80)
             iteration += 1
         } while true
         
