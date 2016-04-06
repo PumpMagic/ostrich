@@ -18,6 +18,8 @@
 		58BB13941CACD63600D7FD06 /* CCF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BB13931CACD63600D7FD06 /* CCF.swift */; };
 		58BB13961CACD95D00D7FD06 /* RST.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BB13951CACD95D00D7FD06 /* RST.swift */; };
 		58BB139A1CACF0FA00D7FD06 /* DJNZ.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BB13991CACF0FA00D7FD06 /* DJNZ.swift */; };
+		58DA2C311CB4C04C00786344 /* DI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DA2C301CB4C04C00786344 /* DI.swift */; };
+		58DA2C331CB4CA5400786344 /* EI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DA2C321CB4CA5400786344 /* EI.swift */; };
 		FCF9A3321CAB86BD00EA79F0 /* ostrichframework.h in Headers */ = {isa = PBXBuildFile; fileRef = FCF9A3311CAB86BD00EA79F0 /* ostrichframework.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FCF9A3A11CAB8AA900EA79F0 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A38A1CAB8AA900EA79F0 /* Util.swift */; };
 		FCF9A3A21CAB8AA900EA79F0 /* ROM.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A38B1CAB8AA900EA79F0 /* ROM.swift */; };
@@ -53,6 +55,8 @@
 		58BB13931CACD63600D7FD06 /* CCF.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCF.swift; sourceTree = "<group>"; };
 		58BB13951CACD95D00D7FD06 /* RST.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RST.swift; sourceTree = "<group>"; };
 		58BB13991CACF0FA00D7FD06 /* DJNZ.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DJNZ.swift; sourceTree = "<group>"; };
+		58DA2C301CB4C04C00786344 /* DI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DI.swift; sourceTree = "<group>"; };
+		58DA2C321CB4CA5400786344 /* EI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EI.swift; sourceTree = "<group>"; };
 		FCF9A32E1CAB86BD00EA79F0 /* ostrichframework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ostrichframework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCF9A3311CAB86BD00EA79F0 /* ostrichframework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ostrichframework.h; sourceTree = "<group>"; };
 		FCF9A3331CAB86BD00EA79F0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -152,7 +156,9 @@
 				58BB13931CACD63600D7FD06 /* CCF.swift */,
 				FCF9A3921CAB8AA900EA79F0 /* CP.swift */,
 				FCF9A3991CAB8AA900EA79F0 /* DEC.swift */,
+				58DA2C301CB4C04C00786344 /* DI.swift */,
 				58BB13991CACF0FA00D7FD06 /* DJNZ.swift */,
+				58DA2C321CB4CA5400786344 /* EI.swift */,
 				FCF9A39E1CAB8AA900EA79F0 /* EX.swift */,
 				FCF9A39C1CAB8AA900EA79F0 /* EXX.swift */,
 				FCF9A39A1CAB8AA900EA79F0 /* INC.swift */,
@@ -265,12 +271,14 @@
 				FCF9A3B11CAB8AA900EA79F0 /* LDI.swift in Sources */,
 				FCF9A3AC1CAB8AA900EA79F0 /* POP.swift in Sources */,
 				58BB13961CACD95D00D7FD06 /* RST.swift in Sources */,
+				58DA2C311CB4C04C00786344 /* DI.swift in Sources */,
 				58BB13941CACD63600D7FD06 /* CCF.swift in Sources */,
 				580216CC1CAD0B2B00913FCE /* ADD.swift in Sources */,
 				5871BCDC1CAB97C3002A799C /* Z80.swift in Sources */,
 				FCF9A3AB1CAB8AA900EA79F0 /* JP.swift in Sources */,
 				FCF9A3B41CAB8AA900EA79F0 /* EX.swift in Sources */,
 				5854A08F1CAE29EE0044A766 /* RRC.swift in Sources */,
+				58DA2C331CB4CA5400786344 /* EI.swift in Sources */,
 				5854A0911CAE34610044A766 /* RLC.swift in Sources */,
 				FCF9A3B21CAB8AA900EA79F0 /* EXX.swift in Sources */,
 				FCF9A3AD1CAB8AA900EA79F0 /* PUSH.swift in Sources */,

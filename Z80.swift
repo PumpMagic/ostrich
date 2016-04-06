@@ -13,6 +13,15 @@ import Foundation
  Represents a Zilog Z80 CPU.
  */
 public class Z80 {
+    enum FlipFlop {
+        case Enabled
+        case Disabled
+    }
+    
+    struct InstructionContext {
+        var lastInstructionWasEI: Bool
+    }
+    
     // main registers
     /// A, AKA the Accumulator
     let A: Register8
@@ -78,6 +87,12 @@ public class Z80 {
     let HLp: Register16Computed
     
     
+    /// interrupt
+    var IFF1: FlipFlop
+    var IFF2: FlipFlop
+    
+    var instructionContext: InstructionContext
+    
     
     let bus: DataBus
     
@@ -130,13 +145,17 @@ public class Z80 {
         self.DEp = Register16Computed(high: self.Dp, low: self.Ep)
         self.HLp = Register16Computed(high: self.Hp, low: self.Lp)
         
-        //@todo break these constants out
+        
+        self.IFF1 = .Disabled
+        self.IFF2 = .Disabled
+        
+        self.instructionContext = InstructionContext(lastInstructionWasEI: false)
+        
+        
+        //@todo break these peripherals out
         let ram = RAM(size: 0xE000 - 0xC000, fillByte: 0, startingAddress: 0xC000)
-        
         self.bus = DataBus()
-        
         self.bus.registerReadable(rom, range: rom.addressRange)
-        
         self.bus.registerReadable(ram, range: ram.addressRange)
         self.bus.registerWriteable(ram, range: ram.addressRange)
     }
@@ -157,27 +176,6 @@ public class Z80 {
     public func injectCall(addr: Address) {
         let instruction = CALL(condition: nil, dest: Immediate16(val: addr))
         instruction.runOn(self)
-    }
-    
-    public func runUntilRET() {
-        //@todo this is a hacky convenience function, how can we better detect a RET without inspecting type?
-        print("Running until RET...")
-        var iteration = 1
-        repeat {
-            guard let instruction = self.fetchInstruction() else {
-                print("Okay, bye")
-                exit(1)
-            }
-            print("\(iteration): \(instruction)")
-            instruction.runOn(self)
-            iteration += 1
-            let inspectedType = String(Mirror(reflecting: instruction).subjectType)
-            if inspectedType == "RET" {
-                return
-            } else {
-                print("Inspected type: \(inspectedType)")
-            }
-        } while true
     }
     
     /// Stack pointer and program counter debug string
@@ -207,13 +205,57 @@ public class Z80 {
         return val
     }
     
+    public func runUntil(instructionType: String) {
+        //@todo this is a hacky convenience function, how can we better detect a given instruction without inspecting type?
+        print("Running until \(instructionType)...")
+        var iteration = 1
+        repeat {
+            let lastInstruction = doInstructionCycle()
+            print("Ran instruction #\(iteration): \(lastInstruction)")
+            iteration += 1
+            let inspectedType = String(Mirror(reflecting: lastInstruction).subjectType)
+            if inspectedType == instructionType {
+                return
+            }
+        } while true
+    }
+    
+    
+    /// Fetches an instruction, runs it, and returns it
+    public func doInstructionCycle() -> Instruction {
+        guard let instruction = self.fetchInstruction() else {
+            print("FATAL: unable to fetch instruction")
+            exit(1)
+        }
+        self.executeInstruction(instruction)
+        
+        return instruction
+    }
+    
+    /// Execute an instruction.
+    /// This function has some additional behavior to support things like EI, which has effects delayed by an instruction.
+    func executeInstruction(instruction: Instruction) {
+        let willEnableInterrupts = self.instructionContext.lastInstructionWasEI
+        
+        instruction.runOn(self)
+        
+        if willEnableInterrupts {
+            self.IFF1 = .Enabled
+            self.IFF2 = .Enabled
+            
+            //@warn this behavior may be too lazy
+            self.instructionContext.lastInstructionWasEI = false
+        }
+    }
     
     //@todo make this internal and add a public run() or clock() or something
-    public func fetchInstruction() -> Instruction? {
+    func fetchInstruction() -> Instruction? {
         let firstByte = bus.read(PC.read())
         
         var instruction: Instruction? = nil
         var instructionLength: UInt16 = 1
+        
+        print("First byte: \(firstByte.hexString)")
         
         switch firstByte {
         case 0x00:
@@ -940,9 +982,9 @@ public class Z80 {
             instructionLength = 3
             
         case 0xF3:
-            let num = bus.read(PC.read()+1)
-            instruction = CP(op: Immediate8(val: num))
-            instructionLength = 2
+            // DI
+            instruction = DI()
+            instructionLength = 1
             
         case 0xF5:
             // PUSH AF
@@ -959,6 +1001,11 @@ public class Z80 {
             let addr = bus.read16(PC.read()+1)
             instruction = JP(condition: Condition(flag: self.SF, target: true), dest: Immediate16(val: addr))
             instructionLength = 3
+            
+        case 0xFB:
+            // EI
+            instruction = EI()
+            instructionLength = 1
             
             
         case 0xDD:

@@ -33,6 +33,6 @@ struct LD
     func runOn(z80: Z80) {
         dest.write(src.read())
         
-        // No LD modifies flags.
+        //@todo LD A, I and LD A, R both modify flags! implement them as special instructions
     }
 }

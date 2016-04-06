@@ -11,7 +11,7 @@ import AudioKit
 import ostrichframework
 
 
-let GBS_PATH: String = "/Users/ryan.conway/Dropbox/emu/SML.gbs"
+let GBS_PATH: String = "/Users/ryanconway/Dropbox/emu/SML.gbs"
 
 class ViewController: NSViewController {
     override func viewDidLoad() {
@@ -33,24 +33,26 @@ class ViewController: NSViewController {
         let z80 = Z80(rom: rom)
         z80.setSP(header.stackPointer)
         z80.setPC(header.loadAddress)
-        
+            
         /* INIT - Called at the end of the LOAD process, or when a new song is selected.
              All of the registers are initialized, RAM is cleared, and the init address is
              called with the song number set in the accumulator. Note that the song number
              in the accumulator is zero-based (the first song is 0). The init code must end
              with a RET instruction. */
         print("Calling and running INIT...")
+        z80.setA(header.firstSong)
         z80.injectCall(header.initAddress)
-        z80.runUntilRET()
+        z80.runUntil("RET")
         
         /* PLAY - Begins after INIT process is complete. The play address is constantly
              called at the rate established in the header (see TIMING). The play code must
              end with a RET instruction. */
+        //@todo use a software timer to call this repeatedly according to timerModulo / timerControl
         print("Calling and running PLAY...")
         z80.injectCall(header.playAddress)
-        z80.runUntilRET()
+        z80.runUntil("RET")
         
-        print("Finished PLAY?")
+        
         exit(1)
     }
 }

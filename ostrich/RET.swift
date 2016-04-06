@@ -18,15 +18,11 @@ struct RET: Instruction {
     let cycleCount = 0
     
     func runOn(z80: Z80) {
-        print("Before RET: \n\(z80.pcsp)")
-        
         // Only return if the condition is absent or met
         let conditionSatisfied = condition?.evaluate() ?? true
         
         if conditionSatisfied {
             z80.PC.write(z80.pop())
         }
-        
-        print("After RET: \n\(z80.pcsp)")
     }
 }

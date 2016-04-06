@@ -19,8 +19,6 @@ struct CALL<T: protocol<Readable, OperandType> where T.ReadType == UInt16>: Inst
     let cycleCount = 0
     
     func runOn(z80: Z80) {
-        print("Before CALL: \n\(z80.pcsp)")
-        
         // Only return if the condition is absent or met
         let conditionSatisfied = condition?.evaluate() ?? true
         
@@ -28,7 +26,5 @@ struct CALL<T: protocol<Readable, OperandType> where T.ReadType == UInt16>: Inst
             z80.push(z80.PC.read())
             z80.PC.write(dest.read())
         }
-        
-        print("After CALL: \n\(z80.pcsp)")
     }
 }

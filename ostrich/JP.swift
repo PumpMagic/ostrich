@@ -20,8 +20,6 @@ struct JP<T: protocol<Readable, OperandType> where T.ReadType == UInt16>: Instru
     let cycleCount = 0 //@todo
     
     func runOn(z80: Z80) {
-        print("Before JP: \n\(z80.pcsp)")
-        
         // Only jump if the condition is absent or met
         let conditionSatisfied = condition?.evaluate() ?? true
         
@@ -30,7 +28,5 @@ struct JP<T: protocol<Readable, OperandType> where T.ReadType == UInt16>: Instru
         }
         
         // Never affects flag bits
-        
-        print("After JP: \n\(z80.pcsp)")
     }
 }
