@@ -837,6 +837,11 @@ public class Z80 {
             instruction = JP(condition: nil, dest: Immediate16(val: addr))
             instructionLength = 3
             
+        case 0xC5:
+            // PUSH BC
+            instruction = PUSH(operand: self.BC)
+            instructionLength = 1
+            
         case 0xC6:
             // ADD A, n
             let val = bus.read(PC.read()+1)
@@ -870,6 +875,11 @@ public class Z80 {
             instruction = JP(condition: Condition(flag: self.CF, target: false), dest: Immediate16(val: addr))
             instructionLength = 3
             
+        case 0xD5:
+            // PUSH DE
+            instruction = PUSH(operand: self.DE)
+            instructionLength = 1
+            
         case 0xD8:
             // RET c
             instruction = RET(condition: Condition(flag: self.CF, target: true))
@@ -896,6 +906,11 @@ public class Z80 {
             let addr = bus.read16(PC.read()+1)
             instruction = JP(condition: Condition(flag: self.PVF, target: false), dest: Immediate16(val: addr))
             instructionLength = 3
+            
+        case 0xE5:
+            // PUSH HL
+            instruction = PUSH(operand: self.HL)
+            instructionLength = 1
             
         case 0xE8:
             // RET pe
@@ -928,6 +943,11 @@ public class Z80 {
             let num = bus.read(PC.read()+1)
             instruction = CP(op: Immediate8(val: num))
             instructionLength = 2
+            
+        case 0xF5:
+            // PUSH AF
+            instruction = PUSH(operand: self.AF)
+            instructionLength = 1
             
         case 0xF8:
             // RET p
@@ -984,6 +1004,11 @@ public class Z80 {
             case 0x39:
                 // ADD IX, SP
                 instruction = ADD16(op1: self.IX, op2: self.SP)
+                instructionLength = 2
+                
+            case 0xE5:
+                // PUSH IX
+                instruction = PUSH(operand: self.IX)
                 instructionLength = 2
                 
             case 0xE9:

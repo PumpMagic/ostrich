@@ -41,7 +41,7 @@ class DataBus: DelegatesReads, DelegatesWrites {
             }
         }
         
-        print("FATAL: no listeners found for read")
+        print("FATAL: no listeners found for read of \(addr.hexString)")
         exit(1)
     }
     
@@ -53,7 +53,7 @@ class DataBus: DelegatesReads, DelegatesWrites {
             }
         }
         
-        print("FATAL: no listeners found for write")
+        print("FATAL: no listeners found for write of \(addr.hexString)")
         exit(1)
     }
     
