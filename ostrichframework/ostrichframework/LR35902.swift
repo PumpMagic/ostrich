@@ -1,16 +1,16 @@
 //
-//  Z80.swift
-//  ostrich
+//  LR35902.swift
+//  ostrichframework
 //
-//  Created by Ryan Conway on 1/6/16.
-//  Copyright © 2016 conwarez. All rights reserved.
+//  Created by Ryan Conway on 4/6/16.
+//  Copyright © 2016 Ryan Conway. All rights reserved.
 //
 
 import Foundation
 
 
-/// Representation a Zilog Z80 CPU.
-public class Z80: Intel8080Like {
+/// Representation of a Sharp LR35902 CPU.
+public class LR35902: Intel8080Like {
     enum FlipFlop {
         case Enabled
         case Disabled
@@ -32,15 +32,8 @@ public class Z80: Intel8080Like {
     let H: Register8
     let L: Register8
     
-    // alternate registers
-    let Ap: Register8
-    let Bp: Register8
-    let Cp: Register8
-    let Dp: Register8
-    let Ep: Register8
-    let Fp: Register8
-    let Hp: Register8
-    let Lp: Register8
+    /// stack pointer
+    let SP: Register16
     
     // other registers
     /// interrupt page address
@@ -51,24 +44,13 @@ public class Z80: Intel8080Like {
     /// program counter
     let PC: Register16
     
-    /// stack pointer
-    let SP: Register16
-    
-    // index registers
-    let IX: Register16
-    let IY: Register16
-    
     // flags - computed from F
-    /// Sign flag. True: positive. False: negative.
-    let SF: Flag
     /// Zero flag
     let ZF: Flag
+    /// Ssubtract flag
+    let NF: Flag
     /// Half-carry flag
     let HF: Flag
-    /// Parity/overflow flag. False: odd number of high bits. True: even number of high bits.
-    let PVF: Flag
-    /// Add/subtract flag
-    let NF: Flag
     /// Carry flag
     let CF: Flag
     
@@ -78,26 +60,14 @@ public class Z80: Intel8080Like {
     let DE: Register16Computed
     let HL: Register16Computed
     
-    // logical 16-bit alternate registers
-    let AFp: Register16Computed
-    let BCp: Register16Computed
-    let DEp: Register16Computed
-    let HLp: Register16Computed
-    
-    
     /// interrupt
     var IFF1: FlipFlop
     var IFF2: FlipFlop
     
     var instructionContext: InstructionContext
     
-    
     let bus: DataBus
     
-    
-    //@todo emulate all necessary pins (see user manual pg. 17)
-    // at least add an interrupt() and maybe nmi()
-
     public init(bus: DataBus) {
         self.A = Register8(val: 0)
         self.B = Register8(val: 0)
@@ -108,17 +78,6 @@ public class Z80: Intel8080Like {
         self.H = Register8(val: 0)
         self.L = Register8(val: 0)
         
-        self.Ap = Register8(val: 0)
-        self.Bp = Register8(val: 0)
-        self.Cp = Register8(val: 0)
-        self.Dp = Register8(val: 0)
-        self.Ep = Register8(val: 0)
-        self.Fp = Register8(val: 0)
-        self.Hp = Register8(val: 0)
-        self.Lp = Register8(val: 0)
-        
-        self.IX = Register16(val: 0)
-        self.IY = Register16(val: 0)
         self.SP = Register16(val: 0)
         
         self.I = Register8(val: 0)
@@ -126,23 +85,15 @@ public class Z80: Intel8080Like {
         
         self.PC = Register16(val: 0x100) //@todo don't init this here
         
-        self.SF = Flag(reg: F, bitNumber: 7)
-        self.ZF = Flag(reg: F, bitNumber: 6)
-        self.HF = Flag(reg: F, bitNumber: 4)
-        self.PVF = Flag(reg: F, bitNumber: 2)
-        self.NF = Flag(reg: F, bitNumber: 1)
-        self.CF = Flag(reg: F, bitNumber: 0)
+        self.ZF = Flag(reg: F, bitNumber: 7)
+        self.NF = Flag(reg: F, bitNumber: 6)
+        self.HF = Flag(reg: F, bitNumber: 5)
+        self.CF = Flag(reg: F, bitNumber: 4)
         
         self.AF = Register16Computed(high: self.A, low: self.F)
         self.BC = Register16Computed(high: self.B, low: self.C)
         self.DE = Register16Computed(high: self.D, low: self.E)
         self.HL = Register16Computed(high: self.H, low: self.L)
-        
-        self.AFp = Register16Computed(high: self.Ap, low: self.Fp)
-        self.BCp = Register16Computed(high: self.Bp, low: self.Cp)
-        self.DEp = Register16Computed(high: self.Dp, low: self.Ep)
-        self.HLp = Register16Computed(high: self.Hp, low: self.Lp)
-        
         
         self.IFF1 = .Disabled
         self.IFF2 = .Disabled
@@ -251,9 +202,9 @@ public class Z80: Intel8080Like {
             instruction = NOP()
             instructionLength = 1
             
-        // Manual: "The first n operand after the op code is the low-order byte."
-        //      -> First byte -> C
-        //      -> Second byte -> B
+            // Manual: "The first n operand after the op code is the low-order byte."
+            //      -> First byte -> C
+            //      -> Second byte -> B
         // So as long as DataBus.read16 returns the endianness LD.src expects, we're fine, right?
         case 0x01:
             // LD BC, nn

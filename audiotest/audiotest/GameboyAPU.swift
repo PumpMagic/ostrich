@@ -19,7 +19,7 @@ func getValueOfBits(num: UInt8, bits: Range<UInt8>) -> UInt8 {
     var result: UInt8 = 0
     for bitIndex in bits {
         if bitIsHigh(num, bit: bitIndex) {
-            result = result + (0x01 << bitIndex - minIndex)
+            result = result + (0x01 << (bitIndex - minIndex))
         }
     }
     
@@ -49,6 +49,8 @@ class GameBoyAPU: Memory, HandlesWrites {
         self.pulse1 = Pulse(mixer: mixer)
         self.pulse2 = Pulse(mixer: mixer)
         
+        self.pulse2.volume = 0
+        
         //@todo we can't use LAST or FIRST here for calculations. what can we do instead?
         self.ram = RAM(size: 0x30, fillByte: 0x00, firstAddress: 0xFF10)
     }
@@ -58,6 +60,8 @@ class GameBoyAPU: Memory, HandlesWrites {
     }
     
     func write(val: UInt8, to addr: Address) {
+        print("APU write! \(val) to \(addr)")
+        
         self.ram.write(val, to: addr)
         
         // Update children

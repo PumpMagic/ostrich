@@ -14,6 +14,8 @@
 		5854A08F1CAE29EE0044A766 /* RRC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5854A08E1CAE29EE0044A766 /* RRC.swift */; };
 		5854A0911CAE34610044A766 /* RLC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5854A0901CAE34610044A766 /* RLC.swift */; };
 		5871BCDC1CAB97C3002A799C /* Z80.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5871BCDB1CAB97C3002A799C /* Z80.swift */; };
+		588666FF1CB61E6800B17A44 /* LR35902.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588666FE1CB61E6800B17A44 /* LR35902.swift */; };
+		588667011CB6255300B17A44 /* Intel8080Like.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588667001CB6255300B17A44 /* Intel8080Like.swift */; };
 		58B69ACA1CAF87A70003793B /* CALL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B69AC91CAF87A70003793B /* CALL.swift */; };
 		58BB13941CACD63600D7FD06 /* CCF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BB13931CACD63600D7FD06 /* CCF.swift */; };
 		58BB13961CACD95D00D7FD06 /* RST.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BB13951CACD95D00D7FD06 /* RST.swift */; };
@@ -51,6 +53,8 @@
 		5854A08E1CAE29EE0044A766 /* RRC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RRC.swift; sourceTree = "<group>"; };
 		5854A0901CAE34610044A766 /* RLC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLC.swift; sourceTree = "<group>"; };
 		5871BCDB1CAB97C3002A799C /* Z80.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Z80.swift; path = ../../Z80.swift; sourceTree = "<group>"; };
+		588666FE1CB61E6800B17A44 /* LR35902.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LR35902.swift; sourceTree = "<group>"; };
+		588667001CB6255300B17A44 /* Intel8080Like.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Intel8080Like.swift; sourceTree = "<group>"; };
 		58B69AC91CAF87A70003793B /* CALL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CALL.swift; sourceTree = "<group>"; };
 		58BB13931CACD63600D7FD06 /* CCF.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCF.swift; sourceTree = "<group>"; };
 		58BB13951CACD95D00D7FD06 /* RST.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RST.swift; sourceTree = "<group>"; };
@@ -104,6 +108,16 @@
 			name = Peripherals;
 			sourceTree = "<group>";
 		};
+		588666FD1CB61B5800B17A44 /* CPUs */ = {
+			isa = PBXGroup;
+			children = (
+				588667001CB6255300B17A44 /* Intel8080Like.swift */,
+				5871BCDB1CAB97C3002A799C /* Z80.swift */,
+				588666FE1CB61E6800B17A44 /* LR35902.swift */,
+			);
+			name = CPUs;
+			sourceTree = "<group>";
+		};
 		FCF9A3241CAB86BD00EA79F0 = {
 			isa = PBXGroup;
 			children = (
@@ -125,7 +139,7 @@
 			children = (
 				FCF9A3311CAB86BD00EA79F0 /* ostrichframework.h */,
 				FCF9A38A1CAB8AA900EA79F0 /* Util.swift */,
-				5871BCDB1CAB97C3002A799C /* Z80.swift */,
+				588666FD1CB61B5800B17A44 /* CPUs */,
 				581233371CB36AD300A2D1A5 /* Peripherals */,
 				FCF9A3901CAB8AA900EA79F0 /* Operands */,
 				FCF9A39F1CAB8AA900EA79F0 /* Instructions */,
@@ -288,6 +302,8 @@
 				FCF9A3AA1CAB8AA900EA79F0 /* ADC.swift in Sources */,
 				FCF9A3A11CAB8AA900EA79F0 /* Util.swift in Sources */,
 				FCF9A3B01CAB8AA900EA79F0 /* INC.swift in Sources */,
+				588667011CB6255300B17A44 /* Intel8080Like.swift in Sources */,
+				588666FF1CB61E6800B17A44 /* LR35902.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

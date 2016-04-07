@@ -117,7 +117,7 @@ func rotateLeft(num: UInt8) -> UInt8 {
 }
 
 // ADD STUFF
-func addOverflowOccurred(op1: UInt8, op2: UInt8, result: UInt8) -> Bool {
+func addOverflowOccurred(op1: UInt8, _ op2: UInt8, result: UInt8) -> Bool {
     if numberIsNegative(op1) && numberIsNegative(op2) && !numberIsNegative(result) {
         return true
     }
@@ -128,7 +128,7 @@ func addOverflowOccurred(op1: UInt8, op2: UInt8, result: UInt8) -> Bool {
     return false
 }
 
-func addHalfCarryProne(op1: UInt8, op2: UInt8) -> Bool {
+func addHalfCarryProne(op1: UInt8, _ op2: UInt8) -> Bool {
     return (op1 & 0x0F) + (op2 & 0x0F) >= 0x10
 }
 
@@ -137,7 +137,7 @@ func addHalfCarryProne(op1: UInt16, op2: UInt16) -> Bool {
     return (op1 & 0x07FF) + (op2 & 0x07FF) >= 0x0800
 }
 
-func addCarryProne(op1: UInt8, op2: UInt8) -> Bool {
+func addCarryProne(op1: UInt8, _ op2: UInt8) -> Bool {
     let overflowedResult: UInt16 = UInt16(op1) + UInt16(op2)
     
     return overflowedResult > 0xFF

@@ -19,6 +19,12 @@ struct ADC<T: protocol<Readable, OperandType>>: Instruction {
     let cycleCount = 0
     
     func runOn(z80: Z80) {
-        print("Running ADC")
+        print("FATAL: ADC unimplemented!")
+        exit(1)
+    }
+    
+    func runOn(lr35902: LR35902) {
+        print("FATAL: ADC unimplemented!")
+        exit(1)
     }
 }

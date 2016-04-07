@@ -13,16 +13,11 @@ import ostrichframework
 
 let GBS_PATH: String = "/Users/ryanconway/Dropbox/emu/SML.gbs"
 
+func delayed(nanos: Int64, closure: () -> ()) {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, nanos), dispatch_get_main_queue(), closure)
+}
+
 class ViewController: NSViewController {
-    func delay(nanos:Int64, closure:()->()) {
-        dispatch_after(
-            dispatch_time(
-                DISPATCH_TIME_NOW,
-                nanos
-            ),
-            dispatch_get_main_queue(), closure)
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -59,7 +54,7 @@ class ViewController: NSViewController {
         
         z80.setSP(header.stackPointer)
         z80.setPC(header.loadAddress)
-            
+        
         /* INIT - Called at the end of the LOAD process, or when a new song is selected.
              All of the registers are initialized, RAM is cleared, and the init address is
              called with the song number set in the accumulator. Note that the song number
@@ -75,15 +70,25 @@ class ViewController: NSViewController {
              end with a RET instruction. */
         //@todo use a software timer to call this repeatedly according to timerModulo / timerControl
         print("Calling and running PLAY...")
+        
+        /*
         var closure: (Void -> Void)!
         closure = {
+            print("Beep beep")
             z80.injectCall(header.playAddress)
             z80.runUntil("RET")
-            self.delay(16666666) { closure() }
+            delayed(16666666) { closure() }
         }
         
         closure()
-        repeat { usleep(100) } while true
+        repeat { usleep(1000) } while true
+        */
+        
+        repeat {
+            z80.injectCall(header.playAddress)
+            z80.runUntil("RET")
+            usleep(16666)
+        } while true
     }
 }
 
