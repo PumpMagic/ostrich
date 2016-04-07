@@ -30,9 +30,7 @@
 		FCF9A3A51CAB8AA900EA79F0 /* Immediates.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A38E1CAB8AA900EA79F0 /* Immediates.swift */; };
 		FCF9A3A61CAB8AA900EA79F0 /* Registers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A38F1CAB8AA900EA79F0 /* Registers.swift */; };
 		FCF9A3A71CAB8AA900EA79F0 /* Instruction.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A3911CAB8AA900EA79F0 /* Instruction.swift */; };
-		FCF9A3A81CAB8AA900EA79F0 /* CP.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A3921CAB8AA900EA79F0 /* CP.swift */; };
 		FCF9A3A91CAB8AA900EA79F0 /* RET.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A3931CAB8AA900EA79F0 /* RET.swift */; };
-		FCF9A3AA1CAB8AA900EA79F0 /* ADC.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A3941CAB8AA900EA79F0 /* ADC.swift */; };
 		FCF9A3AB1CAB8AA900EA79F0 /* JP.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A3951CAB8AA900EA79F0 /* JP.swift */; };
 		FCF9A3AC1CAB8AA900EA79F0 /* POP.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A3961CAB8AA900EA79F0 /* POP.swift */; };
 		FCF9A3AD1CAB8AA900EA79F0 /* PUSH.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A3971CAB8AA900EA79F0 /* PUSH.swift */; };
@@ -71,9 +69,7 @@
 		FCF9A38E1CAB8AA900EA79F0 /* Immediates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Immediates.swift; sourceTree = "<group>"; };
 		FCF9A38F1CAB8AA900EA79F0 /* Registers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Registers.swift; path = ../Registers.swift; sourceTree = "<group>"; };
 		FCF9A3911CAB8AA900EA79F0 /* Instruction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Instruction.swift; sourceTree = "<group>"; };
-		FCF9A3921CAB8AA900EA79F0 /* CP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CP.swift; sourceTree = "<group>"; };
 		FCF9A3931CAB8AA900EA79F0 /* RET.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RET.swift; sourceTree = "<group>"; };
-		FCF9A3941CAB8AA900EA79F0 /* ADC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ADC.swift; sourceTree = "<group>"; };
 		FCF9A3951CAB8AA900EA79F0 /* JP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JP.swift; sourceTree = "<group>"; };
 		FCF9A3961CAB8AA900EA79F0 /* POP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = POP.swift; sourceTree = "<group>"; };
 		FCF9A3971CAB8AA900EA79F0 /* PUSH.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUSH.swift; sourceTree = "<group>"; };
@@ -164,11 +160,9 @@
 			isa = PBXGroup;
 			children = (
 				FCF9A3911CAB8AA900EA79F0 /* Instruction.swift */,
-				FCF9A3941CAB8AA900EA79F0 /* ADC.swift */,
 				580216CB1CAD0B2B00913FCE /* ADD.swift */,
 				58B69AC91CAF87A70003793B /* CALL.swift */,
 				58BB13931CACD63600D7FD06 /* CCF.swift */,
-				FCF9A3921CAB8AA900EA79F0 /* CP.swift */,
 				FCF9A3991CAB8AA900EA79F0 /* DEC.swift */,
 				58DA2C301CB4C04C00786344 /* DI.swift */,
 				58BB13991CACF0FA00D7FD06 /* DJNZ.swift */,
@@ -280,7 +274,6 @@
 				5812333D1CB383C000A2D1A5 /* RAM.swift in Sources */,
 				FCF9A3B31CAB8AA900EA79F0 /* LD.swift in Sources */,
 				FCF9A3AE1CAB8AA900EA79F0 /* NOP.swift in Sources */,
-				FCF9A3A81CAB8AA900EA79F0 /* CP.swift in Sources */,
 				FCF9A3A41CAB8AA900EA79F0 /* Indexed.swift in Sources */,
 				FCF9A3B11CAB8AA900EA79F0 /* LDI.swift in Sources */,
 				FCF9A3AC1CAB8AA900EA79F0 /* POP.swift in Sources */,
@@ -299,7 +292,6 @@
 				FCF9A3A91CAB8AA900EA79F0 /* RET.swift in Sources */,
 				FCF9A3A61CAB8AA900EA79F0 /* Registers.swift in Sources */,
 				58BB139A1CACF0FA00D7FD06 /* DJNZ.swift in Sources */,
-				FCF9A3AA1CAB8AA900EA79F0 /* ADC.swift in Sources */,
 				FCF9A3A11CAB8AA900EA79F0 /* Util.swift in Sources */,
 				FCF9A3B01CAB8AA900EA79F0 /* INC.swift in Sources */,
 				588667011CB6255300B17A44 /* Intel8080Like.swift in Sources */,

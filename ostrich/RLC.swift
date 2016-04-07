@@ -10,46 +10,74 @@ import Foundation
 
 
 /// Left rotate with carry
-struct RLC<T: protocol<Writeable, Readable, OperandType> where T.ReadType == T.WriteType, T.ReadType == UInt8>: Instruction
+struct RLC<T: protocol<Writeable, Readable, OperandType> where T.ReadType == T.WriteType, T.ReadType == UInt8>: Z80Instruction, LR35902Instruction
 {
     let op: T
     
     let cycleCount = 0
     
-    func runOn(z80: Z80) {
+    
+    private func runCommon(cpu: Intel8080Like) -> (UInt8, UInt8) {
         let oldValue = op.read()
         let newValue = rotateRight(oldValue)
         
         op.write(newValue)
         
-        modifyFlags(z80, oldValue: oldValue, newValue: newValue)
+        return (oldValue, newValue)
     }
     
-    func modifyFlags(z80: Z80, oldValue: UInt8, newValue: UInt8) {
-        // S is set if result is negative; otherwise, it is reset.
+    func runOn(cpu: Z80) {
+        let (oldValue, newValue) = runCommon(cpu)
+        
+        modifyFlags(cpu, oldValue: oldValue, newValue: newValue)
+    }
+    
+    func runOn(cpu: LR35902) {
+        let (oldValue, newValue) = runCommon(cpu)
+        
+        modifyFlags(cpu, oldValue: oldValue, newValue: newValue)
+    }
+    
+    
+    private func modifyCommonFlags(cpu: Intel8080Like, oldValue: UInt8, newValue: UInt8) {
         // Z is set if result is 0; otherwise, it is reset.
         // H is reset.
-        // P/V is set if parity even; otherwise, it is reset.
         // N is reset.
         // C is data from bit 7 of source register.
         
-        z80.SF.write(numberIsNegative(newValue))
-        z80.ZF.write(newValue == 0x00)
-        z80.HF.write(false)
-        z80.PVF.write(parity(newValue))
-        z80.NF.write(false)
-        z80.CF.write(bitIsHigh(oldValue, bit: 7))
+        cpu.ZF.write(newValue == 0x00)
+        cpu.HF.write(false)
+        cpu.NF.write(false)
+        cpu.CF.write(bitIsHigh(oldValue, bit: 7))
+    }
+    
+    private func modifyFlags(cpu: Z80, oldValue: UInt8, newValue: UInt8) {
+        modifyCommonFlags(cpu, oldValue: oldValue, newValue: newValue)
+        
+        // S is set if result is negative; otherwise, it is reset.
+        // P/V is set if parity even; otherwise, it is reset.
+        
+        cpu.SF.write(numberIsNegative(newValue))
+        cpu.PVF.write(parity(newValue))
+    }
+    
+    private func modifyFlags(cpu: LR35902, oldValue: UInt8, newValue: UInt8) {
+        modifyCommonFlags(cpu, oldValue: oldValue, newValue: newValue)
     }
 }
 
 /// Left rotate with carry A
-struct RLCA: Instruction {
-    //@warn the Z80 manual's example has something that doesn't look like a proper right rotate
-    // it's probably an error in the manual, so this instruction implements an actual rotate...
-    
+struct RLCA: Z80Instruction, LR35902Instruction {
     let cycleCount = 0
     
-    func runOn(z80: Z80) {
+    func runOn(cpu: Z80) {
+        let oldA = z80.A.read()
+        
+        z80.A.write(rotateLeft(oldA))
+        modifyFlags(z80, oldValue: oldA)
+    }
+    
+    func runOn(cpu: LR35902) {
         let oldA = z80.A.read()
         
         z80.A.write(rotateLeft(oldA))

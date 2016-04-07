@@ -20,7 +20,7 @@ struct DJNZ: Z80Instruction {
     let displacementMinusTwo: Int8
     
     func runOn(cpu: Z80) {
-        let newValue = cpu.B.read() &- 1
+        let newValue = dec(cpu.B.read())
         
         cpu.B.write(newValue)
         

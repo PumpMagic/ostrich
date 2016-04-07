@@ -13,26 +13,24 @@ import Foundation
 struct LD
     <T: protocol<Writeable, OperandType>,
     U: protocol<Readable, OperandType>
-    where T.WriteType == U.ReadType>: Instruction
+    where T.WriteType == U.ReadType>: Z80Instruction, LR35902Instruction
 {
     let dest: T
     let src: U
     
-    var cycleCount: Int {
-        get {
-            //@todo switch, accurate values
-            if dest.operandType == .Register8Like && src.operandType == .Register8Like { return 1 }
-            if dest.operandType == .Register8Like && src.operandType == .Memory8Like { return 1 }
-            if dest.operandType == .Memory8Like && src.operandType == .Register8Like { return 1 }
-            if dest.operandType == .Memory8Like && src.operandType == .Memory8Like { return 1 }
-            
-            return 0
-        }
+    let cycleCount = 0
+    
+    private func load(cpu: Intel8080Like) {
+        dest.write(src.read())
     }
     
-    func runOn(z80: Z80) {
-        dest.write(src.read())
-        
-        //@todo LD A, I and LD A, R both modify flags! implement them as special instructions
+    func runOn(cpu: Z80) {
+        load(cpu)
+    }
+    
+    func runOn(cpu: LR35902) {
+        load(cpu)
     }
 }
+
+//@todo make special instructions for LD A, I and LD A, R, which both modify flags

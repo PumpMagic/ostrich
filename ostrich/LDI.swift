@@ -10,20 +10,20 @@ import Foundation
 
 
 /// A special load-increment-increment-decrement, used to copy arrays or something
-///@warn this uses z80.memory
-struct LDI: Instruction {
+//@warn the Z80's "LDI" is completely different from the LR35902's "LDI". this is the Z80's
+struct LDI: Z80Instruction {
     let cycleCount = 0
     
-    func runOn(z80: Z80) {
-        z80.DE.asIndirectInto(z80.bus).write(z80.HL.asIndirectInto(z80.bus).read())
-        z80.DE.write(z80.DE.read() + 1)
-        z80.HL.write(z80.HL.read() + 1)
-        z80.BC.write(z80.BC.read() - 1)
+    func runOn(cpu: Z80) {
+        cpu.DE.asIndirectInto(cpu.bus).write(cpu.HL.asIndirectInto(cpu.bus).read())
+        incAndStore(cpu.DE)
+        incAndStore(cpu.HL)
+        decAndStore(cpu.BC)
         
-        self.modifyFlags(z80)
+        modifyFlags(cpu)
     }
     
-    func modifyFlags(z80: Z80) {
+    func modifyFlags(cpu: Z80) {
         // S is not affected.
         // Z is not affected.
         // H is reset.
@@ -31,10 +31,10 @@ struct LDI: Instruction {
         // N is reset.
         // C is not affected.
         
-        let newBC = z80.BC.read()
+        let newBC = cpu.BC.read()
         
-        z80.HF.write(false)
-        z80.PVF.write(newBC != 0x00)
-        z80.NF.write(false)
+        cpu.HF.write(false)
+        cpu.PVF.write(newBC != 0x00)
+        cpu.NF.write(false)
     }
 }

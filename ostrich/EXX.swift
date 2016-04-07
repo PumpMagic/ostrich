@@ -10,23 +10,23 @@ import Foundation
 
 
 /// Three-way exchange: exchange three specific pairs of registers
-struct EXX: Instruction {
+struct EXX: Z80Instruction {
     let cycleCount = 0
     
-    func runOn(z80: Z80) {
-        let bcValue = z80.BC.read()
-        let bcpValue = z80.BCp.read()
-        let deValue = z80.DE.read()
-        let depValue = z80.DEp.read()
-        let hlValue = z80.HL.read()
-        let hlpValue = z80.HLp.read()
+    func runOn(cpu: Z80) {
+        let bcValue = cpu.BC.read()
+        let bcpValue = cpu.BCp.read()
+        let deValue = cpu.DE.read()
+        let depValue = cpu.DEp.read()
+        let hlValue = cpu.HL.read()
+        let hlpValue = cpu.HLp.read()
         
-        z80.BC.write(bcpValue)
-        z80.BCp.write(bcValue)
-        z80.DE.write(depValue)
-        z80.DEp.write(deValue)
-        z80.HL.write(hlpValue)
-        z80.HLp.write(hlValue)
+        cpu.BC.write(bcpValue)
+        cpu.BCp.write(bcValue)
+        cpu.DE.write(depValue)
+        cpu.DEp.write(deValue)
+        cpu.HL.write(hlpValue)
+        cpu.HLp.write(hlValue)
         
         // EXX does not modify flags.
     }

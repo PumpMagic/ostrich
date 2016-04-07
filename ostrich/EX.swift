@@ -16,7 +16,7 @@ struct EX
     U: protocol<Readable, Writeable, OperandType>
     where T.WriteType == U.ReadType,
     U.WriteType == T.ReadType,
-    T.WriteType == UInt16>: Instruction
+    T.WriteType == UInt16>: Z80Instruction
 {
     // legal combinations are quite limited: DE <-> HL, AF <-> AF', (SP) <-> HL, (SP) <-> IX, (SP) <-> IY
     // really, we should somehow limit this struct's parameters to these combinations only
@@ -35,7 +35,7 @@ struct EX
         }
     }
     
-    func runOn(z80: Z80) {
+    func runOn(cpu: Z80) {
         let tmp = op2.read()
         
         op2.write(op1.read())

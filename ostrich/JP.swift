@@ -10,7 +10,8 @@ import Foundation
 
 
 /// Jump
-struct JP<T: protocol<Readable, OperandType> where T.ReadType == UInt16>: Instruction {
+struct JP<T: protocol<Readable, OperandType> where T.ReadType == UInt16>: Z80Instruction, LR35902Instruction
+{
     /// Condition: if present, the jump will only happen if the flag evaluates to the boolean value
     let condition: Condition?
     
@@ -19,13 +20,23 @@ struct JP<T: protocol<Readable, OperandType> where T.ReadType == UInt16>: Instru
     
     let cycleCount = 0 //@todo
     
-    func runOn(z80: Z80) {
+    private func jump(cpu: Intel8080Like) {
         // Only jump if the condition is absent or met
         let conditionSatisfied = condition?.evaluate() ?? true
         
         if conditionSatisfied {
-            z80.PC.write(dest.read())
+            cpu.PC.write(dest.read())
         }
+    }
+    
+    func runOn(cpu: Z80) {
+        jump(cpu)
+        
+        // Never affects flag bits
+    }
+    
+    func runOn(cpu: LR35902) {
+        jump(cpu)
         
         // Never affects flag bits
     }

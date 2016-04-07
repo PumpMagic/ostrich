@@ -13,13 +13,13 @@ import Foundation
 // 8-bit operands
 
 
-private func dec<T: IntegerType>(num: T) -> T {
+func dec<T: IntegerType>(num: T) -> T {
     return num &- 1
 }
 
 /// Decrement an operand and overwrite it with the new value
 /// Returns (oldValue, newValue)
-private func decAndStore<T: protocol<Readable, Writeable> where T.ReadType == T.WriteType, T.ReadType: IntegerType>(op: T) -> (T.ReadType, T.WriteType)
+func decAndStore<T: protocol<Readable, Writeable> where T.ReadType == T.WriteType, T.ReadType: IntegerType>(op: T) -> (T.ReadType, T.WriteType)
 {
     let oldValue = op.read()
     let newValue = dec(oldValue)

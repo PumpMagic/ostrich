@@ -10,19 +10,28 @@ import Foundation
 
 
 /// Return: leave a function by popping the stack onto the PC
-struct RET: Instruction {
+struct RET: Z80Instruction, LR35902Instruction {
     // pCL ← (sp), pCH ← (sp+1)
     
     let condition: Condition?
     
     let cycleCount = 0
     
-    func runOn(z80: Z80) {
-        // Only return if the condition is absent or met
+    
+    private func runCommon(cpu: Intel8080Like) {
+        // Only call if the condition is absent or met
         let conditionSatisfied = condition?.evaluate() ?? true
         
         if conditionSatisfied {
-            z80.PC.write(z80.pop())
+            cpu.PC.write(cpu.pop())
         }
+    }
+    
+    func runOn(cpu: Z80) {
+        runCommon(cpu)
+    }
+    
+    func runOn(cpu: LR35902) {
+        runCommon(cpu)
     }
 }

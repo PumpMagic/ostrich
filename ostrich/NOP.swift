@@ -10,10 +10,14 @@ import Foundation
 
 
 /// No-op
-struct NOP: Instruction {
-    let cycleCount = 0 //@todo
+struct NOP: Z80Instruction, LR35902Instruction {
+    let cycleCount = 0
     
-    func runOn(z80: Z80) {
+    func runOn(cpu: Z80) {
+        // Never affects flag bits
+    }
+    
+    func runOn(cpu: LR35902) {
         // Never affects flag bits
     }
 }
