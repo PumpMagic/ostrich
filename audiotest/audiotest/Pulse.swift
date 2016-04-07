@@ -26,15 +26,15 @@ NR24 FF19 TL-- -FFF Trigger, Length enable, Frequency MSB
 */
 
 protocol HasFrequency {
-    var frequency: UInt { get set }
+    var frequency: UInt16 { get set }
 }
 
 protocol HasVolumeEnvelope {
-    var volume: UInt { get set }
+    var volume: UInt8 { get set }
 }
 
 protocol HasLengthTimer {
-    var length: UInt { get set }
+    var length: UInt8 { get set }
     var lengthEnable: Bool { get set }
 }
 
@@ -52,7 +52,7 @@ class Pulse: HasFrequency, HasVolumeEnvelope, HasLengthTimer {
     /* DUTY CYCLE STUFF
         The pulse channel has a variable-width duty cycle */
     /** Duty is a two-bit value representing the pulse wave duty cycle to output */
-    var duty: UInt = 0 {
+    var duty: UInt8 = 0 {
         didSet {
             //@todo enforce range
             self.oscillator.index = Double(duty)
@@ -69,7 +69,7 @@ class Pulse: HasFrequency, HasVolumeEnvelope, HasLengthTimer {
         If length transitions to 0, the channel gets disabled (by clearing an internal enabled flag) */
     /** Length is a six-bit vaule representing the time, in 1/256ths of a second, after which the
         channel should be disabled */
-    var length: UInt = 0 {
+    var length: UInt8 = 0 {
         didSet {
             if length == 0 {
                 self.enabled = false
@@ -98,7 +98,7 @@ class Pulse: HasFrequency, HasVolumeEnvelope, HasLengthTimer {
     
     /* VOLUME STUFF */
     /** Volume is a 4-bit value representing the volume of the channel */
-    var volume: UInt = 0 {
+    var volume: UInt8 = 0 {
         didSet {
             //@todo enforce range
             updateImplVolume()
@@ -112,7 +112,7 @@ class Pulse: HasFrequency, HasVolumeEnvelope, HasLengthTimer {
         stays on each sample of its wavetable, in 1/4194304ths of a second.
         The frequency of the output pulse wave is (4194304 / 8 / frequency), since the wavetable is
         8 samples wide  */
-    var frequency: UInt = 1192 {
+    var frequency: UInt16 = 1192 {
         didSet {
             updateImplFrequency()
         }

@@ -9,43 +9,43 @@
 import Foundation
 
 
-public class RAM: HandlesReads, HandlesWrites {
+public class RAM: Memory, HandlesWrites {
     var data: Array<UInt8>
     
     /// An offset: specifies what memory location the first byte of the supplied data occupies
-    let startingAddress: Address
+    public let firstAddress: Address
     
-    var highestAddress: Address {
-        return UInt16(UInt32(self.startingAddress) + UInt32(self.data.count))
+    public var lastAddress: Address {
+        return UInt16(UInt32(self.firstAddress) + UInt32(self.data.count))
     }
-    var addressRange: Range<Address> {
-        return self.startingAddress ... self.highestAddress
+    public var addressRange: Range<Address> {
+        return self.firstAddress ... self.lastAddress
     }
     var addressRangeString: String {
-        return "\(self.startingAddress.hexString) - \(self.highestAddress.hexString)"
+        return "\(self.firstAddress.hexString) - \(self.lastAddress.hexString)"
     }
     
-    public init(size: UInt16, fillByte: UInt8, startingAddress: Address) {
+    public init(size: UInt16, fillByte: UInt8, firstAddress: Address) {
         self.data = Array<UInt8>(count: Int(size), repeatedValue: fillByte)
-        self.startingAddress = startingAddress
+        self.firstAddress = firstAddress
     }
     
     public convenience init(size: UInt16) {
-        self.init(size: size, fillByte: 0x00, startingAddress: 0x0000)
+        self.init(size: size, fillByte: 0x00, firstAddress: 0x0000)
     }
     
-    func read(addr: Address) -> UInt8 {
-        if addr < self.startingAddress ||
-            Int(addr) > Int(self.startingAddress) + Int(self.data.count)
+    public func read(addr: Address) -> UInt8 {
+        if addr < self.firstAddress ||
+            Int(addr) > Int(self.firstAddress) + Int(self.data.count)
         {
             print("FATAL: attempt to access address \(addr.hexString) but our range is \(self.addressRangeString)")
             exit(1)
         }
         
-        return self.data[Int(addr - self.startingAddress)]
+        return self.data[Int(addr - self.firstAddress)]
     }
     
-    func write(val: UInt8, to addr: Address) {
-        self.data[Int(addr - self.startingAddress)] = val
+    public func write(val: UInt8, to addr: Address) {
+        self.data[Int(addr - self.firstAddress)] = val
     }
 }

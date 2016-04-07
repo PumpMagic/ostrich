@@ -9,32 +9,30 @@
 import Foundation
 
 
-typealias AddressRange = Range<Address>
-
 protocol DelegatesReads: HandlesReads {
-    func registerReadable(readable: HandlesReads, range: Range<Address>)
+    func registerReadable(readable: protocol<BusListener, HandlesReads>)
 }
 protocol DelegatesWrites: HandlesWrites {
-    func registerWriteable(writeable: HandlesWrites, range: Range<Address>)
+    func registerWriteable(writeable: protocol<BusListener, HandlesWrites>)
 }
 
-class DataBus: DelegatesReads, DelegatesWrites {
-    var readables: [(HandlesReads, AddressRange)]
-    var writeables: [(HandlesWrites, AddressRange)]
+public class DataBus: DelegatesReads, DelegatesWrites {
+    var readables: [(HandlesReads, Range<Address>)]
+    var writeables: [(HandlesWrites, Range<Address>)]
     
-    init() {
-        self.readables = [(HandlesReads, AddressRange)]()
-        self.writeables = [(HandlesWrites, AddressRange)]()
+    public init() {
+        self.readables = [(HandlesReads, Range<Address>)]()
+        self.writeables = [(HandlesWrites, Range<Address>)]()
     }
     
-    func registerReadable(readable: HandlesReads, range: Range<Address>) {
-        self.readables.append((readable, range))
+    public func registerReadable(readable: protocol<BusListener, HandlesReads>) {
+        self.readables.append((readable, readable.addressRange))
     }
-    func registerWriteable(writeable: HandlesWrites, range: Range<Address>) {
-        self.writeables.append((writeable, range))
+    public func registerWriteable(writeable: protocol<BusListener, HandlesWrites>) {
+        self.writeables.append((writeable, writeable.addressRange))
     }
     
-    func read(addr: Address) -> UInt8 {
+    public func read(addr: Address) -> UInt8 {
         for (readable, range) in self.readables {
             if range ~= addr {
                 return readable.read(addr)
@@ -45,7 +43,7 @@ class DataBus: DelegatesReads, DelegatesWrites {
         exit(1)
     }
     
-    func write(val: UInt8, to addr: Address) {
+    public func write(val: UInt8, to addr: Address) {
         for (writeable, range) in self.writeables {
             if range ~= addr {
                 writeable.write(val, to: addr)

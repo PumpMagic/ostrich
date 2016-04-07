@@ -100,7 +100,7 @@ public class Z80 {
     //@todo emulate all necessary pins (see user manual pg. 17)
     // at least add an interrupt() and maybe nmi()
 
-    public init(rom: ROM) {
+    public init(bus: DataBus) {
         self.A = Register8(val: 0)
         self.B = Register8(val: 0)
         self.C = Register8(val: 0)
@@ -151,13 +151,7 @@ public class Z80 {
         
         self.instructionContext = InstructionContext(lastInstructionWasEI: false)
         
-        
-        //@todo break these peripherals out
-        let ram = RAM(size: 0xE000 - 0xC000, fillByte: 0, startingAddress: 0xC000)
-        self.bus = DataBus()
-        self.bus.registerReadable(rom, range: rom.addressRange)
-        self.bus.registerReadable(ram, range: ram.addressRange)
-        self.bus.registerWriteable(ram, range: ram.addressRange)
+        self.bus = bus
     }
     
     // Utility methods
@@ -207,11 +201,9 @@ public class Z80 {
     
     public func runUntil(instructionType: String) {
         //@todo this is a hacky convenience function, how can we better detect a given instruction without inspecting type?
-        print("Running until \(instructionType)...")
         var iteration = 1
         repeat {
             let lastInstruction = doInstructionCycle()
-            print("Ran instruction #\(iteration): \(lastInstruction)")
             iteration += 1
             let inspectedType = String(Mirror(reflecting: lastInstruction).subjectType)
             if inspectedType == instructionType {
@@ -254,8 +246,6 @@ public class Z80 {
         
         var instruction: Instruction? = nil
         var instructionLength: UInt16 = 1
-        
-        print("First byte: \(firstByte.hexString)")
         
         switch firstByte {
         case 0x00:

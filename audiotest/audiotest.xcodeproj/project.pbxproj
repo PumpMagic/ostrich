@@ -15,8 +15,8 @@
 		5893ED141C9FAA66002AA01C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5893ED131C9FAA66002AA01C /* ViewController.swift */; };
 		5893ED161C9FAA66002AA01C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5893ED151C9FAA66002AA01C /* Assets.xcassets */; };
 		5893ED191C9FAA66002AA01C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5893ED171C9FAA66002AA01C /* Main.storyboard */; };
-		FC1D79EA1CAF64BC00EB2D38 /* AudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC1D79E91CAF64BC00EB2D38 /* AudioKit.framework */; };
-		FC1D79EB1CAF64BC00EB2D38 /* AudioKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FC1D79E91CAF64BC00EB2D38 /* AudioKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FCA8D64E1CB5E85900BDD117 /* AudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FCA8D64D1CB5E85900BDD117 /* AudioKit.framework */; };
+		FCA8D64F1CB5E85900BDD117 /* AudioKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FCA8D64D1CB5E85900BDD117 /* AudioKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,7 +26,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				FC1D79EB1CAF64BC00EB2D38 /* AudioKit.framework in Embed Frameworks */,
+				FCA8D64F1CB5E85900BDD117 /* AudioKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -44,7 +44,7 @@
 		5893ED151C9FAA66002AA01C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5893ED181C9FAA66002AA01C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5893ED1A1C9FAA66002AA01C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FC1D79E91CAF64BC00EB2D38 /* AudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AudioKit.framework; sourceTree = "<group>"; };
+		FCA8D64D1CB5E85900BDD117 /* AudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AudioKit.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,7 +52,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FC1D79EA1CAF64BC00EB2D38 /* AudioKit.framework in Frameworks */,
+				FCA8D64E1CB5E85900BDD117 /* AudioKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,7 +92,7 @@
 		5893ED051C9FAA66002AA01C = {
 			isa = PBXGroup;
 			children = (
-				FC1D79E91CAF64BC00EB2D38 /* AudioKit.framework */,
+				FCA8D64D1CB5E85900BDD117 /* AudioKit.framework */,
 				5893ED101C9FAA66002AA01C /* audiotest */,
 				5893ED0F1C9FAA66002AA01C /* Products */,
 			);

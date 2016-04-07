@@ -53,7 +53,7 @@ func numberIsZero(num: UInt8) -> Bool {
 }
 
 /// Test a zero-based bit of a 16-bit number
-func bitIsHigh(num: UInt16, bit: UInt8) -> Bool {
+public func bitIsHigh(num: UInt16, bit: UInt8) -> Bool {
     let mask = UInt16(0x0001 << bit)
     if num & mask != 0 {
         return true
@@ -63,7 +63,7 @@ func bitIsHigh(num: UInt16, bit: UInt8) -> Bool {
 }
 
 /// Test a zero-based bit of an 8-bit number
-func bitIsHigh(num: UInt8, bit: UInt8) -> Bool {
+public func bitIsHigh(num: UInt8, bit: UInt8) -> Bool {
     let mask = UInt8(0x01 << bit)
     if num & mask != 0 {
         return true

@@ -14,6 +14,15 @@ import ostrichframework
 let GBS_PATH: String = "/Users/ryanconway/Dropbox/emu/SML.gbs"
 
 class ViewController: NSViewController {
+    func delay(nanos:Int64, closure:()->()) {
+        dispatch_after(
+            dispatch_time(
+                DISPATCH_TIME_NOW,
+                nanos
+            ),
+            dispatch_get_main_queue(), closure)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -23,14 +32,31 @@ class ViewController: NSViewController {
         
         print(header)
         
+        // Instantiate some prep stuff
+        let mixer = AKMixer()
+        AudioKit.output = mixer
+        
         /* LOAD - The ripped code and data is read into the player program's address space
              starting at the load address and proceeding until end-of-file or address $7fff
              is reached. After loading, Page 0 is in Bank 0 (which never changes), and Page
              1 is in Bank 1 (which can be changed during init or play). Finally, the INIT
              is called with the first song defined in the header. */
         print("Instantiating Z80 and executing LOAD...")
-        let rom = ROM(data: codeAndData, startingAddress: header.loadAddress)
-        let z80 = Z80(rom: rom)
+        let ram = RAM(size: 0xE000 - 0xC000, fillByte: 0x00, firstAddress: 0xC000)
+        let rom = ROM(data: codeAndData, firstAddress: header.loadAddress)
+        let apu = GameBoyAPU(mixer: mixer)
+        
+        AudioKit.start()
+        
+        let bus = DataBus()
+        bus.registerReadable(rom)
+        bus.registerReadable(ram)
+        bus.registerWriteable(ram)
+        bus.registerReadable(apu)
+        bus.registerWriteable(apu)
+        
+        let z80 = Z80(bus: bus)
+        
         z80.setSP(header.stackPointer)
         z80.setPC(header.loadAddress)
             
@@ -49,11 +75,15 @@ class ViewController: NSViewController {
              end with a RET instruction. */
         //@todo use a software timer to call this repeatedly according to timerModulo / timerControl
         print("Calling and running PLAY...")
-        z80.injectCall(header.playAddress)
-        z80.runUntil("RET")
+        var closure: (Void -> Void)!
+        closure = {
+            z80.injectCall(header.playAddress)
+            z80.runUntil("RET")
+            self.delay(16666666) { closure() }
+        }
         
-        
-        exit(1)
+        closure()
+        repeat { usleep(100) } while true
     }
 }
 

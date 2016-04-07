@@ -9,41 +9,41 @@
 import Foundation
 
 
-public class ROM: HandlesReads {
+public class ROM: Memory {
     var data: NSData
     
     /// An offset: specifies what memory location the first byte of the supplied data occupies
-    let startingAddress: Address
+    public let firstAddress: Address
     
-    var highestAddress: Address {
-        return UInt16(UInt32(self.startingAddress) + UInt32(self.data.length))
+    public var lastAddress: Address {
+        return UInt16(UInt32(self.firstAddress) + UInt32(self.data.length))
     }
-    var addressRange: Range<Address> {
-        return self.startingAddress ... self.highestAddress
+    public var addressRange: Range<Address> {
+        return self.firstAddress ... self.lastAddress
     }
     var addressRangeString: String {
-        return "\(self.startingAddress.hexString) - \(self.highestAddress.hexString)"
+        return "\(self.firstAddress.hexString) - \(self.lastAddress.hexString)"
     }
     
-    public init(data: NSData, startingAddress: Address) {
+    public init(data: NSData, firstAddress: Address) {
         self.data = data
-        self.startingAddress = startingAddress
+        self.firstAddress = firstAddress
     }
     
     public convenience init(data: NSData) {
-        self.init(data: data, startingAddress: 0)
+        self.init(data: data, firstAddress: 0)
     }
     
-    func read(addr: Address) -> UInt8 {
-        if addr < self.startingAddress ||
-            Int(addr) > Int(self.startingAddress) + Int(self.data.length)
+    public func read(addr: Address) -> UInt8 {
+        if addr < self.firstAddress ||
+            Int(addr) > Int(self.firstAddress) + Int(self.data.length)
         {
             print("FATAL: attempt to access address \(addr.hexString) but our range is \(self.addressRangeString)")
             exit(1)
         }
         
         var readByte: UInt8 = 0
-        data.getBytes(&readByte, range: NSMakeRange(Int(addr-self.startingAddress), 1))
+        data.getBytes(&readByte, range: NSMakeRange(Int(addr-self.firstAddress), 1))
         return readByte
     }
 }

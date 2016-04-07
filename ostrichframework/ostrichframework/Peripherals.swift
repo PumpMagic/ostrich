@@ -12,9 +12,16 @@ import Foundation
 public typealias Address = UInt16
 
 
-protocol HandlesReads {
+public protocol BusListener {
+    var firstAddress: Address { get }
+    var lastAddress: Address { get }
+    var addressRange: Range<Address> { get }
+}
+public protocol HandlesReads {
     func read(addr: Address) -> UInt8
 }
-protocol HandlesWrites {
+public protocol HandlesWrites {
     func write(val: UInt8, to addr: Address)
 }
+
+public protocol Memory: BusListener, HandlesReads {}
