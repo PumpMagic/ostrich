@@ -9,10 +9,14 @@
 import Foundation
 
 
-struct EI: Instruction {
+struct EI: Z80Instruction, LR35902Instruction {
     let cycleCount: Int = 0
     
-    func runOn(z80: Z80) {
-        z80.instructionContext.lastInstructionWasEI = true
+    func runOn(cpu: Z80) {
+        cpu.instructionContext.lastInstructionWasEI = true
+    }
+    
+    func runOn(cpu: LR35902) {
+        cpu.instructionContext.lastInstructionWasEI = true
     }
 }

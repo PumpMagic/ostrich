@@ -9,11 +9,14 @@
 import Foundation
 
 
-struct DI: Instruction {
+struct DI: Z80Instruction, LR35902Instruction {
     let cycleCount: Int = 0
     
-    func runOn(z80: Z80) {
-        z80.IFF1 = .Disabled
-        z80.IFF2 = .Disabled
+    func runOn(cpu: Z80) {
+        cpu.instructionContext.lastInstructionWasDI = true
+    }
+    
+    func runOn(cpu: LR35902) {
+        cpu.instructionContext.lastInstructionWasDI = true
     }
 }

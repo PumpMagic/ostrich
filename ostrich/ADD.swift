@@ -39,42 +39,40 @@ struct ADD8
     let cycleCount = 0
     
     
-    func runOn(z80: Z80) {
+    func runOn(cpu: Z80) {
         let (op1v, op2v, result) = addAndStore(op1, op2)
-        modifyFlags(z80, op1: op1v, op2: op2v, result: result)
+        modifyFlags(cpu, op1: op1v, op2: op2v, result: result)
     }
     
-    func runOn(lr35902: LR35902) {
+    func runOn(cpu: LR35902) {
         let (op1v, op2v, result) = addAndStore(op1, op2)
-        modifyFlags(lr35902, op1: op1v, op2: op2v, result: result)
+        modifyFlags(cpu, op1: op1v, op2: op2v, result: result)
     }
     
-    func modifyFlags(z80: Z80, op1: T.ReadType, op2: U.ReadType, result: T.ReadType) {
-        // S is set if result is negative; otherwise, it is reset.
+    private func modifyCommonFlags(cpu: Intel8080Like, op1: T.ReadType, op2: U.ReadType, result: T.ReadType)
+    {
         // Z is set if result is 0; otherwise, it is reset.
         // H is set if carry from bit 3; otherwise, it is reset.
-        // P/V is set if overflow; otherwise, it is reset.
         // N is reset.
         // C is set if carry from bit 7; otherwise, it is reset.
         
-        z80.SF.write(numberIsNegative(result))
-        z80.ZF.write(result == 0)
-        z80.HF.write(addHalfCarryProne(op1, op2))
-        z80.PVF.write(addOverflowOccurred(op1, op2, result: result))
-        z80.NF.write(false)
-        z80.CF.write(addCarryProne(op1, op2))
+        cpu.ZF.write(result == 0x00)
+        cpu.HF.write(addHalfCarryProne(op1, op2))
+        cpu.NF.write(false)
+        cpu.CF.write(addCarryProne(op1, op2))
     }
     
-    func modifyFlags(lr35902: LR35902, op1: T.ReadType, op2: U.ReadType, result: T.ReadType) {
-        // Z - Set if result is zero.
-        // N - Reset.
-        // H - Set if carry from bit 3.
-        // C - Set if carry from bit 7.
+    private func modifyFlags(cpu: Z80, op1: T.ReadType, op2: U.ReadType, result: T.ReadType) {
+        modifyCommonFlags(cpu, op1: op1, op2: op2, result: result)
         
-        lr35902.ZF.write(result == 0x00)
-        lr35902.NF.write(false)
-        lr35902.HF.write(addHalfCarryProne(op1, op2))
-        lr35902.CF.write(addCarryProne(op1, op2))
+        // S is set if result is negative; otherwise, it is reset.
+        // P/V is set if overflow; otherwise, it is reset.
+        cpu.SF.write(numberIsNegative(result))
+        cpu.PVF.write(addOverflowOccurred(op1, op2, result: result))
+    }
+    
+    private func modifyFlags(cpu: LR35902, op1: T.ReadType, op2: U.ReadType, result: T.ReadType) {
+        modifyCommonFlags(cpu, op1: op1, op2: op2, result: result)
     }
 }
 
@@ -99,28 +97,27 @@ struct ADD16
         modifyFlags(lr35902, op1: op1v, op2: op2v, result: result)
     }
     
-    func modifyFlags(z80: Z80, op1: T.ReadType, op2: U.ReadType, result: T.ReadType) {
-        // S is not affected.
+    private func modifyCommonFlags(cpu: Intel8080Like, op1: T.ReadType, op2: U.ReadType, result: T.ReadType)
+    {
         // Z is not affected.
         // H is set if carry from bit 11; otherwise, it is reset.
-        // P/V is not affected.
         // N is reset.
         // C is set if carry from bit 15; otherwise, it is reset.
         
-        z80.HF.write(addHalfCarryProne(op1, op2: op2))
-        z80.NF.write(false)
-        z80.CF.write(addCarryProne(op1, op2: op2))
+        cpu.HF.write(addHalfCarryProne(op1, op2: op2))
+        cpu.NF.write(false)
+        cpu.CF.write(addCarryProne(op1, op2: op2))
     }
     
-    func modifyFlags(lr35902: LR35902, op1: T.ReadType, op2: U.ReadType, result: T.ReadType) {
-        // Z - Not affected.
-        // N - Reset.
-        // H - Set if carry from bit 11.
-        // C - Set if carry from bit 15.
+    private func modifyFlags(cpu: Z80, op1: T.ReadType, op2: U.ReadType, result: T.ReadType) {
+        modifyCommonFlags(cpu, op1: op1, op2: op2, result: result)
         
-        lr35902.NF.write(false)
-        lr35902.HF.write(addHalfCarryProne(op1, op2: op2))
-        lr35902.CF.write(addCarryProne(op1, op2: op2))
+        // S is not affected.
+        // P/V is not affected.
+    }
+    
+    private func modifyFlags(cpu: LR35902, op1: T.ReadType, op2: U.ReadType, result: T.ReadType) {
+        modifyCommonFlags(cpu, op1: op1, op2: op2, result: result)
     }
     
 }

@@ -10,29 +10,41 @@ import Foundation
 
 
 /// Invert the Carry flag
-struct CCF: Instruction {
+struct CCF: Z80Instruction, LR35902Instruction {
     // CY ← !CY
     
     let cycleCount = 0
     
-    func runOn(z80: Z80) {
-        print("Running CCF")
-        
-        self.modifyFlags(z80)
+    func runOn(cpu: Z80) {
+        self.modifyFlags(cpu)
     }
     
-    func modifyFlags(z80: Z80) {
-        // S is not affected.
+    func runOn(cpu: LR35902) {
+        self.modifyFlags(cpu)
+    }
+    
+    
+    private func modifyCommonFlags(cpu: Intel8080Like) {
         // Z is not affected.
         // H, previous carry is copied.
-        // P/V is not affected.
         // N is reset.
         // C is set if CY was 0 before operation; otherwise, it is reset.
         
-        let currentCarry = z80.CF.read()
+        let currentCarry = cpu.CF.read()
         
-        z80.HF.write(currentCarry)
-        z80.NF.write(false)
-        z80.CF.write(!currentCarry)
+        cpu.HF.write(currentCarry)
+        cpu.NF.write(false)
+        cpu.CF.write(!currentCarry)
+    }
+    
+    private func modifyFlags(cpu: Z80) {
+        // S is not affected.
+        // P/V is not affected.
+        
+        modifyCommonFlags(cpu)
+    }
+    
+    private func modifyFlags(cpu: LR35902) {
+        modifyCommonFlags(cpu)
     }
 }

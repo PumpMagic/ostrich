@@ -10,15 +10,15 @@ import Foundation
 
 
 /// Instructions
-public protocol Instruction {
+protocol Instruction {
     var cycleCount: Int { get }
 }
 
-public protocol Z80Instruction: Instruction {
+protocol Z80Instruction: Instruction {
     func runOn(z80: Z80)
 }
 
-public protocol LR35902Instruction: Instruction {
+protocol LR35902Instruction: Instruction {
     func runOn(lr35902: LR35902)
 }
 

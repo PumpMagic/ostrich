@@ -10,7 +10,7 @@ import Foundation
 
 
 /// Jump conditionally based on a register rather than a flag
-struct DJNZ: Instruction {
+struct DJNZ: Z80Instruction {
     // B ← B–1
     // If B = 0, continue
     // If B ≠ 0, PC ← PC + e
@@ -19,14 +19,14 @@ struct DJNZ: Instruction {
     
     let displacementMinusTwo: Int8
     
-    func runOn(z80: Z80) {
-        let newValue = z80.B.read() &- 1
+    func runOn(cpu: Z80) {
+        let newValue = cpu.B.read() &- 1
         
-        z80.B.write(newValue)
+        cpu.B.write(newValue)
         
         if newValue != 0 {
             //@todo bounds check
-            z80.PC.write(UInt16(Int32(z80.PC.read()) + Int32(displacementMinusTwo) + 2))
+            cpu.PC.write(UInt16(Int32(cpu.PC.read()) + Int32(displacementMinusTwo) + 2))
         }
     }
     

@@ -11,15 +11,6 @@ import Foundation
 
 /// Representation a Zilog Z80 CPU.
 public class Z80: Intel8080Like {
-    enum FlipFlop {
-        case Enabled
-        case Disabled
-    }
-    
-    struct InstructionContext {
-        var lastInstructionWasEI: Bool
-    }
-    
     // main registers
     /// A, AKA the Accumulator
     let A: Register8
@@ -89,7 +80,7 @@ public class Z80: Intel8080Like {
     var IFF1: FlipFlop
     var IFF2: FlipFlop
     
-    var instructionContext: InstructionContext
+    var instructionContext: Intel8080InstructionContext
     
     
     let bus: DataBus
@@ -147,7 +138,7 @@ public class Z80: Intel8080Like {
         self.IFF1 = .Disabled
         self.IFF2 = .Disabled
         
-        self.instructionContext = InstructionContext(lastInstructionWasEI: false)
+        self.instructionContext = Intel8080InstructionContext(lastInstructionWasDI: false, lastInstructionWasEI: false)
         
         self.bus = bus
     }
@@ -172,30 +163,7 @@ public class Z80: Intel8080Like {
     
     /// Stack pointer and program counter debug string
     var pcsp: String { return "\tSP: \(self.SP.read().hexString)\n\tPC: \(self.PC.read().hexString)" }
-    
-    
-    
-    // Convenience stack functions
-    /// Push a two-byte value onto the stack.
-    /// Adjusts the stack pointer accordingly.
-    func push(val: UInt16) {
-        let oldAddr = self.SP.read()
-        let newAddr = oldAddr - 2
-        
-        self.SP.write(newAddr)
-        
-        self.bus.write16(val, to: newAddr)
-    }
-    
-    /// Pop a two-byte value off the stack.
-    /// Adjusts the stack pointer accordingly.
-    func pop() -> UInt16 {
-        let addr = self.SP.read()
-        let val = self.bus.read16(addr)
-        
-        self.SP.write(addr + 2)
-        return val
-    }
+
     
     public func runUntil(instructionType: String) {
         //@todo this is a hacky convenience function, how can we better detect a given instruction without inspecting type?
@@ -212,7 +180,7 @@ public class Z80: Intel8080Like {
     
     
     /// Fetches an instruction, runs it, and returns it
-    public func doInstructionCycle() -> Instruction {
+    func doInstructionCycle() -> Instruction {
         guard let instruction = self.fetchInstruction() else {
             print("FATAL: unable to fetch instruction")
             exit(1)
@@ -225,11 +193,18 @@ public class Z80: Intel8080Like {
     /// Execute an instruction.
     /// This function has some additional behavior to support things like EI, which has effects delayed by an instruction.
     func executeInstruction(instruction: Instruction) {
-        let willEnableInterrupts = self.instructionContext.lastInstructionWasEI
+        let oldInstructionContext = self.instructionContext
         
         instruction.runOn(self)
         
-        if willEnableInterrupts {
+        if oldInstructionContext.lastInstructionWasDI {
+            self.IFF1 = .Disabled
+            self.IFF2 = .Disabled
+            
+            //@warn this behavior may be too lazy
+            self.instructionContext.lastInstructionWasDI = false
+        }
+        if oldInstructionContext.lastInstructionWasEI {
             self.IFF1 = .Enabled
             self.IFF2 = .Enabled
             

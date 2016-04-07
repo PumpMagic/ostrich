@@ -11,15 +11,6 @@ import Foundation
 
 /// Representation of a Sharp LR35902 CPU.
 public class LR35902: Intel8080Like {
-    enum FlipFlop {
-        case Enabled
-        case Disabled
-    }
-    
-    struct InstructionContext {
-        var lastInstructionWasEI: Bool
-    }
-    
     // main registers
     /// A, AKA the Accumulator
     let A: Register8
@@ -64,7 +55,7 @@ public class LR35902: Intel8080Like {
     var IFF1: FlipFlop
     var IFF2: FlipFlop
     
-    var instructionContext: InstructionContext
+    var instructionContext: Intel8080InstructionContext
     
     let bus: DataBus
     
@@ -98,7 +89,7 @@ public class LR35902: Intel8080Like {
         self.IFF1 = .Disabled
         self.IFF2 = .Disabled
         
-        self.instructionContext = InstructionContext(lastInstructionWasEI: false)
+        self.instructionContext = Intel8080InstructionContext(lastInstructionWasEI: false)
         
         self.bus = bus
     }
@@ -124,29 +115,6 @@ public class LR35902: Intel8080Like {
     /// Stack pointer and program counter debug string
     var pcsp: String { return "\tSP: \(self.SP.read().hexString)\n\tPC: \(self.PC.read().hexString)" }
     
-    
-    
-    // Convenience stack functions
-    /// Push a two-byte value onto the stack.
-    /// Adjusts the stack pointer accordingly.
-    func push(val: UInt16) {
-        let oldAddr = self.SP.read()
-        let newAddr = oldAddr - 2
-        
-        self.SP.write(newAddr)
-        
-        self.bus.write16(val, to: newAddr)
-    }
-    
-    /// Pop a two-byte value off the stack.
-    /// Adjusts the stack pointer accordingly.
-    func pop() -> UInt16 {
-        let addr = self.SP.read()
-        let val = self.bus.read16(addr)
-        
-        self.SP.write(addr + 2)
-        return val
-    }
     
     public func runUntil(instructionType: String) {
         //@todo this is a hacky convenience function, how can we better detect a given instruction without inspecting type?
