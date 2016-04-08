@@ -64,8 +64,14 @@ class Flag: Readable, Writeable {
     }
 }
 
+
+protocol CanActAsPointer: Readable, Writeable {
+    func dereferenceOn(bus: DataBus) -> UInt8
+    func storeInLocation(bus: DataBus, val: UInt8)
+}
+
 /// A 16-bit register: some CPU-built-in memory cell that holds a 16-bit value
-class Register16: RegisterType, OperandType {
+class Register16: RegisterType, OperandType, CanActAsPointer {
     var val: UInt16
     
     init(val: UInt16) {
@@ -84,14 +90,21 @@ class Register16: RegisterType, OperandType {
         return OperandKind.Register16Like
     }
     
-    /// Utility method for obtaining an indirect value out of this register
-    func asIndirectTo(bus: DataBus) -> Register16Indirect8<Register16> {
-        return Register16Indirect8(register: self, bus: bus)
+    private func asPointerOn(bus: DataBus) -> Pointer<Register16> {
+        return Pointer(source: self, bus: bus)
+    }
+    
+    func dereferenceOn(bus: DataBus) -> UInt8 {
+        return self.asPointerOn(bus).read()
+    }
+    
+    func storeInLocation(bus: DataBus, val: UInt8) {
+        self.asPointerOn(bus).write(val)
     }
 }
 
 /// A virtual 16-bit register, computed from two 8-bit registers
-class Register16Computed: RegisterType, OperandType {
+class Register16Computed: RegisterType, OperandType, CanActAsPointer {
     let high: Register8
     let low: Register8
     
@@ -117,29 +130,99 @@ class Register16Computed: RegisterType, OperandType {
         return OperandKind.Register16ComputedLike
     }
     
-    /// Utility method for obtaining an indirect value out of this register
-    func asIndirectInto(bus: DataBus) -> Register16Indirect8<Register16Computed> {
-        return Register16Indirect8(register: self, bus: bus)
+    func asPointerOn(bus: DataBus) -> Pointer<Register16Computed> {
+        return Pointer(source: self, bus: bus)
+    }
+    
+    func dereferenceOn(bus: DataBus) -> UInt8 {
+        return self.asPointerOn(bus).read()
+    }
+    
+    func storeInLocation(bus: DataBus, val: UInt8) {
+        self.asPointerOn(bus).write(val)
     }
 }
 
 /// A 16-bit register whose value is interpreted as an address to an 8-bit value to read from or write to.
-/// @warn this type's `memory` member will be insufficient when bank switching is implemented
-class Register16Indirect8<T: RegisterType where T.ReadType == UInt16>: Readable, Writeable, OperandType {
-    let register: T
+class Pointer<T: Readable where T.ReadType == Address>: Readable, Writeable, OperandType {
+    let source: T
     let bus: DataBus
     
-    init(register: T, bus: DataBus) {
-        self.register = register
+    init(source: T, bus: DataBus) {
+        self.source = source
         self.bus = bus
     }
     
     func read() -> UInt8 {
-        return bus.read(register.read())
+        return bus.read(source.read())
     }
     
     func write(val: UInt8) {
-        bus.write(val, to: register.read())
+        bus.write(val, to: source.read())
+    }
+    
+    var operandType: OperandKind {
+        return OperandKind.Register16Indirect8Like
+    }
+}
+
+/// An optional 8-bit operand whose value is added to a fixed address to point to an 8-bit value to read from or
+/// write to.
+class PseudoPointer8<T: Readable where T.ReadType == UInt8>: Readable, Writeable, OperandType {
+    let base: Address
+    let offset: T
+    let bus: DataBus
+    
+    init(base: UInt16, offset: T, bus: DataBus) {
+        self.base = base
+        self.offset = offset
+        self.bus = bus
+    }
+    
+    var offsetInt: Int8 {
+        return Int8(bitPattern: offset.read())
+    }
+    var targetAddress: Address {
+        return Address(Int(base) + offsetInt)
+    }
+    
+    func read() -> UInt8 {
+        return bus.read(targetAddress)
+    }
+    
+    func write(val: UInt8) {
+        bus.write(val, to: targetAddress)
+    }
+    
+    var operandType: OperandKind {
+        return OperandKind.Register16Indirect8Like
+    }
+}
+
+class PseudoPointer16<T: Readable where T.ReadType == UInt8>: Readable, Writeable, OperandType {
+    let base: Address
+    let offset: T
+    let bus: DataBus
+    
+    init(base: UInt16, offset: T, bus: DataBus) {
+        self.base = base
+        self.offset = offset
+        self.bus = bus
+    }
+    
+    var offsetInt: Int8 {
+        return Int8(bitPattern: offset.read())
+    }
+    var targetAddress: Address {
+        return Address(Int(base) + offsetInt)
+    }
+    
+    func read() -> UInt16 {
+        return bus.read16(targetAddress)
+    }
+    
+    func write(val: UInt16) {
+        bus.write16(val, to: targetAddress)
     }
     
     var operandType: OperandKind {

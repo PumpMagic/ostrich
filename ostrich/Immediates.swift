@@ -21,6 +21,18 @@ struct Immediate8: Readable, OperandType {
     }
 }
 
+struct Immediate8Signed: Readable, OperandType {
+    let val: Int8
+    
+    func read() -> Int8 {
+        return val
+    }
+    
+    var operandType: OperandKind {
+        return OperandKind.Immediate8Like
+    }
+}
+
 struct Immediate16: Readable, OperandType {
     let val: UInt16
     

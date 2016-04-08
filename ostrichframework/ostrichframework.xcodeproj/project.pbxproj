@@ -37,7 +37,6 @@
 		FCF9A3AE1CAB8AA900EA79F0 /* NOP.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A3981CAB8AA900EA79F0 /* NOP.swift */; };
 		FCF9A3AF1CAB8AA900EA79F0 /* DEC.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A3991CAB8AA900EA79F0 /* DEC.swift */; };
 		FCF9A3B01CAB8AA900EA79F0 /* INC.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A39A1CAB8AA900EA79F0 /* INC.swift */; };
-		FCF9A3B11CAB8AA900EA79F0 /* LDI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A39B1CAB8AA900EA79F0 /* LDI.swift */; };
 		FCF9A3B21CAB8AA900EA79F0 /* EXX.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A39C1CAB8AA900EA79F0 /* EXX.swift */; };
 		FCF9A3B31CAB8AA900EA79F0 /* LD.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A39D1CAB8AA900EA79F0 /* LD.swift */; };
 		FCF9A3B41CAB8AA900EA79F0 /* EX.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A39E1CAB8AA900EA79F0 /* EX.swift */; };
@@ -76,7 +75,6 @@
 		FCF9A3981CAB8AA900EA79F0 /* NOP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NOP.swift; sourceTree = "<group>"; };
 		FCF9A3991CAB8AA900EA79F0 /* DEC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DEC.swift; sourceTree = "<group>"; };
 		FCF9A39A1CAB8AA900EA79F0 /* INC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = INC.swift; sourceTree = "<group>"; };
-		FCF9A39B1CAB8AA900EA79F0 /* LDI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LDI.swift; sourceTree = "<group>"; };
 		FCF9A39C1CAB8AA900EA79F0 /* EXX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EXX.swift; sourceTree = "<group>"; };
 		FCF9A39D1CAB8AA900EA79F0 /* LD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LD.swift; sourceTree = "<group>"; };
 		FCF9A39E1CAB8AA900EA79F0 /* EX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EX.swift; sourceTree = "<group>"; };
@@ -172,7 +170,6 @@
 				FCF9A39A1CAB8AA900EA79F0 /* INC.swift */,
 				FCF9A3951CAB8AA900EA79F0 /* JP.swift */,
 				FCF9A39D1CAB8AA900EA79F0 /* LD.swift */,
-				FCF9A39B1CAB8AA900EA79F0 /* LDI.swift */,
 				FCF9A3981CAB8AA900EA79F0 /* NOP.swift */,
 				FCF9A3961CAB8AA900EA79F0 /* POP.swift */,
 				FCF9A3971CAB8AA900EA79F0 /* PUSH.swift */,
@@ -275,7 +272,6 @@
 				FCF9A3B31CAB8AA900EA79F0 /* LD.swift in Sources */,
 				FCF9A3AE1CAB8AA900EA79F0 /* NOP.swift in Sources */,
 				FCF9A3A41CAB8AA900EA79F0 /* Indexed.swift in Sources */,
-				FCF9A3B11CAB8AA900EA79F0 /* LDI.swift in Sources */,
 				FCF9A3AC1CAB8AA900EA79F0 /* POP.swift in Sources */,
 				58BB13961CACD95D00D7FD06 /* RST.swift in Sources */,
 				58DA2C311CB4C04C00786344 /* DI.swift in Sources */,
