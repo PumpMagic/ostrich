@@ -180,7 +180,7 @@ public class Z80: Intel8080Like {
     
     
     /// Fetches an instruction, runs it, and returns it
-    func doInstructionCycle() -> Instruction {
+    func doInstructionCycle() -> Z80Instruction {
         guard let instruction = self.fetchInstruction() else {
             print("FATAL: unable to fetch instruction")
             exit(1)
@@ -192,7 +192,7 @@ public class Z80: Intel8080Like {
     
     /// Execute an instruction.
     /// This function has some additional behavior to support things like EI, which has effects delayed by an instruction.
-    func executeInstruction(instruction: Instruction) {
+    func executeInstruction(instruction: Z80Instruction) {
         let oldInstructionContext = self.instructionContext
         
         instruction.runOn(self)
@@ -214,10 +214,10 @@ public class Z80: Intel8080Like {
     }
     
     //@todo make this internal and add a public run() or clock() or something
-    func fetchInstruction() -> Instruction? {
+    func fetchInstruction() -> Z80Instruction? {
         let firstByte = bus.read(PC.read())
         
-        var instruction: Instruction? = nil
+        var instruction: Z80Instruction? = nil
         var instructionLength: UInt16 = 1
         
         switch firstByte {
@@ -238,7 +238,7 @@ public class Z80: Intel8080Like {
             
         case 0x02:
             // LD (BC), A
-            instruction = LD(dest: self.BC.asIndirectInto(self.bus), src: self.A)
+            instruction = LD(dest: self.BC.asPointerOn(self.bus), src: self.A)
             instructionLength = 1
             
         case 0x03:
@@ -279,7 +279,7 @@ public class Z80: Intel8080Like {
             
         case 0x0A:
             // LD A, (BC)
-            instruction = LD(dest: self.A, src: self.BC.asIndirectInto(bus))
+            instruction = LD(dest: self.A, src: self.BC.asPointerOn(bus))
             instructionLength = 1
             
         case 0x0B:
@@ -322,7 +322,7 @@ public class Z80: Intel8080Like {
             
         case 0x12:
             // LD (DE), A
-            instruction = LD(dest: self.DE.asIndirectInto(self.bus), src: self.A)
+            instruction = LD(dest: self.DE.asPointerOn(self.bus), src: self.A)
             instructionLength = 1
             
         case 0x13:
@@ -432,18 +432,18 @@ public class Z80: Intel8080Like {
             
         case 0x34:
             // INC (HL)
-            instruction = INC8(operand: self.HL.asIndirectInto(bus))
+            instruction = INC8(operand: self.HL.asPointerOn(bus))
             instructionLength = 1
             
         case 0x35:
             // DEC (HL)
-            instruction = DEC8(operand: self.HL.asIndirectInto(bus))
+            instruction = DEC8(operand: self.HL.asPointerOn(bus))
             instructionLength = 1
             
         case 0x36:
             // LD (HL), n
             let val = bus.read(PC.read()+1)
-            instruction = LD(dest: self.HL.asIndirectInto(bus), src: Immediate8(val: val))
+            instruction = LD(dest: self.HL.asPointerOn(bus), src: Immediate8(val: val))
             instructionLength = 2
             
         case 0x39:
@@ -509,7 +509,7 @@ public class Z80: Intel8080Like {
             
         case 0x46:
             // LD B, (HL)
-            instruction = LD(dest: self.B, src: self.HL.asIndirectInto(bus))
+            instruction = LD(dest: self.B, src: self.HL.asPointerOn(bus))
             instructionLength = 1
             
         case 0x47:
@@ -549,7 +549,7 @@ public class Z80: Intel8080Like {
             
         case 0x4E:
             // LD C, (HL)
-            instruction = LD(dest: self.C, src: self.HL.asIndirectInto(bus))
+            instruction = LD(dest: self.C, src: self.HL.asPointerOn(bus))
             instructionLength = 1
             
         case 0x4F:
@@ -589,7 +589,7 @@ public class Z80: Intel8080Like {
             
         case 0x56:
             // LD D, (HL)
-            instruction = LD(dest: self.D, src: self.HL.asIndirectInto(bus))
+            instruction = LD(dest: self.D, src: self.HL.asPointerOn(bus))
             instructionLength = 1
             
         case 0x57:
@@ -629,7 +629,7 @@ public class Z80: Intel8080Like {
             
         case 0x5E:
             // LD E, (HL)
-            instruction = LD(dest: self.E, src: self.HL.asIndirectInto(bus))
+            instruction = LD(dest: self.E, src: self.HL.asPointerOn(bus))
             instructionLength = 1
             
         case 0x5F:
@@ -669,7 +669,7 @@ public class Z80: Intel8080Like {
             
         case 0x66:
             // LD H, (HL)
-            instruction = LD(dest: self.H, src: self.HL.asIndirectInto(self.bus))
+            instruction = LD(dest: self.H, src: self.HL.asPointerOn(self.bus))
             instructionLength = 1
             
         case 0x67:
@@ -709,7 +709,7 @@ public class Z80: Intel8080Like {
             
         case 0x6E:
             // LD L, (HL)
-            instruction = LD(dest: self.L, src: self.HL.asIndirectInto(bus))
+            instruction = LD(dest: self.L, src: self.HL.asPointerOn(bus))
             instructionLength = 1
             
         case 0x6F:
@@ -719,37 +719,37 @@ public class Z80: Intel8080Like {
             
         case 0x70:
             // LD (HL), B
-            instruction = LD(dest: self.HL.asIndirectInto(self.bus), src: self.B)
+            instruction = LD(dest: self.HL.asPointerOn(self.bus), src: self.B)
             instructionLength = 1
             
         case 0x71:
             // LD (HL), C
-            instruction = LD(dest: self.HL.asIndirectInto(self.bus), src: self.C)
+            instruction = LD(dest: self.HL.asPointerOn(self.bus), src: self.C)
             instructionLength = 1
             
         case 0x72:
             // LD (HL), D
-            instruction = LD(dest: self.HL.asIndirectInto(self.bus), src: self.D)
+            instruction = LD(dest: self.HL.asPointerOn(self.bus), src: self.D)
             instructionLength = 1
             
         case 0x73:
             // LD (HL), E
-            instruction = LD(dest: self.HL.asIndirectInto(self.bus), src: self.E)
+            instruction = LD(dest: self.HL.asPointerOn(self.bus), src: self.E)
             instructionLength = 1
             
         case 0x74:
             // LD (HL), H
-            instruction = LD(dest: self.HL.asIndirectInto(self.bus), src: self.H)
+            instruction = LD(dest: self.HL.asPointerOn(self.bus), src: self.H)
             instructionLength = 1
             
         case 0x75:
             // LD (HL), L
-            instruction = LD(dest: self.HL.asIndirectInto(self.bus), src: self.L)
+            instruction = LD(dest: self.HL.asPointerOn(self.bus), src: self.L)
             instructionLength = 1
             
         case 0x77:
             // LD (HL), A
-            instruction = LD(dest: self.HL.asIndirectInto(bus), src: self.A)
+            instruction = LD(dest: self.HL.asPointerOn(bus), src: self.A)
             instructionLength = 1
             
         case 0x78:
@@ -784,7 +784,7 @@ public class Z80: Intel8080Like {
             
         case 0x7E:
             // LD A, (HL)
-            instruction = LD(dest: self.A, src: self.HL.asIndirectInto(bus))
+            instruction = LD(dest: self.A, src: self.HL.asPointerOn(bus))
             instructionLength = 1
             
         case 0x7F:
@@ -818,7 +818,7 @@ public class Z80: Intel8080Like {
             instructionLength = 1
         case 0x86:
             // ADD A, (HL)
-            instruction = ADD8(op1: self.A, op2: self.HL.asIndirectInto(self.bus))
+            instruction = ADD8(op1: self.A, op2: self.HL.asPointerOn(self.bus))
             instructionLength = 1
         case 0x87:
             // ADD A, A

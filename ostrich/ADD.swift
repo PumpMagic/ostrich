@@ -104,9 +104,9 @@ struct ADD16
         // N is reset.
         // C is set if carry from bit 15; otherwise, it is reset.
         
-        cpu.HF.write(addHalfCarryProne(op1, op2: op2))
+        cpu.HF.write(addHalfCarryProne(op1, op2))
         cpu.NF.write(false)
-        cpu.CF.write(addCarryProne(op1, op2: op2))
+        cpu.CF.write(addCarryProne(op1, op2))
     }
     
     private func modifyFlags(cpu: Z80, op1: T.ReadType, op2: U.ReadType, result: T.ReadType) {

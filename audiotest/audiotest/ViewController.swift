@@ -50,7 +50,7 @@ class ViewController: NSViewController {
         bus.registerReadable(apu)
         bus.registerWriteable(apu)
         
-        let z80 = Z80(bus: bus)
+        let cpu = Z80(bus: bus)
         
         z80.setSP(header.stackPointer)
         z80.setPC(header.loadAddress)

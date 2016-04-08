@@ -113,15 +113,26 @@ struct LDHNA: LR35902Instruction {
     }
 }
 
-// LD HL, (SP+n)
+// LD HL, SP+n
 struct LDHLSP: LR35902Instruction {
     /// This offset will be treated as signed during execution!
-    let offset: UInt8
+    let offset: Int8
     
     let cycleCount = 0
     
     func runOn(cpu: LR35902) {
-        cpu.HL.write(PseudoPointer16(base: cpu.SP.read(), offset: Immediate8(val: offset), bus: cpu.bus).read())
+        let sp = cpu.SP.read()
+        let n = offset
+        
+        cpu.HL.write(UInt16(Int(sp) + n))
+    }
+    
+    //@todo is this done right? what resource talks about how these flags are set?
+    private func modifyFlags(cpu: LR35902, sp: UInt16, n: Int8) {
+        cpu.ZF.write(false)
+        cpu.NF.write(false)
+        cpu.HF.write(addHalfCarryProne(sp, n))
+        cpu.CF.write(addCarryProne(sp, n))
     }
 }
 

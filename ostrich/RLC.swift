@@ -71,17 +71,17 @@ struct RLCA: Z80Instruction, LR35902Instruction {
     let cycleCount = 0
     
     func runOn(cpu: Z80) {
-        let oldA = z80.A.read()
+        let oldA = cpu.A.read()
         
-        z80.A.write(rotateLeft(oldA))
-        modifyFlags(z80, oldValue: oldA)
+        cpu.A.write(rotateLeft(oldA))
+        modifyFlags(cpu, oldValue: oldA)
     }
     
     func runOn(cpu: LR35902) {
-        let oldA = z80.A.read()
+        let oldA = cpu.A.read()
         
-        z80.A.write(rotateLeft(oldA))
-        modifyFlags(z80, oldValue: oldA)
+        cpu.A.write(rotateLeft(oldA))
+        modifyFlags(cpu, oldValue: oldA)
     }
     
     func modifyFlags(z80: Z80, oldValue: UInt8) {

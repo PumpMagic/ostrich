@@ -133,8 +133,12 @@ func addHalfCarryProne(op1: UInt8, _ op2: UInt8) -> Bool {
 }
 
 /// Z80 half-carry for 16-bit numbers is on bit 11, not bit 7
-func addHalfCarryProne(op1: UInt16, op2: UInt16) -> Bool {
+func addHalfCarryProne(op1: UInt16, _ op2: UInt16) -> Bool {
     return (op1 & 0x07FF) + (op2 & 0x07FF) >= 0x0800
+}
+
+func addHalfCarryProne(op1: UInt16, _ op2: Int8) -> Bool {
+    return Int(op1 & 0x07FF) + Int(op2) >= 0x0800
 }
 
 func addCarryProne(op1: UInt8, _ op2: UInt8) -> Bool {
@@ -143,8 +147,14 @@ func addCarryProne(op1: UInt8, _ op2: UInt8) -> Bool {
     return overflowedResult > 0xFF
 }
 
-func addCarryProne(op1: UInt16, op2: UInt16) -> Bool {
+func addCarryProne(op1: UInt16, _ op2: UInt16) -> Bool {
     let overflowedResult: UInt32 = UInt32(op1) + UInt32(op2)
+    
+    return overflowedResult > 0xFFFF
+}
+
+func addCarryProne(op1: UInt16, _ op2: Int8) -> Bool {
+    let overflowedResult = Int(op1) + Int(op2)
     
     return overflowedResult > 0xFFFF
 }

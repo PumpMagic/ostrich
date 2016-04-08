@@ -89,7 +89,7 @@ public class LR35902: Intel8080Like {
         self.IFF1 = .Disabled
         self.IFF2 = .Disabled
         
-        self.instructionContext = Intel8080InstructionContext(lastInstructionWasEI: false)
+        self.instructionContext = Intel8080InstructionContext(lastInstructionWasDI: false, lastInstructionWasEI: false)
         
         self.bus = bus
     }
@@ -131,7 +131,7 @@ public class LR35902: Intel8080Like {
     
     
     /// Fetches an instruction, runs it, and returns it
-    public func doInstructionCycle() -> Instruction {
+    func doInstructionCycle() -> LR35902Instruction {
         guard let instruction = self.fetchInstruction() else {
             print("FATAL: unable to fetch instruction")
             exit(1)
@@ -143,7 +143,7 @@ public class LR35902: Intel8080Like {
     
     /// Execute an instruction.
     /// This function has some additional behavior to support things like EI, which has effects delayed by an instruction.
-    func executeInstruction(instruction: Instruction) {
+    func executeInstruction(instruction: LR35902Instruction) {
         let willEnableInterrupts = self.instructionContext.lastInstructionWasEI
         
         instruction.runOn(self)
@@ -158,10 +158,10 @@ public class LR35902: Intel8080Like {
     }
     
     //@todo make this internal and add a public run() or clock() or something
-    func fetchInstruction() -> Instruction? {
+    func fetchInstruction() -> LR35902Instruction? {
         let firstByte = bus.read(PC.read())
         
-        var instruction: Instruction? = nil
+        var instruction: LR35902Instruction? = nil
         var instructionLength: UInt16 = 1
         
         print(String(format: "Unrecognized opcode 0x%02X at PC 0x%04X", firstByte, PC.read()))
