@@ -19,7 +19,7 @@ struct RLC<T: protocol<Writeable, Readable, OperandType> where T.ReadType == T.W
     
     private func runCommon(cpu: Intel8080Like) -> (UInt8, UInt8) {
         let oldValue = op.read()
-        let newValue = rotateRight(oldValue)
+        let newValue = rotateLeft(oldValue)
         
         op.write(newValue)
         
@@ -84,16 +84,25 @@ struct RLCA: Z80Instruction, LR35902Instruction {
         modifyFlags(cpu, oldValue: oldA)
     }
     
-    func modifyFlags(z80: Z80, oldValue: UInt8) {
-        // S is not affected.
+    private func modifyCommonFlags(cpu: Intel8080Like, oldValue: UInt8) {
         // Z is not affected.
         // H is reset.
-        // P/V is not affected.
         // N is reset.
         // C is data from bit 7 of Accumulator.
         
-        z80.HF.write(false)
-        z80.NF.write(false)
-        z80.CF.write(bitIsHigh(oldValue, bit: 7))
+        cpu.HF.write(false)
+        cpu.NF.write(false)
+        cpu.CF.write(bitIsHigh(oldValue, bit: 7))
+    }
+    
+    func modifyFlags(cpu: Z80, oldValue: UInt8) {
+        modifyCommonFlags(cpu, oldValue: oldValue)
+        
+        // S is not affected.
+        // P/V is not affected.
+    }
+    
+    private func modifyFlags(cpu: LR35902, oldValue: UInt8) {
+        modifyCommonFlags(cpu, oldValue: oldValue)
     }
 }

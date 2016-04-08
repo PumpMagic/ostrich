@@ -50,10 +50,10 @@ class ViewController: NSViewController {
         bus.registerReadable(apu)
         bus.registerWriteable(apu)
         
-        let cpu = Z80(bus: bus)
+        let cpu = LR35902(bus: bus)
         
-        z80.setSP(header.stackPointer)
-        z80.setPC(header.loadAddress)
+        cpu.setSP(header.stackPointer)
+        cpu.setPC(header.loadAddress)
         
         /* INIT - Called at the end of the LOAD process, or when a new song is selected.
              All of the registers are initialized, RAM is cleared, and the init address is
@@ -61,9 +61,9 @@ class ViewController: NSViewController {
              in the accumulator is zero-based (the first song is 0). The init code must end
              with a RET instruction. */
         print("Calling and running INIT...")
-        z80.setA(header.firstSong)
-        z80.injectCall(header.initAddress)
-        z80.runUntil("RET")
+        cpu.setA(header.firstSong)
+        cpu.injectCall(header.initAddress)
+        cpu.runUntil("RET")
         
         /* PLAY - Begins after INIT process is complete. The play address is constantly
              called at the rate established in the header (see TIMING). The play code must
@@ -85,8 +85,8 @@ class ViewController: NSViewController {
         */
         
         repeat {
-            z80.injectCall(header.playAddress)
-            z80.runUntil("RET")
+            cpu.injectCall(header.playAddress)
+            cpu.runUntil("RET")
             usleep(16666)
         } while true
     }

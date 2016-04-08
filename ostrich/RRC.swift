@@ -10,62 +10,99 @@ import Foundation
 
 
 /// Right rotate with carry
-struct RRC<T: protocol<Writeable, Readable, OperandType> where T.ReadType == T.WriteType, T.ReadType == UInt8>: Instruction
+struct RRC<T: protocol<Writeable, Readable, OperandType> where T.ReadType == T.WriteType, T.ReadType == UInt8>: Z80Instruction, LR35902Instruction
 {
     let op: T
     
     let cycleCount = 0
     
-    func runOn(z80: Z80) {
+    
+    private func runCommon(cpu: Intel8080Like) -> (UInt8, UInt8) {
         let oldValue = op.read()
         let newValue = rotateRight(oldValue)
         
         op.write(newValue)
         
-        modifyFlags(z80, oldValue: oldValue, newValue: newValue)
+        return (oldValue, newValue)
     }
     
-    func modifyFlags(z80: Z80, oldValue: UInt8, newValue: UInt8) {
-        // S is set if result is negative; otherwise, it is reset.
+    func runOn(cpu: Z80) {
+        let (oldValue, newValue) = runCommon(cpu)
+        
+        modifyFlags(cpu, oldValue: oldValue, newValue: newValue)
+    }
+    
+    func runOn(cpu: LR35902) {
+        let (oldValue, newValue) = runCommon(cpu)
+        
+        modifyFlags(cpu, oldValue: oldValue, newValue: newValue)
+    }
+    
+    
+    private func modifyCommonFlags(cpu: Intel8080Like, oldValue: UInt8, newValue: UInt8) {
         // Z is set if result is 0; otherwise, it is reset.
         // H is reset.
-        // P/V is set if parity even; otherwise, it is reset.
         // N is reset.
         // C is data from bit 0 of source register.
         
-        z80.SF.write(numberIsNegative(newValue))
-        z80.ZF.write(newValue == 0x00)
-        z80.HF.write(false)
-        z80.PVF.write(parity(newValue))
-        z80.NF.write(false)
-        z80.CF.write(bitIsHigh(oldValue, bit: 0))
+        cpu.ZF.write(newValue == 0x00)
+        cpu.HF.write(false)
+        cpu.NF.write(false)
+        cpu.CF.write(bitIsHigh(oldValue, bit: 0))
+    }
+    
+    private func modifyFlags(cpu: Z80, oldValue: UInt8, newValue: UInt8) {
+        modifyCommonFlags(cpu, oldValue: oldValue, newValue: newValue)
+        
+        // S is set if result is negative; otherwise, it is reset.
+        // P/V is set if parity even; otherwise, it is reset.
+        
+        cpu.SF.write(numberIsNegative(newValue))
+        cpu.PVF.write(parity(newValue))
+    }
+    
+    private func modifyFlags(cpu: LR35902, oldValue: UInt8, newValue: UInt8) {
+        modifyCommonFlags(cpu, oldValue: oldValue, newValue: newValue)
     }
 }
 
 /// Right rotate with carry A
-struct RRCA: Instruction {
-    //@warn the Z80 manual's example has something that doesn't look like a proper right rotate
-    // it's probably an error in the manual, so this instruction implements an actual rotate...
-    
+struct RRCA: Z80Instruction, LR35902Instruction {
     let cycleCount = 0
     
-    func runOn(z80: Z80) {
-        let oldA = z80.A.read()
+    func runOn(cpu: Z80) {
+        let oldA = cpu.A.read()
         
-        z80.A.write(rotateRight(oldA))
-        modifyFlags(z80, oldValue: oldA)
+        cpu.A.write(rotateRight(oldA))
+        modifyFlags(cpu, oldValue: oldA)
     }
     
-    func modifyFlags(z80: Z80, oldValue: UInt8) {
-        // S is not affected.
+    func runOn(cpu: LR35902) {
+        let oldA = cpu.A.read()
+        
+        cpu.A.write(rotateLeft(oldA))
+        modifyFlags(cpu, oldValue: oldA)
+    }
+    
+    private func modifyCommonFlags(cpu: Intel8080Like, oldValue: UInt8) {
         // Z is not affected.
         // H is reset.
-        // P/V is not affected.
         // N is reset.
         // C is data from bit 0 of Accumulator.
         
-        z80.HF.write(false)
-        z80.NF.write(false)
-        z80.CF.write(bitIsHigh(oldValue, bit: 0))
+        cpu.HF.write(false)
+        cpu.NF.write(false)
+        cpu.CF.write(bitIsHigh(oldValue, bit: 0))
+    }
+    
+    func modifyFlags(cpu: Z80, oldValue: UInt8) {
+        modifyCommonFlags(cpu, oldValue: oldValue)
+        
+        // S is not affected.
+        // P/V is not affected.
+    }
+    
+    private func modifyFlags(cpu: LR35902, oldValue: UInt8) {
+        modifyCommonFlags(cpu, oldValue: oldValue)
     }
 }
