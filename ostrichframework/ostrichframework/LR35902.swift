@@ -159,15 +159,29 @@ public class LR35902: Intel8080Like {
     
     //@todo make this internal and add a public run() or clock() or something
     func fetchInstruction() -> LR35902Instruction? {
-        let firstByte = bus.read(PC.read())
-        
         var instruction: LR35902Instruction? = nil
         var instructionLength: UInt16 = 1
         
-        print(String(format: "Unrecognized opcode 0x%02X at PC 0x%04X", firstByte, PC.read()))
+        if let commonInstruction = self.fetchInstructionCommon() {
+            if let i = commonInstruction as? LR35902Instruction {
+                instruction = i
+            }
+        }
         
-        //@warn we should probably only alter the PC if the instruction doesn't do so itself
-        PC.write(PC.read() + instructionLength)
+        if instruction == nil {
+            let firstByte = bus.read(PC.read())
+            
+            switch firstByte {
+            default:
+                print(String(format: "Unrecognized opcode 0x%02X at PC 0x%04X", firstByte, PC.read()))
+            }
+            
+            //@warn we should probably only alter the PC if the instruction doesn't do so itself
+            PC.write(PC.read() + instructionLength)
+        }
+        
+        instructionLength = 1
+        
         return instruction
     }
 }
