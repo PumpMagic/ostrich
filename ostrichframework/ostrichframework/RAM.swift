@@ -16,7 +16,7 @@ public class RAM: Memory, HandlesWrites {
     public let firstAddress: Address
     
     public var lastAddress: Address {
-        return UInt16(UInt32(self.firstAddress) + UInt32(self.data.count))
+        return UInt16(UInt32(self.firstAddress) + UInt32(self.data.count) - 1)
     }
     public var addressRange: Range<Address> {
         return self.firstAddress ... self.lastAddress

@@ -71,6 +71,7 @@ struct LDI_Z80: Z80Instruction {
 // Special LR35902 instructions
 // LD A, ($FF00+C)
 /// Load into A whatever's at (0xFF00 + C)
+// Note that C is treated as unsigned here!
 struct LDAC: LR35902Instruction {
     let cycleCount = 0
     
@@ -81,6 +82,7 @@ struct LDAC: LR35902Instruction {
 
 // LD ($FF00+C), A
 /// Load A into whatever's at (0xFF00 + C)
+// Note that C is treated as unsigned here!
 struct LDCA: LR35902Instruction {
     let cycleCount = 0
     
@@ -90,8 +92,8 @@ struct LDCA: LR35902Instruction {
 }
 
 // LD A, ($FF00+n)
+// Note that n is unsigned here!
 struct LDHAN: LR35902Instruction {
-    /// This offset will be treated as signed during execution!
     let offset: UInt8
     
     let cycleCount = 0
@@ -102,8 +104,8 @@ struct LDHAN: LR35902Instruction {
 }
 
 // LD ($FF00+n), A
+// Note that n is unsigned here!
 struct LDHNA: LR35902Instruction {
-    /// This offset will be treated as signed during execution!
     let offset: UInt8
     
     let cycleCount = 0
@@ -115,7 +117,6 @@ struct LDHNA: LR35902Instruction {
 
 // LD HL, SP+n
 struct LDHLSP: LR35902Instruction {
-    /// This offset will be treated as signed during execution!
     let offset: Int8
     
     let cycleCount = 0

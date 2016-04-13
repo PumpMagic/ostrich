@@ -178,12 +178,9 @@ class PseudoPointer8<T: Readable where T.ReadType == UInt8>: Readable, Writeable
         self.offset = offset
         self.bus = bus
     }
-    
-    var offsetInt: Int8 {
-        return Int8(bitPattern: offset.read())
-    }
+
     var targetAddress: Address {
-        return Address(Int(base) + Int(offsetInt))
+        return base + Address(offset.read())
     }
     
     func read() -> UInt8 {

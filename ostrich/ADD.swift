@@ -119,7 +119,34 @@ struct ADD16
     private func modifyFlags(cpu: LR35902, op1: T.ReadType, op2: U.ReadType, result: T.ReadType) {
         modifyCommonFlags(cpu, op1: op1, op2: op2, result: result)
     }
-    
 }
 
 //@todo special LR35902 ADD16 that affects flags differently: ADD SP, n
+/// Add two 16-bit operands; overwrite the first with the result
+struct ADDSP: LR35902Instruction
+{
+    let value: Int8
+    
+    let cycleCount = 0
+    
+    
+    func runOn(cpu: LR35902) {
+        let op1v = cpu.SP.read()
+        let op2v = value
+        let resultOverflowed = Int(op1v) &+ Int(op2v)
+        let result = Address(truncatingBitPattern: resultOverflowed)
+        cpu.SP.write(result)
+        modifyFlags(cpu, op1: op1v, op2: op2v)
+    }
+    
+    private func modifyFlags(cpu: LR35902, op1: Address, op2: Int8) {
+        // Z - Reset.
+        // N - Reset.
+        // H is set if carry from bit 11; otherwise, it is reset.
+        // C is set if carry from bit 15; otherwise, it is reset.
+        cpu.ZF.write(false)
+        cpu.NF.write(false)
+        cpu.HF.write(addHalfCarryProne(op1, op2))
+        cpu.CF.write(addCarryProne(op1, op2))
+    }
+}

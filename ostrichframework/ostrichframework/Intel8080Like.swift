@@ -83,46 +83,46 @@ extension Intel8080Like {
         
         switch firstByte {
         case 0x00:
-        // NOP
-        instruction = NOP()
-        instructionLength = 1
+            // NOP
+            instruction = NOP()
+            instructionLength = 1
         
         case 0x01:
-        // LD BC, nn
-        let val = bus.read16(PC.read()+1)
-        instruction = LD(dest: self.BC, src: Immediate16(val: val))
-        instructionLength = 3
+            // LD BC, nn
+            let val = bus.read16(PC.read()+1)
+            instruction = LD(dest: self.BC, src: Immediate16(val: val))
+            instructionLength = 3
         
         case 0x02:
-        // LD (BC), A
-        instruction = LD(dest: self.BC.asPointerOn(self.bus), src: self.A)
-        instructionLength = 1
+            // LD (BC), A
+            instruction = LD(dest: self.BC.asPointerOn(self.bus), src: self.A)
+            instructionLength = 1
         
         case 0x03:
-        // INC BC
-        instruction = INC16(operand: self.BC)
-        instructionLength = 1
+            // INC BC
+            instruction = INC16(operand: self.BC)
+            instructionLength = 1
         
         case 0x04:
-        // INC B
-        instruction = INC8(operand: self.B)
-        instructionLength = 1
+            // INC B
+            instruction = INC8(operand: self.B)
+            instructionLength = 1
         
         case 0x05:
-        // DEC B
-        instruction = DEC8(operand: self.B)
-        instructionLength = 1
+            // DEC B
+            instruction = DEC8(operand: self.B)
+            instructionLength = 1
         
         case 0x06:
-        // LD B, n
-        let val = bus.read(PC.read()+1)
-        instruction = LD(dest: self.B, src: Immediate8(val: val))
-        instructionLength = 2
+            // LD B, n
+            let val = bus.read(PC.read()+1)
+            instruction = LD(dest: self.B, src: Immediate8(val: val))
+            instructionLength = 2
         
         case 0x07:
-        // RLCA
-        instruction = RLCA()
-        instructionLength = 1
+            // RLCA
+            instruction = RLCA()
+            instructionLength = 1
             
         case 0x09:
             // ADD HL, BC
@@ -316,7 +316,7 @@ extension Intel8080Like {
             // LD A, n
             let val = bus.read(PC.read()+1)
             instruction = LD(dest: self.A, src: Immediate8(val: val))
-            instructionLength = 1
+            instructionLength = 2
             
         case 0x3F:
             // CCF
@@ -773,7 +773,8 @@ extension Intel8080Like {
             instructionLength = 1
             
         default:
-            print("Unshared opcode \(firstByte.hexString) at PC \(PC.read().hexString)")
+            //print("Unshared opcode \(firstByte.hexString) at PC \(PC.read().hexString)")
+            break
         }
         
         
@@ -781,6 +782,8 @@ extension Intel8080Like {
         if instruction != nil {
             self.PC.write(self.PC.read() + instructionLength)
         }
+        
+        print("\(firstByte.hexString) -> \(instruction)")
         
         return instruction
     }

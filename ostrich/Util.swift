@@ -19,6 +19,11 @@ func make16(high high: UInt8, low: UInt8) -> UInt16 {
     return result
 }
 
+func endianSwap(val: UInt16) -> UInt16 {
+    let (high, low) = getBytes(val)
+    return make16(high: low, low: high)
+}
+
 /// Returns (MSB, LSB) of a host-endian 16-bit number
 func getBytes(val: UInt16) -> (UInt8, UInt8) {
     return (getHigh(val), getLow(val))

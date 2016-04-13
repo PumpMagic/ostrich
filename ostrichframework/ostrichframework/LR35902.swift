@@ -172,15 +172,36 @@ public class LR35902: Intel8080Like {
             let firstByte = bus.read(PC.read())
             
             switch firstByte {
-            case 0xEA:
+            case 0xE0:
                 // LDH (n), A
                 let offset = bus.read(PC.read()+1)
                 instruction = LDHNA(offset: offset)
-                instructionLength = 1
+                instructionLength = 2
+                
+            case 0xE8:
+                // ADD SP, n
+                let value = Int8(bitPattern: bus.read(PC.read()+1))
+                instruction = ADDSP(value: value)
+                instructionLength = 2
+                
+            case 0xEA:
+                // LD (nn), A
+                let val = bus.read16(PC.read()+1)
+                instruction = LD(dest: Pointer(source: Immediate16(val: val), bus: bus), src: self.A)
+                instructionLength = 3
+                
+            case 0xF0:
+                // LDH A, (n)
+                let offset = bus.read(PC.read()+1)
+                instruction = LDHAN(offset: offset)
+                instructionLength = 2
+                
                 
             default:
                 print(String(format: "Unrecognized opcode 0x%02X at PC 0x%04X", firstByte, PC.read()))
             }
+            
+            print("\(firstByte.hexString) -> \(instruction)")
             
             //@warn we should probably only alter the PC if the instruction doesn't do so itself
             PC.write(PC.read() + instructionLength)
