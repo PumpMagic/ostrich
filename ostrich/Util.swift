@@ -137,7 +137,7 @@ func addHalfCarryProne(op1: UInt8, _ op2: UInt8) -> Bool {
     return (op1 & 0x0F) + (op2 & 0x0F) >= 0x10
 }
 
-/// Z80 half-carry for 16-bit numbers is on bit 11, not bit 7
+/// 8080 half-carry for 16-bit numbers is on bit 11, not bit 7
 func addHalfCarryProne(op1: UInt16, _ op2: UInt16) -> Bool {
     return (op1 & 0x07FF) + (op2 & 0x07FF) >= 0x0800
 }
@@ -162,6 +162,37 @@ func addCarryProne(op1: UInt16, _ op2: Int8) -> Bool {
     let overflowedResult = Int(op1) + Int(op2)
     
     return overflowedResult > 0xFFFF
+}
+
+// SUB STUFF
+//@todo verify this behavior is correct
+func subOverflowOccurred(op1: UInt8, op2: UInt8, result: UInt8) -> Bool {
+    // If you subtract a positive number from a negative one, the result should always be negative
+    if numberIsNegative(op1) && !numberIsNegative(op2) && !numberIsNegative(result) {
+        return true
+    }
+    // If you subtract a negative number from a positive one, the result should always be positive
+    if !numberIsNegative(op1) && numberIsNegative(op2) && numberIsNegative(result) {
+        return true
+    }
+    
+    return false
+}
+
+//@todo verify this behavior is correct
+func subHalfBorrowProne(op1: UInt8, _ op2: UInt8) -> Bool {
+    if op1 >= 0x10 {
+        if (op1 & 0xF0) - (op2 & 0xF0) <= 0x0F {
+            return true
+        }
+    }
+    
+    return false
+}
+
+//@todo implement this
+func subBorrowProne(op1: UInt8, _ op2: UInt8) -> Bool {
+    return false
 }
 
 
