@@ -172,6 +172,12 @@ public class LR35902: Intel8080Like {
             let firstByte = bus.read(PC.read())
             
             switch firstByte {
+            case 0xEA:
+                // LDH (n), A
+                let offset = bus.read(PC.read()+1)
+                instruction = LDHNA(offset: offset)
+                instructionLength = 1
+                
             default:
                 print(String(format: "Unrecognized opcode 0x%02X at PC 0x%04X", firstByte, PC.read()))
             }
@@ -179,8 +185,6 @@ public class LR35902: Intel8080Like {
             //@warn we should probably only alter the PC if the instruction doesn't do so itself
             PC.write(PC.read() + instructionLength)
         }
-        
-        instructionLength = 1
         
         return instruction
     }

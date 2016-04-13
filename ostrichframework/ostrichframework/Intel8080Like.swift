@@ -778,7 +778,9 @@ extension Intel8080Like {
         
         
         //@todo make PC-incrementing common
-        self.PC.write(self.PC.read() + instructionLength)
+        if instruction != nil {
+            self.PC.write(self.PC.read() + instructionLength)
+        }
         
         return instruction
     }

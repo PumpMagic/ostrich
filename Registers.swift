@@ -183,7 +183,7 @@ class PseudoPointer8<T: Readable where T.ReadType == UInt8>: Readable, Writeable
         return Int8(bitPattern: offset.read())
     }
     var targetAddress: Address {
-        return Address(Int(base) + offsetInt)
+        return Address(Int(base) + Int(offsetInt))
     }
     
     func read() -> UInt8 {
