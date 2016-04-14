@@ -10,6 +10,8 @@ import Foundation
 
 
 /// Jump conditionally based on a register rather than a flag
+/// This assumes that the PC has been incremented BEFORE this instruction is executed!
+/// Ie. it doesn't add two to the displacement
 struct DJNZ: Z80Instruction {
     // B ← B–1
     // If B = 0, continue
@@ -26,7 +28,7 @@ struct DJNZ: Z80Instruction {
         
         if newValue != 0 {
             //@todo bounds check
-            cpu.PC.write(UInt16(Int32(cpu.PC.read()) + Int32(displacementMinusTwo) + 2))
+            cpu.PC.write(Address(Int32(cpu.PC.read()) + Int32(displacementMinusTwo)))
         }
     }
     

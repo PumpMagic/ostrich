@@ -2,45 +2,15 @@
 //  SUB.swift
 //  ostrichframework
 //
-//  Created by Ryan Conway on 3/31/16.
+//  Created by Ryan Conway on 4/13/16.
 //  Copyright © 2016 Ryan Conway. All rights reserved.
 //
 
 import Foundation
 
 
-func sub<T: IntegerType>(v1: T, _ v2: T) -> T {
-    return v1 &- v2
-}
-
-func subWithoutStore
-    <T: protocol<Readable, Writeable>, U: Readable
-    where T.WriteType == U.ReadType, T.ReadType == T.WriteType, T.ReadType: IntegerType>
-    (op1: T, _ op2: U)
-    -> (T.ReadType, U.ReadType, T.WriteType)
-{
-    let op1v = op1.read()
-    let op2v = op2.read()
-    let result = sub(op1v, op2v)
-    
-    return (op1v, op2v, result)
-}
-
-private func subAndStore
-    <T: protocol<Readable, Writeable>, U: Readable
-    where T.WriteType == U.ReadType, T.ReadType == T.WriteType, T.ReadType: IntegerType>
-    (op1: T, _ op2: U)
-    -> (T.ReadType, U.ReadType, T.WriteType)
-{
-    let (op1v, op2v, result) = subWithoutStore(op1, op2)
-    op1.write(result)
-    
-    return (op1v, op2v, result)
-}
-
-
-/// Subtract from the accumulator an 8-bit operand; overwrite the accumulator with the result
-struct SUB
+/// Subtract from the accumulator an 8-bit operand and modify flags accordingly, discarding the result
+struct CP
     <T: protocol<Readable, OperandType> where T.ReadType == UInt8>: Z80Instruction, LR35902Instruction
 {
     let op: T
@@ -49,12 +19,12 @@ struct SUB
     
     
     func runOn(cpu: Z80) {
-        let (op1v, op2v, result) = subAndStore(cpu.A, op)
+        let (op1v, op2v, result) = subWithoutStore(cpu.A, op)
         modifyFlags(cpu, op1: op1v, op2: op2v, result: result)
     }
     
     func runOn(cpu: LR35902) {
-        let (op1v, op2v, result) = subAndStore(cpu.A, op)
+        let (op1v, op2v, result) = subWithoutStore(cpu.A, op)
         modifyFlags(cpu, op1: op1v, op2: op2v, result: result)
     }
     

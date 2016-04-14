@@ -165,7 +165,6 @@ func addCarryProne(op1: UInt16, _ op2: Int8) -> Bool {
 }
 
 // SUB STUFF
-//@todo verify this behavior is correct
 func subOverflowOccurred(op1: UInt8, op2: UInt8, result: UInt8) -> Bool {
     // If you subtract a positive number from a negative one, the result should always be negative
     if numberIsNegative(op1) && !numberIsNegative(op2) && !numberIsNegative(result) {
@@ -180,19 +179,15 @@ func subOverflowOccurred(op1: UInt8, op2: UInt8, result: UInt8) -> Bool {
 }
 
 //@todo verify this behavior is correct
+//took this logic from https://gist.github.com/Palmr/4526839
 func subHalfBorrowProne(op1: UInt8, _ op2: UInt8) -> Bool {
-    if op1 >= 0x10 {
-        if (op1 & 0xF0) - (op2 & 0xF0) <= 0x0F {
-            return true
-        }
-    }
-    
-    return false
+    return (op1 & 0x0F) < (op2 & 0x0F)
 }
 
-//@todo implement this
+//@todo verify this behavior is correct
+//took this logic from https://gist.github.com/Palmr/4526839
 func subBorrowProne(op1: UInt8, _ op2: UInt8) -> Bool {
-    return false
+    return op1 < op2
 }
 
 

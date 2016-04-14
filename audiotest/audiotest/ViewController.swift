@@ -11,7 +11,7 @@ import AudioKit
 import ostrichframework
 
 
-let GBS_PATH: String = "/Users/ryan.conway/Dropbox/emu/SML.gbs"
+let GBS_PATH: String = "/Users/ryanconway/Dropbox/emu/SML.gbs"
 
 func delayed(nanos: Int64, closure: () -> ()) {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, nanos), dispatch_get_main_queue(), closure)
@@ -37,10 +37,12 @@ class ViewController: NSViewController {
              1 is in Bank 1 (which can be changed during init or play). Finally, the INIT
              is called with the first song defined in the header. */
         print("Instantiating Z80 and executing LOAD...")
-        // work RAM: 0xC000 - 0xCFFF plus work RAM (need to implement banking): 0xD000 - 0xDFFF
-        let ram = RAM(size: 0xE000 - 0xC000, fillByte: 0x00, firstAddress: 0xC000)
+        // internal RAM: 0xC000 - 0xCFFF plus switchable RAM (need to implement banking): 0xD000 - 0xDFFF
+        let internalRAM = RAM(size: 0xE000 - 0xC000, fillByte: 0x00, firstAddress: 0xC000)
+        // cartridge RAM: 0xA000 - 0xBFFF (need to add this conditionally)
+        let cartridgeRAM = RAM(size: 0xC000 - 0xA000, fillByte: 0x00, firstAddress: 0xA000)
         // high RAM: 0xFF80 - 0xFFFE
-        let highram = RAM(size: 0xFFFF - 0xFF80, fillByte: 0x00, firstAddress: 0xFF80)
+        let highRAM = RAM(size: 0xFFFF - 0xFF80, fillByte: 0x00, firstAddress: 0xFF80)
         let rom = ROM(data: codeAndData, firstAddress: header.loadAddress)
         let apu = GameBoyAPU(mixer: mixer)
         
@@ -48,10 +50,12 @@ class ViewController: NSViewController {
         
         let bus = DataBus()
         bus.registerReadable(rom)
-        bus.registerReadable(ram)
-        bus.registerWriteable(ram)
-        bus.registerReadable(highram)
-        bus.registerWriteable(highram)
+        bus.registerReadable(internalRAM)
+        bus.registerWriteable(internalRAM)
+        bus.registerReadable(cartridgeRAM)
+        bus.registerWriteable(cartridgeRAM)
+        bus.registerReadable(highRAM)
+        bus.registerWriteable(highRAM)
         bus.registerReadable(apu)
         bus.registerWriteable(apu)
         

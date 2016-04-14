@@ -22,5 +22,9 @@ func toImplAmplitude(volume: UInt8) -> Double {
 }
 
 func toImplFrequency(frequency: UInt16) -> Double {
+    if frequency == 0 {
+        return 0
+    }
+    
     return GB_CLOCK_HZ / SAMPLES_PER_PULSE_WAVE_PERIOD / Double(frequency)
 }

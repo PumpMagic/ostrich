@@ -178,6 +178,11 @@ public class LR35902: Intel8080Like {
                 instruction = LDHNA(offset: offset)
                 instructionLength = 2
                 
+            case 0xE2:
+                // LD (C), A
+                instruction = LDCA()
+                instructionLength = 1
+                
             case 0xE8:
                 // ADD SP, n
                 let value = Int8(bitPattern: bus.read(PC.read()+1))
@@ -196,16 +201,21 @@ public class LR35902: Intel8080Like {
                 instruction = LDHAN(offset: offset)
                 instructionLength = 2
                 
+            case 0xF2:
+                // LD A, (C)
+                instruction = LDAC()
+                instructionLength = 1
+                
                 
             default:
                 break
             }
             
-            print("PC \(PC.read().hexString): ", terminator: "")
+            //print("PC \(PC.read().hexString): ", terminator: "")
             for i in 0..<instructionLength {
-                print("\(bus.read(PC.read()+i).hexString) ", terminator: "")
+                //print("\(bus.read(PC.read()+i).hexString) ", terminator: "")
             }
-            print("-> \(instruction)")
+            //print("-> \(instruction)")
             
             //@warn we should probably only alter the PC if the instruction doesn't do so itself
             PC.write(PC.read() + instructionLength)

@@ -195,12 +195,17 @@ extension Intel8080Like {
         case 0x18:
             // JR n
             let displacement = Int8(bus.read(PC.read()+1))
-            instruction = JP(condition: nil, dest: ImmediateDisplaced16(base: PC.read()+2, displacement: displacement))
+            instruction = JR(condition: nil, displacementMinusTwo: displacement)
             instructionLength = 2
             
         case 0x19:
             // ADD HL, DE
             instruction = ADD16(op1: self.HL, op2: self.DE)
+            instructionLength = 1
+            
+        case 0x1A:
+            // LD A, (DE)
+            instruction = LD(dest: self.A, src: self.DE.asPointerOn(bus))
             instructionLength = 1
             
         case 0x1B:
@@ -217,6 +222,12 @@ extension Intel8080Like {
             // DEC E
             instruction = DEC8(operand: self.E)
             instructionLength = 1
+            
+        case 0x20:
+            // JR NZ n
+            let displacement = Int8(bus.read(PC.read()+1))
+            instruction = JR(condition: Condition(flag: self.ZF, target: false), displacementMinusTwo: displacement)
+            instructionLength = 2
             
         case 0x21:
             // LD HL, nn
@@ -245,6 +256,12 @@ extension Intel8080Like {
             instruction = LD(dest: self.H, src: Immediate8(val: val))
             instructionLength = 2
             
+        case 0x28:
+            // JR Z n
+            let displacement = Int8(bus.read(PC.read()+1))
+            instruction = JR(condition: Condition(flag: self.ZF, target: true), displacementMinusTwo: displacement)
+            instructionLength = 2
+            
         case 0x29:
             // ADD HL, HL
             instruction = ADD16(op1: self.HL, op2: self.HL)
@@ -264,6 +281,12 @@ extension Intel8080Like {
             // DEC L
             instruction = DEC8(operand: self.L)
             instructionLength = 1
+            
+        case 0x30:
+            // JR NC n
+            let displacement = Int8(bus.read(PC.read()+1))
+            instruction = JR(condition: Condition(flag: self.CF, target: false), displacementMinusTwo: displacement)
+            instructionLength = 2
             
         case 0x31:
             // LD SP, nn
@@ -290,6 +313,12 @@ extension Intel8080Like {
             // LD (HL), n
             let val = bus.read(PC.read()+1)
             instruction = LD(dest: self.HL.asPointerOn(bus), src: Immediate8(val: val))
+            instructionLength = 2
+            
+        case 0x38:
+            // JR C n
+            let displacement = Int8(bus.read(PC.read()+1))
+            instruction = JR(condition: Condition(flag: self.CF, target: true), displacementMinusTwo: displacement)
             instructionLength = 2
             
         case 0x39:
@@ -671,6 +700,138 @@ extension Intel8080Like {
             instruction = ADD8(op1: self.A, op2: self.A)
             instructionLength = 1
             
+        case 0xA0:
+            // AND B
+            instruction = AND(op: self.B)
+            instructionLength = 1
+        case 0xA1:
+            // AND C
+            instruction = AND(op: self.C)
+            instructionLength = 1
+        case 0xA2:
+            // AND D
+            instruction = AND(op: self.D)
+            instructionLength = 1
+        case 0xA3:
+            // AND E
+            instruction = AND(op: self.E)
+            instructionLength = 1
+        case 0xA4:
+            // AND H
+            instruction = AND(op: self.H)
+            instructionLength = 1
+        case 0xA5:
+            // AND L
+            instruction = AND(op: self.L)
+            instructionLength = 1
+        case 0xA6:
+            // AND (HL)
+            instruction = AND(op: self.HL.asPointerOn(self.bus))
+            instructionLength = 1
+        case 0xA7:
+            // AND A
+            instruction = AND(op: self.A)
+            instructionLength = 1
+            
+        case 0xA8:
+            // XOR B
+            instruction = XOR(op: self.B)
+            instructionLength = 1
+        case 0xA9:
+            // XOR C
+            instruction = XOR(op: self.C)
+            instructionLength = 1
+        case 0xAA:
+            // XOR D
+            instruction = XOR(op: self.D)
+            instructionLength = 1
+        case 0xAB:
+            // XOR E
+            instruction = XOR(op: self.E)
+            instructionLength = 1
+        case 0xAC:
+            // XOR H
+            instruction = XOR(op: self.H)
+            instructionLength = 1
+        case 0xAD:
+            // XOR L
+            instruction = XOR(op: self.L)
+            instructionLength = 1
+        case 0xAE:
+            // XOR (HL)
+            instruction = XOR(op: self.HL.asPointerOn(self.bus))
+            instructionLength = 1
+        case 0xAF:
+            // XOR A
+            instruction = XOR(op: self.A)
+            instructionLength = 1
+            
+        case 0xB0:
+            // OR B
+            instruction = OR(op: self.B)
+            instructionLength = 1
+        case 0xB1:
+            // OR C
+            instruction = OR(op: self.C)
+            instructionLength = 1
+        case 0xB2:
+            // OR D
+            instruction = OR(op: self.D)
+            instructionLength = 1
+        case 0xB3:
+            // OR E
+            instruction = OR(op: self.E)
+            instructionLength = 1
+        case 0xB4:
+            // OR H
+            instruction = OR(op: self.H)
+            instructionLength = 1
+        case 0xB5:
+            // OR L
+            instruction = OR(op: self.L)
+            instructionLength = 1
+        case 0xB6:
+            // OR (HL)
+            instruction = OR(op: self.HL.asPointerOn(self.bus))
+            instructionLength = 1
+        case 0xB7:
+            // OR A
+            instruction = OR(op: self.A)
+            instructionLength = 1
+            
+        case 0xB8:
+            // CP B
+            instruction = CP(op: self.B)
+            instructionLength = 1
+        case 0xB9:
+            // CP C
+            instruction = CP(op: self.C)
+            instructionLength = 1
+        case 0xBA:
+            // CP D
+            instruction = CP(op: self.D)
+            instructionLength = 1
+        case 0xBB:
+            // CP E
+            instruction = CP(op: self.E)
+            instructionLength = 1
+        case 0xBC:
+            // CP H
+            instruction = CP(op: self.H)
+            instructionLength = 1
+        case 0xBD:
+            // CP L
+            instruction = CP(op: self.L)
+            instructionLength = 1
+        case 0xBE:
+            // CP (HL)
+            instruction = CP(op: self.HL.asPointerOn(self.bus))
+            instructionLength = 1
+        case 0xBF:
+            // CP A
+            instruction = CP(op: self.A)
+            instructionLength = 1
+            
         case 0xC0:
             // RET nz
             instruction = RET(condition: Condition(flag: self.ZF, target: false))
@@ -686,6 +847,12 @@ extension Intel8080Like {
             // JP nn
             let addr = bus.read16(PC.read()+1)
             instruction = JP(condition: nil, dest: Immediate16(val: addr))
+            instructionLength = 3
+            
+        case 0xC4:
+            // CALL NZ, nn
+            let addr = bus.read16(PC.read()+1)
+            instruction = CALL(condition: Condition(flag: self.ZF, target: false), dest: Immediate16(val: addr))
             instructionLength = 3
             
         case 0xC5:
@@ -715,6 +882,18 @@ extension Intel8080Like {
             instruction = JP(condition: Condition(flag: self.ZF, target: true), dest: Immediate16(val: addr))
             instructionLength = 3
             
+        case 0xCC:
+            // CALL Z, nn
+            let addr = bus.read16(PC.read()+1)
+            instruction = CALL(condition: Condition(flag: self.ZF, target: true), dest: Immediate16(val: addr))
+            instructionLength = 3
+            
+        case 0xCD:
+            // CALL nn
+            let addr = bus.read16(PC.read()+1)
+            instruction = CALL(condition: nil, dest: Immediate16(val: addr))
+            instructionLength = 3
+            
         case 0xD0:
             // RET nc
             instruction = RET(condition: Condition(flag: self.CF, target: false))
@@ -724,6 +903,12 @@ extension Intel8080Like {
             // JP nc, nn
             let addr = bus.read16(PC.read()+1)
             instruction = JP(condition: Condition(flag: self.CF, target: false), dest: Immediate16(val: addr))
+            instructionLength = 3
+            
+        case 0xD4:
+            // CALL NC, nn
+            let addr = bus.read16(PC.read()+1)
+            instruction = CALL(condition: Condition(flag: self.CF, target: false), dest: Immediate16(val: addr))
             instructionLength = 3
             
         case 0xD5:
@@ -740,6 +925,12 @@ extension Intel8080Like {
             // JP c, nn
             let addr = bus.read16(PC.read()+1)
             instruction = JP(condition: Condition(flag: self.CF, target: true), dest: Immediate16(val: addr))
+            instructionLength = 3
+            
+        case 0xDC:
+            // CALL C, nn
+            let addr = bus.read16(PC.read()+1)
+            instruction = CALL(condition: Condition(flag: self.CF, target: true), dest: Immediate16(val: addr))
             instructionLength = 3
             
         case 0xDF:
@@ -772,16 +963,22 @@ extension Intel8080Like {
             instruction = EI()
             instructionLength = 1
             
+        case 0xFE:
+            // CP n
+            let subtrahend = bus.read(PC.read()+1)
+            instruction = CP(op: Immediate8(val: subtrahend))
+            instructionLength = 2
+            
         default:
             break
         }
         
         
-        print("PC \(PC.read().hexString): ", terminator: "")
+        //print("PC \(PC.read().hexString): ", terminator: "")
         for i in 0..<instructionLength {
-            print("\(bus.read(PC.read()+i).hexString) ", terminator: "")
+            //print("\(bus.read(PC.read()+i).hexString) ", terminator: "")
         }
-        print("-> \(instruction)")
+        //print("-> \(instruction)")
         
         //@todo make PC-incrementing common
         if instruction != nil {
