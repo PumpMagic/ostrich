@@ -773,17 +773,20 @@ extension Intel8080Like {
             instructionLength = 1
             
         default:
-            //print("Unshared opcode \(firstByte.hexString) at PC \(PC.read().hexString)")
             break
         }
         
+        
+        print("PC \(PC.read().hexString): ", terminator: "")
+        for i in 0..<instructionLength {
+            print("\(bus.read(PC.read()+i).hexString) ", terminator: "")
+        }
+        print("-> \(instruction)")
         
         //@todo make PC-incrementing common
         if instruction != nil {
             self.PC.write(self.PC.read() + instructionLength)
         }
-        
-        print("\(firstByte.hexString) -> \(instruction)")
         
         return instruction
     }

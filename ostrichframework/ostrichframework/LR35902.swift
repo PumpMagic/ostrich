@@ -198,10 +198,14 @@ public class LR35902: Intel8080Like {
                 
                 
             default:
-                print(String(format: "Unrecognized opcode 0x%02X at PC 0x%04X", firstByte, PC.read()))
+                break
             }
             
-            print("\(firstByte.hexString) -> \(instruction)")
+            print("PC \(PC.read().hexString): ", terminator: "")
+            for i in 0..<instructionLength {
+                print("\(bus.read(PC.read()+i).hexString) ", terminator: "")
+            }
+            print("-> \(instruction)")
             
             //@warn we should probably only alter the PC if the instruction doesn't do so itself
             PC.write(PC.read() + instructionLength)
