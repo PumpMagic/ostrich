@@ -116,15 +116,20 @@ public class LR35902: Intel8080Like {
     var pcsp: String { return "\tSP: \(self.SP.read().hexString)\n\tPC: \(self.PC.read().hexString)" }
     
     
-    public func runUntil(instructionType: String) {
+    public func runUntilRet() {
         //@todo this is a hacky convenience function, how can we better detect a given instruction without inspecting type?
-        var iteration = 1
+        var callsDeep = 1
         repeat {
             let lastInstruction = doInstructionCycle()
-            iteration += 1
             let inspectedType = String(Mirror(reflecting: lastInstruction).subjectType)
-            if inspectedType == instructionType {
-                return
+            if inspectedType.rangeOfString("CALL") != nil {
+                callsDeep += 1
+            } else if inspectedType.rangeOfString("RET") != nil {
+                callsDeep -= 1
+                
+                if callsDeep == 0 {
+                    return
+                }
             }
         } while true
     }
@@ -172,6 +177,11 @@ public class LR35902: Intel8080Like {
             let firstByte = bus.read(PC.read())
             
             switch firstByte {
+            case 0x2A:
+                // LD A, (HL+)
+                instruction = LDI_LR(pointable: self.HL, other: self.A, direction: .OutOfPointer)
+                instructionLength = 1
+                
             case 0xE0:
                 // LDH (n), A
                 let offset = bus.read(PC.read()+1)
@@ -206,16 +216,21 @@ public class LR35902: Intel8080Like {
                 instruction = LDAC()
                 instructionLength = 1
                 
+            case 0xFA:
+                // LD A, (nn)
+                let val = bus.read16(PC.read()+1)
+                instruction = LD(dest: self.A, src: Pointer(source: Immediate16(val: val), bus: bus))
+                instructionLength = 3
                 
             default:
                 break
             }
             
-            //print("PC \(PC.read().hexString): ", terminator: "")
+            print("PC \(PC.read().hexString): ", terminator: "")
             for i in 0..<instructionLength {
-                //print("\(bus.read(PC.read()+i).hexString) ", terminator: "")
+                print("\(bus.read(PC.read()+i).hexString) ", terminator: "")
             }
-            //print("-> \(instruction)")
+            print("-> \(instruction)")
             
             //@warn we should probably only alter the PC if the instruction doesn't do so itself
             PC.write(PC.read() + instructionLength)

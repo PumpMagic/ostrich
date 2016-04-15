@@ -159,7 +159,9 @@ extension Intel8080Like {
             // RRCA
             instruction = RRCA()
             instructionLength = 1
-            
+             
+ 
+ 
         case 0x11:
             // LD DE, nn
             let val = bus.read16(PC.read()+1)
@@ -222,10 +224,13 @@ extension Intel8080Like {
             // DEC E
             instruction = DEC8(operand: self.E)
             instructionLength = 1
+ 
+ 
+ 
             
         case 0x20:
             // JR NZ n
-            let displacement = Int8(bus.read(PC.read()+1))
+            let displacement = Int8(bitPattern: bus.read(PC.read()+1))
             instruction = JR(condition: Condition(flag: self.ZF, target: false), displacementMinusTwo: displacement)
             instructionLength = 2
             
@@ -837,6 +842,11 @@ extension Intel8080Like {
             instruction = RET(condition: Condition(flag: self.ZF, target: false))
             instructionLength = 1
             
+        case 0xC1:
+            // POP BC
+            instruction = POP(operand: self.BC)
+            instructionLength = 1
+            
         case 0xC2:
             // JP nz, nn
             let addr = bus.read16(PC.read()+1)
@@ -899,6 +909,11 @@ extension Intel8080Like {
             instruction = RET(condition: Condition(flag: self.CF, target: false))
             instructionLength = 1
             
+        case 0xD1:
+            // POP DE
+            instruction = POP(operand: self.DE)
+            instructionLength = 1
+            
         case 0xD2:
             // JP nc, nn
             let addr = bus.read16(PC.read()+1)
@@ -915,6 +930,12 @@ extension Intel8080Like {
             // PUSH DE
             instruction = PUSH(operand: self.DE)
             instructionLength = 1
+            
+        case 0xD6:
+            // SUB n
+            let val = bus.read(PC.read()+1)
+            instruction = SUB(op: Immediate8(val: val))
+            instructionLength = 2
             
         case 0xD8:
             // RET c
@@ -938,14 +959,30 @@ extension Intel8080Like {
             instruction = RST(restartAddress: 0x18)
             instructionLength = 1
             
+        case 0xE1:
+            // POP HL
+            instruction = POP(operand: self.HL)
+            instructionLength = 1
+            
         case 0xE5:
             // PUSH HL
             instruction = PUSH(operand: self.HL)
             instructionLength = 1
             
+        case 0xE6:
+            // AND n
+            let val = bus.read(PC.read()+1)
+            instruction = AND(op: Immediate8(val: val))
+            instructionLength = 2
+            
         case 0xE9:
             // JP (HL)
             instruction = JP(condition: nil, dest: self.HL)
+            instructionLength = 1
+            
+        case 0xF1:
+            // POP AF
+            instruction = POP(operand: self.AF)
             instructionLength = 1
             
         case 0xF3:
@@ -958,6 +995,12 @@ extension Intel8080Like {
             instruction = PUSH(operand: self.AF)
             instructionLength = 1
             
+        case 0xF6:
+            // OR n
+            let val = bus.read(PC.read()+1)
+            instruction = OR(op: Immediate8(val: val))
+            instructionLength = 2
+            
         case 0xFB:
             // EI
             instruction = EI()
@@ -969,16 +1012,29 @@ extension Intel8080Like {
             instruction = CP(op: Immediate8(val: subtrahend))
             instructionLength = 2
             
+        case 0xCB:
+            // bit instructions
+            let secondByte = bus.read(PC.read()+1)
+            switch secondByte {
+            case 0xFE:
+                instruction = SET(op: self.HL.asPointerOn(self.bus), bit: 7)
+                instructionLength = 2
+                
+            default:
+                let combinedOpcode: UInt16 = make16(high: firstByte, low: secondByte)
+                print("Unrecognized opcode \(combinedOpcode.hexString) at PC \(PC.read())")
+            }
+            
         default:
             break
         }
         
         
-        //print("PC \(PC.read().hexString): ", terminator: "")
+        print("PC \(PC.read().hexString): ", terminator: "")
         for i in 0..<instructionLength {
-            //print("\(bus.read(PC.read()+i).hexString) ", terminator: "")
+            print("\(bus.read(PC.read()+i).hexString) ", terminator: "")
         }
-        //print("-> \(instruction)")
+        print("-> \(instruction)")
         
         //@todo make PC-incrementing common
         if instruction != nil {

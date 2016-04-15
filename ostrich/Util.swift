@@ -77,12 +77,14 @@ public func bitIsHigh(num: UInt8, bit: UInt8) -> Bool {
     return false
 }
 
+/// Set a zero-based bit of an 8-bit number
 func setBit(num: UInt8, bit: UInt8) -> UInt8 {
     let mask = UInt8(0x01 << bit)
     
     return num | mask
 }
 
+/// Clear a zero-based bit of an 8-bit number
 func clearBit(num: UInt8, bit: UInt8) -> UInt8 {
     let mask = ~(UInt8(0x01 << bit))
     

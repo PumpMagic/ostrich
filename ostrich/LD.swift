@@ -142,7 +142,7 @@ enum LDDIDirection {
     case OutOfPointer
 }
 
-/// Load and decrement: store whatever a dereferenceable points to into something else, then
+/// Load and decrement: store whatever a dereferenceable points to into something else, or vice versa, then
 /// decrement the dereferenceable
 struct LDD_LR
     <T: protocol<Readable, Writeable, CanActAsPointer, OperandType>,
@@ -167,7 +167,7 @@ struct LDD_LR
     }
 }
 
-/// Load and increment: store whatever a dereferenceable points to into something else, then
+/// Load and increment: store whatever a dereferenceable points to into something else, or vice versa, then
 /// increment the dereferenceable
 struct LDI_LR
     <T: protocol<Readable, Writeable, CanActAsPointer, OperandType>,

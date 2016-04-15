@@ -25,19 +25,6 @@ NR23 FF18 FFFF FFFF Frequency LSB
 NR24 FF19 TL-- -FFF Trigger, Length enable, Frequency MSB
 */
 
-protocol HasFrequency {
-    var frequency: UInt16 { get set }
-}
-
-protocol HasVolumeEnvelope {
-    var volume: UInt8 { get set }
-}
-
-protocol HasLengthTimer {
-    var length: UInt8 { get set }
-    var lengthEnable: Bool { get set }
-}
-
 func delay(delay: Int64, closure: ()->()) {
     dispatch_after(
         dispatch_time(
@@ -48,13 +35,27 @@ func delay(delay: Int64, closure: ()->()) {
 }
 
 /** Representation of a Game Boy pulse wave channel */
-class Pulse: HasFrequency, HasVolumeEnvelope, HasLengthTimer {
+class Pulse {
+    
+    static let MIN_DUTY: UInt8 = 0
+    static let MAX_DUTY: UInt8 = 3
+    static let MIN_LENGTH_COUNTER: UInt8 = 0
+    static let MAX_LENGTH_COUNTER: UInt8 = 63
+    static let LENGTH_TIMER_PERIOD: Int64 = 3906250 //ns of 1/256 sec
+    static let ENVELOPE_TIMER_PERIOD: Int64 = 15625000 //ns of 1/64 sec
+    static let MIN_VOLUME: UInt8 = 0
+    static let MAX_VOLUME: UInt8 = 15
+    
     /* DUTY CYCLE STUFF
         The pulse channel has a variable-width duty cycle */
     /** Duty is a two-bit value representing the pulse wave duty cycle to output */
-    var duty: UInt8 = 0 {
+    var duty: UInt8 = Pulse.MIN_DUTY {
         didSet {
-            //@todo enforce range
+            if duty < Pulse.MIN_DUTY || duty > Pulse.MAX_DUTY {
+                print("FATAL: invalid duty assigned")
+                exit(1)
+            }
+            
             self.oscillator.index = Double(duty)
         }
     }
@@ -67,25 +68,30 @@ class Pulse: HasFrequency, HasVolumeEnvelope, HasLengthTimer {
     /* LENGTH STUFF
         Every 256hz, if the length enabled flag is set, length gets decremented
         If length transitions to 0, the channel gets disabled (by clearing an internal enabled flag) */
-    /** Length is a six-bit vaule representing the time, in 1/256ths of a second, after which the
+    /** lengthCounter is a six-bit vaule representing the time, in 1/256ths of a second, after which the
         channel should be disabled */
-    var length: UInt8 = 0 {
+    var lengthCounter: UInt8 = Pulse.MIN_LENGTH_COUNTER {
         didSet {
-            if length == 0 {
+            if lengthCounter < Pulse.MIN_LENGTH_COUNTER || lengthCounter > Pulse.MAX_LENGTH_COUNTER {
+                print("FATAL: invalid length counter assigned: \(lengthCounter)")
+                exit(1)
+            }
+            
+            if lengthCounter == Pulse.MIN_LENGTH_COUNTER {
                 self.enabled = false
             }
         }
     }
     
-    static let LENGTH_TIMER_PERIOD: Int64 = 3906250 //ns of 1/256 sec
+    
     
     /** Length Enable is a one-bit value representing whether or not the Length machinery should run */
     var lengthEnable: Bool = false
     
     internal func lengthTimerFired() {
         if lengthEnable {
-            if length > 0 {
-                length = length - 1
+            if lengthCounter > 0 {
+                lengthCounter -= 1
             }
         }
         
@@ -97,11 +103,44 @@ class Pulse: HasFrequency, HasVolumeEnvelope, HasLengthTimer {
     
     
     /* VOLUME STUFF */
-    /** Volume is a 4-bit value representing the volume of the channel */
-    var volume: UInt8 = 0 {
+    
+    /** initialVolume is a 4-bit value representing the initial volume of the channel */
+    var initialVolume: UInt8 = Pulse.MIN_VOLUME
+    internal var volume: UInt8 = Pulse.MIN_VOLUME {
         didSet {
-            //@todo enforce range
+            if volume < Pulse.MIN_VOLUME || volume > Pulse.MAX_VOLUME {
+                print("FATAL: invalid volume assigned: \(volume)")
+                exit(1)
+            }
+            
             updateImplVolume()
+        }
+    }
+    
+    /** Envelope add mode specifies whether the volume goes up or down when the envelope counter fires */
+    var addMode: UInt8 = 0
+    
+    /** Envelope period specifies how many times the envelope clock needs to fire before the envelope triggers */
+    var envelopePeriod: UInt8 = 0
+    internal var envelopeCounter: UInt8 = 0
+    
+    internal func envelopeTimerFired() {
+        switch self.addMode {
+        case 0:
+            if self.volume > Pulse.MIN_VOLUME {
+                self.volume -= 1
+            }
+        case 1:
+            if self.volume < Pulse.MAX_VOLUME {
+                self.volume += 1
+            }
+        default:
+            print("FATAL: invalid add mode!")
+            exit(1)
+        }
+        
+        delay(Pulse.ENVELOPE_TIMER_PERIOD) {
+            self.envelopeTimerFired()
         }
     }
     
@@ -139,7 +178,27 @@ class Pulse: HasFrequency, HasVolumeEnvelope, HasLengthTimer {
     }
     
     internal func triggered() {
-        //@todo see comment block for trigger variable above
+        // 1. Raises the internal enable flag
+        self.enabled = true
+        
+        // 2. Sets length counter to max, if it's currently zero
+        if self.lengthCounter == Pulse.MIN_LENGTH_COUNTER {
+            self.lengthCounter = Pulse.MAX_LENGTH_COUNTER
+        }
+        
+        // 3. Reloads the frequency timer with period
+        //@todo we would need model frequency more accurately than AudioKit allows to do anything here
+        
+        // 4. Reloads the volume envelope timer with period
+        self.envelopeCounter = self.envelopePeriod
+        
+        // 5. Reloads the channel volume
+        self.volume = self.initialVolume
+        
+        // 6. Raises noise channel's LFSR bits
+        // 7. Resets wave channel's table position
+        // 8. Stuff for pulse 1's frequency sweep...
+        
         return
     }
     
@@ -197,5 +256,8 @@ class Pulse: HasFrequency, HasVolumeEnvelope, HasLengthTimer {
         
         // Start length timer
         self.lengthTimerFired()
+        
+        // Start envelope timer
+        self.envelopeTimerFired()
     }
 }
