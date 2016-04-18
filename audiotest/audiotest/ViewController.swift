@@ -11,7 +11,7 @@ import AudioKit
 import ostrichframework
 
 
-let GBS_PATH: String = "/Users/ryanconway/Dropbox/emu/kdl.gbs"
+let GBS_PATH: String = "/Users/ryanconway/Dropbox/emu/sml.gbs"
 
 func delayed(nanos: Int64, closure: () -> ()) {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, nanos), dispatch_get_main_queue(), closure)
@@ -27,6 +27,7 @@ class ViewController: NSViewController {
 
 class ApuTest {
     var cpu: LR35902
+    var apu: GameBoyAPU
     var header: GBSHeader
     var codeAndData: NSData
     
@@ -70,7 +71,7 @@ class ApuTest {
         
         // 0xFF00 - 0xFF7F is partially unimplemented hardware IO registers
         /// 0xFF10 - 0xFF3F is the APU memory
-        let apu = GameBoyAPU(mixer: mixer)
+        apu = GameBoyAPU(mixer: mixer)
         
         /// High RAM: 0xFF80 - 0xFFFE
         let highRAM = RAM(size: 0xFFFF - 0xFF80, fillByte: 0x00, firstAddress: 0xFF80)
@@ -111,10 +112,17 @@ class ApuTest {
         print("Calling and running PLAY...")
         
         let _ = NSTimer.scheduledTimerWithTimeInterval(0.167, target: self, selector: #selector(ApuTest.vblank), userInfo: nil, repeats: true)
+        let _ = NSTimer.scheduledTimerWithTimeInterval(0.00391, target: self, selector: #selector(ApuTest.clock256), userInfo: nil, repeats: true)
     }
     
     @objc func vblank() {
+        print("64hz")
         cpu.injectCall(header.playAddress)
         cpu.runUntilRet()
+    }
+    
+    @objc func clock256() {
+        print("256hz")
+        apu.clock256()
     }
 }

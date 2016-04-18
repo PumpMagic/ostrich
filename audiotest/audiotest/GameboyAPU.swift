@@ -141,6 +141,28 @@ class GameBoyAPU: Memory, HandlesWrites {
             break
         }
     }
+    
+    
+    //@todo we shouldn't rely on our caller to call this - we should have some internal timer
+    var clockIndex = 0 // 0-3
+    func clock256() {
+        pulse1.lengthTimerFired()
+        pulse2.lengthTimerFired()
+        
+        if clockIndex == 1 || clockIndex == 3 {
+            // sweep stuff
+        }
+        
+        if clockIndex == 3 {
+            pulse1.envelopeTimerFired()
+            pulse2.envelopeTimerFired()
+        }
+        
+        clockIndex += 1
+        if clockIndex > 3 {
+            clockIndex = 0
+        }
+    }
 }
 
 protocol HexStringConvertible {

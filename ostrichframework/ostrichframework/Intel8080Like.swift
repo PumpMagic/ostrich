@@ -1365,11 +1365,13 @@ extension Intel8080Like {
         }
         
         
-        print("PC \(PC.read().hexString): ", terminator: "")
-        for i in 0..<instructionLength {
-            print("\(bus.read(PC.read()+i).hexString) ", terminator: "")
+        if let ins = instruction {
+            print("C PC \(PC.read().hexString): ", terminator: "")
+            for i in 0..<instructionLength {
+                print("\(bus.read(PC.read()+i).hexString) ", terminator: "")
+            }
+            print("\n\t\(ins)")
         }
-        print("-> \(instruction)")
         
         //@todo make PC-incrementing common
         if instruction != nil {

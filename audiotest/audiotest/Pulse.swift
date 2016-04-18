@@ -41,6 +41,8 @@ class Pulse {
     static let MAX_DUTY: UInt8 = 3
     static let MIN_LENGTH_COUNTER: UInt8 = 0
     static let MAX_LENGTH_COUNTER: UInt8 = 63
+    static let MIN_LENGTH_ENABLE: UInt8 = 0
+    static let MAX_LENGTH_ENABLE: UInt8 = 1
     static let LENGTH_TIMER_PERIOD: Int64 = 3906250 //ns of 1/256 sec
     static let ENVELOPE_TIMER_PERIOD: Int64 = 15625000 //ns of 1/64 sec
     static let MIN_VOLUME: UInt8 = 0
@@ -68,35 +70,51 @@ class Pulse {
     /* LENGTH STUFF
         Every 256hz, if the length enabled flag is set, length gets decremented
         If length transitions to 0, the channel gets disabled (by clearing an internal enabled flag) */
-    /** lengthCounter is a six-bit vaule representing the time, in 1/256ths of a second, after which the
-        channel should be disabled */
-    var lengthCounter: UInt8 = Pulse.MIN_LENGTH_COUNTER {
+    
+    /** lengthLoad is a six-bit value that, when written to, sets the internal length counter */
+    var lengthLoad: UInt8 = Pulse.MIN_LENGTH_COUNTER {
         didSet {
-            if lengthCounter < Pulse.MIN_LENGTH_COUNTER || lengthCounter > Pulse.MAX_LENGTH_COUNTER {
-                print("FATAL: invalid length counter assigned: \(lengthCounter)")
+            if lengthLoad < Pulse.MIN_LENGTH_COUNTER || lengthLoad > Pulse.MAX_LENGTH_COUNTER {
+                print("FATAL: invalid length loaded: \(lengthLoad)")
                 exit(1)
             }
             
+            self.lengthCounter = lengthLoad
+        }
+    }
+    
+    /** lengthEnableLoad is a one-bit value that, when written to, sets the internal length enable */
+    var lengthEnableLoad: UInt8 = 0 {
+        didSet {
+            if lengthLoad < Pulse.MIN_LENGTH_ENABLE || lengthLoad > Pulse.MIN_LENGTH_ENABLE {
+                print("FATAL: invalid length loaded: \(lengthLoad)")
+                exit(1)
+            }
+            
+            self.lengthCounter = lengthLoad
+        }
+    }
+    
+    /** lengthCounter is an internal six-bit vaule representing the time, in 1/256ths of a second, after which the
+        channel should be disabled */
+    internal var lengthCounter: UInt8 = 0 {
+        didSet {
             if lengthCounter == Pulse.MIN_LENGTH_COUNTER {
                 self.enabled = false
             }
         }
     }
     
-    
-    
     /** Length Enable is a one-bit value representing whether or not the Length machinery should run */
-    var lengthEnable: UInt8 = 0
+    internal var lengthEnable: UInt8 = 0
     
-    internal func lengthTimerFired() {
-        if lengthEnable {
+    func lengthTimerFired() {
+        print("Length timer fired")
+        
+        if lengthEnable == 1 {
             if lengthCounter > 0 {
                 lengthCounter -= 1
             }
-        }
-        
-        delay(Pulse.LENGTH_TIMER_PERIOD) {
-            self.lengthTimerFired()
         }
     }
     
@@ -104,8 +122,10 @@ class Pulse {
     
     /* VOLUME STUFF */
     
-    /** initialVolume is a 4-bit value representing the initial volume of the channel */
+    /** initialVolume is a 4-bit value that sets the initial volume of the channel */
     var initialVolume: UInt8 = Pulse.MIN_VOLUME
+    
+    /** volume is an internal 4-bit value that controls the output volume of the channel */
     internal var volume: UInt8 = Pulse.MIN_VOLUME {
         didSet {
             if volume < Pulse.MIN_VOLUME || volume > Pulse.MAX_VOLUME {
@@ -124,7 +144,7 @@ class Pulse {
     var envelopePeriod: UInt8 = 0
     internal var envelopeCounter: UInt8 = 0
     
-    internal func envelopeTimerFired() {
+    func envelopeTimerFired() {
         switch self.addMode {
         case 0:
             if self.volume > Pulse.MIN_VOLUME {
@@ -137,10 +157,6 @@ class Pulse {
         default:
             print("FATAL: invalid add mode!")
             exit(1)
-        }
-        
-        delay(Pulse.ENVELOPE_TIMER_PERIOD) {
-            self.envelopeTimerFired()
         }
     }
     
@@ -181,7 +197,7 @@ class Pulse {
         // 1. Raises the internal enable flag
         self.enabled = true
         
-        // 2. Sets length counter to max, if it's currently zero
+        // 2. If length counter is currently zero, set it to max
         if self.lengthCounter == Pulse.MIN_LENGTH_COUNTER {
             self.lengthCounter = Pulse.MAX_LENGTH_COUNTER
         }
@@ -252,12 +268,5 @@ class Pulse {
         
         self.mixer.connect(self.oscillator)
         self.oscillator.start()
-        
-        
-        // Start length timer
-        self.lengthTimerFired()
-        
-        // Start envelope timer
-        self.envelopeTimerFired()
     }
 }
