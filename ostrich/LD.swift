@@ -9,9 +9,6 @@
 import Foundation
 
 
-//@todo make special instructions for the Z80's LD A, I and LD A, R, which both modify flags
-
-
 /// Load: store an operand in another operand.
 struct LD
     <T: protocol<Writeable, OperandType>,
@@ -23,16 +20,16 @@ struct LD
     
     let cycleCount = 0
     
-    private func load(cpu: Intel8080Like) {
+    private func load() {
         dest.write(src.read())
     }
     
     func runOn(cpu: Z80) {
-        load(cpu)
+        load()
     }
     
     func runOn(cpu: LR35902) {
-        load(cpu)
+        load()
     }
 }
 

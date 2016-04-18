@@ -16,7 +16,7 @@ public class ROM: Memory {
     public let firstAddress: Address
     
     public var lastAddress: Address {
-        return UInt16(UInt32(self.firstAddress) + UInt32(self.data.length))
+        return self.firstAddress + UInt16(self.data.length)
     }
     public var addressRange: Range<Address> {
         return self.firstAddress ... self.lastAddress

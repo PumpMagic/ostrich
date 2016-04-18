@@ -13,9 +13,6 @@ import ostrichframework
 
 let GBS_PATH: String = "/Users/ryanconway/Dropbox/emu/sml.gbs"
 
-func delayed(nanos: Int64, closure: () -> ()) {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, nanos), dispatch_get_main_queue(), closure)
-}
 
 class ViewController: NSViewController {
     override func viewDidLoad() {
@@ -108,21 +105,19 @@ class ApuTest {
         /* PLAY - Begins after INIT process is complete. The play address is constantly
          called at the rate established in the header (see TIMING). The play code must
          end with a RET instruction. */
-        //@todo use a software timer to call this repeatedly according to timerModulo / timerControl
         print("Calling and running PLAY...")
         
-        let _ = NSTimer.scheduledTimerWithTimeInterval(0.167, target: self, selector: #selector(ApuTest.vblank), userInfo: nil, repeats: true)
+        //@todo listen to timerModulo / timerControl
+        let _ = NSTimer.scheduledTimerWithTimeInterval(0.015625, target: self, selector: #selector(ApuTest.clock64), userInfo: nil, repeats: true)
         let _ = NSTimer.scheduledTimerWithTimeInterval(0.00391, target: self, selector: #selector(ApuTest.clock256), userInfo: nil, repeats: true)
     }
     
-    @objc func vblank() {
-        print("64hz")
+    @objc func clock64() {
         cpu.injectCall(header.playAddress)
         cpu.runUntilRet()
     }
     
     @objc func clock256() {
-        print("256hz")
         apu.clock256()
     }
 }

@@ -109,8 +109,6 @@ class Pulse {
     internal var lengthEnable: UInt8 = 0
     
     func lengthTimerFired() {
-        print("Length timer fired")
-        
         if lengthEnable == 1 {
             if lengthCounter > 0 {
                 lengthCounter -= 1

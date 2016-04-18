@@ -18,7 +18,7 @@ struct JP<T: protocol<Readable, OperandType> where T.ReadType == UInt16>: Z80Ins
     // possible jump targets: immediate extended, relative, register
     let dest: T
     
-    let cycleCount = 0 //@todo
+    let cycleCount = 0
     
     private func jump(cpu: Intel8080Like) {
         // Only jump if the condition is absent or met

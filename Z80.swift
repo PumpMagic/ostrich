@@ -115,7 +115,7 @@ public class Z80: Intel8080Like {
         self.I = Register8(val: 0)
         self.R = Register8(val: 0)
         
-        self.PC = Register16(val: 0x100) //@todo don't init this here
+        self.PC = Register16(val: 0)
         
         self.SF = Flag(reg: F, bitNumber: 7)
         self.ZF = Flag(reg: F, bitNumber: 6)
@@ -215,6 +215,7 @@ public class Z80: Intel8080Like {
     
     //@todo make this internal and add a public run() or clock() or something
     func fetchInstruction() -> Z80Instruction? {
+        /*
         let firstByte = bus.read(PC.read())
         
         var instruction: Z80Instruction? = nil
@@ -278,6 +279,7 @@ public class Z80: Intel8080Like {
             let addr = bus.read16(PC.read()+1)
             instruction = JP(condition: Condition(flag: self.SF, target: true), dest: Immediate16(val: addr))
             instructionLength = 3
+           
             
         case 0xDD:
             // IX instructions
@@ -366,6 +368,7 @@ public class Z80: Intel8080Like {
                 let combinedOpcode: UInt16 = make16(high: firstByte, low: secondByte)
                 print(String(format: "Unrecognized opcode 0x%04X at PC 0x%04X", combinedOpcode, PC.read()))
             }
+ 
             
             
         default:
@@ -375,5 +378,8 @@ public class Z80: Intel8080Like {
         //@warn we should probably only alter the PC if the instruction doesn't do so itself
         PC.write(PC.read() + instructionLength)
         return instruction
+         */
+        
+        return nil
     }
 }

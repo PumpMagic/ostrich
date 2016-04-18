@@ -121,8 +121,7 @@ struct ADD16
     }
 }
 
-//@todo special LR35902 ADD16 that affects flags differently: ADD SP, n
-/// Add two 16-bit operands; overwrite the first with the result
+/// Add an immediate to the stack pointer
 struct ADDSP: LR35902Instruction
 {
     let value: Int8

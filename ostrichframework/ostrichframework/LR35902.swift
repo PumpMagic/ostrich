@@ -74,7 +74,7 @@ public class LR35902: Intel8080Like {
         self.I = Register8(val: 0)
         self.R = Register8(val: 0)
         
-        self.PC = Register16(val: 0x100) //@todo don't init this here
+        self.PC = Register16(val: 0)
         
         self.ZF = Flag(reg: F, bitNumber: 7)
         self.NF = Flag(reg: F, bitNumber: 6)
@@ -231,16 +231,16 @@ public class LR35902: Intel8080Like {
                 break
             }
             
-            if let ins = instruction {
-                print("L PC \(PC.read().hexString): ", terminator: "")
+            if let instruction = instruction {
+                print("L \(PC.read().hexString): ", terminator: "")
                 for i in 0..<instructionLength {
                     print("\(bus.read(PC.read()+i).hexString) ", terminator: "")
                 }
-                print("\n\t\(ins)")
+                print("\n\t\(instruction)\n")
+                
+                //@todo make PC-incrementing common
+                self.PC.write(self.PC.read() + instructionLength)
             }
-            
-            //@warn we should probably only alter the PC if the instruction doesn't do so itself
-            PC.write(PC.read() + instructionLength)
         }
         
         return instruction
