@@ -263,7 +263,7 @@ extension Intel8080Like {
             
         case 0x28:
             // JR Z n
-            let displacement = Int8(bus.read(PC.read()+1))
+            let displacement = Int8(bitPattern: bus.read(PC.read()+1))
             instruction = JR(condition: Condition(flag: self.ZF, target: true), displacementMinusTwo: displacement)
             instructionLength = 2
             
@@ -1016,7 +1016,342 @@ extension Intel8080Like {
             // bit instructions
             let secondByte = bus.read(PC.read()+1)
             switch secondByte {
+                
+            case 0x40:
+                // BIT 0, B
+                instruction = BIT(op: self.B, bit: 0)
+                instructionLength = 2
+                
+            case 0x41:
+                // BIT 0, C
+                instruction = BIT(op: self.C, bit: 0)
+                instructionLength = 2
+                
+            case 0x42:
+                // BIT 0, D
+                instruction = BIT(op: self.D, bit: 0)
+                instructionLength = 2
+                
+            case 0x43:
+                // BIT 0, E
+                instruction = BIT(op: self.E, bit: 0)
+                instructionLength = 2
+                
+            case 0x44:
+                // BIT 0, H
+                instruction = BIT(op: self.H, bit: 0)
+                instructionLength = 2
+                
+            case 0x45:
+                // BIT 0, L
+                instruction = BIT(op: self.L, bit: 0)
+                instructionLength = 2
+                
+            case 0x46:
+                // BIT 0, (HL)
+                instruction = BIT(op: self.HL.asPointerOn(self.bus), bit: 0)
+                instructionLength = 2
+                
+            case 0x47:
+                // BIT 0, A
+                instruction = BIT(op: self.A, bit: 0)
+                instructionLength = 2
+                
+                
+            case 0x48:
+                // BIT 1, B
+                instruction = BIT(op: self.B, bit: 1)
+                instructionLength = 2
+                
+            case 0x49:
+                // BIT 1, C
+                instruction = BIT(op: self.C, bit: 1)
+                instructionLength = 2
+                
+            case 0x4A:
+                // BIT 1, D
+                instruction = BIT(op: self.D, bit: 1)
+                instructionLength = 2
+                
+            case 0x4B:
+                // BIT 1, E
+                instruction = BIT(op: self.E, bit: 1)
+                instructionLength = 2
+                
+            case 0x4C:
+                // BIT 1, H
+                instruction = BIT(op: self.H, bit: 1)
+                instructionLength = 2
+                
+            case 0x4D:
+                // BIT 1, L
+                instruction = BIT(op: self.L, bit: 1)
+                instructionLength = 2
+                
+            case 0x4E:
+                // BIT 1, (HL)
+                instruction = BIT(op: self.HL.asPointerOn(self.bus), bit: 1)
+                instructionLength = 2
+                
+            case 0x4F:
+                // BIT 1, A
+                instruction = BIT(op: self.A, bit: 1)
+                instructionLength = 2
+                
+                
+            case 0x50:
+                // BIT 2, B
+                instruction = BIT(op: self.B, bit: 2)
+                instructionLength = 2
+                
+            case 0x51:
+                // BIT 2, C
+                instruction = BIT(op: self.C, bit: 2)
+                instructionLength = 2
+                
+            case 0x52:
+                // BIT 2, D
+                instruction = BIT(op: self.D, bit: 2)
+                instructionLength = 2
+                
+            case 0x53:
+                // BIT 2, E
+                instruction = BIT(op: self.E, bit: 2)
+                instructionLength = 2
+                
+            case 0x54:
+                // BIT 2, H
+                instruction = BIT(op: self.H, bit: 2)
+                instructionLength = 2
+                
+            case 0x55:
+                // BIT 2, L
+                instruction = BIT(op: self.L, bit: 2)
+                instructionLength = 2
+                
+            case 0x56:
+                // BIT 2, (HL)
+                instruction = BIT(op: self.HL.asPointerOn(self.bus), bit: 2)
+                instructionLength = 2
+                
+            case 0x57:
+                // BIT 2, A
+                instruction = BIT(op: self.A, bit: 2)
+                instructionLength = 2
+                
+                
+            case 0x58:
+                // BIT 3, B
+                instruction = BIT(op: self.B, bit: 3)
+                instructionLength = 2
+                
+            case 0x59:
+                // BIT 3, C
+                instruction = BIT(op: self.C, bit: 3)
+                instructionLength = 2
+                
+            case 0x5A:
+                // BIT 3, D
+                instruction = BIT(op: self.D, bit: 3)
+                instructionLength = 2
+                
+            case 0x5B:
+                // BIT 3, E
+                instruction = BIT(op: self.E, bit: 3)
+                instructionLength = 2
+                
+            case 0x5C:
+                // BIT 3, H
+                instruction = BIT(op: self.H, bit: 3)
+                instructionLength = 2
+                
+            case 0x5D:
+                // BIT 3, L
+                instruction = BIT(op: self.L, bit: 3)
+                instructionLength = 2
+                
+            case 0x5E:
+                // BIT 3, (HL)
+                instruction = BIT(op: self.HL.asPointerOn(self.bus), bit: 3)
+                instructionLength = 2
+                
+            case 0x5F:
+                // BIT 3, A
+                instruction = BIT(op: self.A, bit: 3)
+                instructionLength = 2
+                
+                
+                
+            case 0x60:
+                // BIT 4, B
+                instruction = BIT(op: self.B, bit: 4)
+                instructionLength = 2
+                
+            case 0x61:
+                // BIT 4, C
+                instruction = BIT(op: self.C, bit: 4)
+                instructionLength = 2
+                
+            case 0x62:
+                // BIT 4, D
+                instruction = BIT(op: self.D, bit: 4)
+                instructionLength = 2
+                
+            case 0x63:
+                // BIT 4, E
+                instruction = BIT(op: self.E, bit: 4)
+                instructionLength = 2
+                
+            case 0x64:
+                // BIT 4, H
+                instruction = BIT(op: self.H, bit: 4)
+                instructionLength = 2
+                
+            case 0x65:
+                // BIT 4, L
+                instruction = BIT(op: self.L, bit: 4)
+                instructionLength = 2
+                
+            case 0x66:
+                // BIT 4, (HL)
+                instruction = BIT(op: self.HL.asPointerOn(self.bus), bit: 4)
+                instructionLength = 2
+                
+            case 0x67:
+                // BIT 4, A
+                instruction = BIT(op: self.A, bit: 4)
+                instructionLength = 2
+                
+                
+                
+            case 0x68:
+                // BIT 5, B
+                instruction = BIT(op: self.B, bit: 5)
+                instructionLength = 2
+                
+            case 0x69:
+                // BIT 5, C
+                instruction = BIT(op: self.C, bit: 5)
+                instructionLength = 2
+                
+            case 0x6A:
+                // BIT 5, D
+                instruction = BIT(op: self.D, bit: 5)
+                instructionLength = 2
+                
+            case 0x6B:
+                // BIT 5, E
+                instruction = BIT(op: self.E, bit: 5)
+                instructionLength = 2
+                
+            case 0x6C:
+                // BIT 5, H
+                instruction = BIT(op: self.H, bit: 5)
+                instructionLength = 2
+                
+            case 0x6D:
+                // BIT 5, L
+                instruction = BIT(op: self.L, bit: 5)
+                instructionLength = 2
+                
+            case 0x6E:
+                // BIT 5, (HL)
+                instruction = BIT(op: self.HL.asPointerOn(self.bus), bit: 5)
+                instructionLength = 2
+                
+            case 0x6F:
+                // BIT 5, A
+                instruction = BIT(op: self.A, bit: 5)
+                instructionLength = 2
+                
+                
+                
+            case 0x70:
+                // BIT 6, B
+                instruction = BIT(op: self.B, bit: 6)
+                instructionLength = 2
+                
+            case 0x71:
+                // BIT 6, C
+                instruction = BIT(op: self.C, bit: 6)
+                instructionLength = 2
+                
+            case 0x72:
+                // BIT 6, D
+                instruction = BIT(op: self.D, bit: 6)
+                instructionLength = 2
+                
+            case 0x73:
+                // BIT 6, E
+                instruction = BIT(op: self.E, bit: 6)
+                instructionLength = 2
+                
+            case 0x74:
+                // BIT 6, H
+                instruction = BIT(op: self.H, bit: 6)
+                instructionLength = 2
+                
+            case 0x75:
+                // BIT 6, L
+                instruction = BIT(op: self.L, bit: 6)
+                instructionLength = 2
+                
+            case 0x76:
+                // BIT 6, (HL)
+                instruction = BIT(op: self.HL.asPointerOn(self.bus), bit: 6)
+                instructionLength = 2
+                
+            case 0x77:
+                // BIT 6, A
+                instruction = BIT(op: self.A, bit: 6)
+                instructionLength = 2
+                
+                
+                
+            case 0x78:
+                // BIT 7, B
+                instruction = BIT(op: self.B, bit: 7)
+                instructionLength = 2
+                
+            case 0x79:
+                // BIT 7, C
+                instruction = BIT(op: self.C, bit: 7)
+                instructionLength = 2
+                
+            case 0x7A:
+                // BIT 7, D
+                instruction = BIT(op: self.D, bit: 7)
+                instructionLength = 2
+                
+            case 0x7B:
+                // BIT 7, E
+                instruction = BIT(op: self.E, bit: 7)
+                instructionLength = 2
+                
+            case 0x7C:
+                // BIT 7, H
+                instruction = BIT(op: self.H, bit: 7)
+                instructionLength = 2
+                
+            case 0x7D:
+                // BIT 7, L
+                instruction = BIT(op: self.L, bit: 7)
+                instructionLength = 2
+                
+            case 0x7E:
+                // BIT 7, (HL)
+                instruction = BIT(op: self.HL.asPointerOn(self.bus), bit: 7)
+                instructionLength = 2
+                
+            case 0x7F:
+                // BIT 7, A
+                instruction = BIT(op: self.A, bit: 7)
+                instructionLength = 2
+                
+                
+                
             case 0xFE:
+                // SET 7, (HL)
                 instruction = SET(op: self.HL.asPointerOn(self.bus), bit: 7)
                 instructionLength = 2
                 

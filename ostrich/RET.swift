@@ -35,3 +35,18 @@ struct RET: Z80Instruction, LR35902Instruction {
         runCommon(cpu)
     }
 }
+
+
+/// Return then enable interrupts
+struct RETI: LR35902Instruction {
+    // pCL ← (sp), pCH ← (sp+1)
+    
+    let cycleCount = 0
+    
+    
+    func runOn(cpu: LR35902) {
+        cpu.PC.write(cpu.pop())
+        cpu.IFF1 = .Enabled
+        cpu.IFF2 = .Enabled
+    }
+}

@@ -39,7 +39,18 @@ public class DataBus: DelegatesReads, DelegatesWrites {
             }
         }
         
-        print("FATAL: no listeners found for read of \(addr.hexString)")
+        // Hack: implement divider register here
+        // Increments at 16384Hz, or ABOUT once every 61 microseconds
+        // 8-bit value -> overflows at (16384/256) = 64Hz
+        //@todo don't be so sloppy
+        if addr == 0xFF04 {
+            let secs = NSDate().timeIntervalSince1970
+            let remainder = secs - round(secs)
+            let us = remainder*1000000
+            return UInt8(truncatingBitPattern: (Int((us/61) % 255)))
+        }
+        
+        print("FATAL: no one listening to read of address \(addr.hexString)")
         exit(1)
     }
     
@@ -51,7 +62,17 @@ public class DataBus: DelegatesReads, DelegatesWrites {
             }
         }
         
-        print("FATAL: no listeners found for write of \(addr.hexString)")
+        // Hack: memory bank controller is unimplemented for now; ignore communication with it
+        //@todo implement the memory bank controller
+        if 0x0000 ... 0x7FFF as Range<Address> ~= addr {
+            print("WARNING! Ignoring memory bank controller communication in the form of writing \(val.hexString) to \(addr.hexString)")
+            if 0x0000 ... 0x1FFF as Range<Address> ~= addr {
+                print("(external RAM control)")
+            }
+            return
+        }
+        
+        print("FATAL: no one listening to write of \(val.hexString) to address \(addr.hexString)")
         exit(1)
     }
     

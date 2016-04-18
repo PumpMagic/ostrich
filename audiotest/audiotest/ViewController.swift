@@ -11,7 +11,7 @@ import AudioKit
 import ostrichframework
 
 
-let GBS_PATH: String = "/Users/ryanconway/Dropbox/emu/SML.gbs"
+let GBS_PATH: String = "/Users/ryanconway/Dropbox/emu/kdl.gbs"
 
 func delayed(nanos: Int64, closure: () -> ()) {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, nanos), dispatch_get_main_queue(), closure)
@@ -50,14 +50,31 @@ class ApuTest {
          1 is in Bank 1 (which can be changed during init or play). Finally, the INIT
          is called with the first song defined in the header. */
         print("Instantiating Z80 and executing LOAD...")
-        // internal RAM: 0xC000 - 0xCFFF plus switchable RAM (need to implement banking): 0xD000 - 0xDFFF
-        let internalRAM = RAM(size: 0xE000 - 0xC000, fillByte: 0x00, firstAddress: 0xC000)
-        // cartridge RAM: 0xA000 - 0xBFFF (need to add this conditionally)
-        let cartridgeRAM = RAM(size: 0xC000 - 0xA000, fillByte: 0x00, firstAddress: 0xA000)
-        // high RAM: 0xFF80 - 0xFFFE
-        let highRAM = RAM(size: 0xFFFF - 0xFF80, fillByte: 0x00, firstAddress: 0xFF80)
+        
+        /// ROM: Generally 0x0000 - 0x3FFF and 0x4000 - 0x7FFF, but sometimes incomplete subregions of such
+        /// (at least in the case of GBS files)
         let rom = ROM(data: codeAndData, firstAddress: header.loadAddress)
+        
+        // 0x8000 - 0x9FFF is unimplemented video stuff
+        
+        /// External (cartridge) RAM: 0xA000 - 0xBFFF
+        /// @todo this exists only on a per-cartridge basis
+        let externalRAM = RAM(size: 0xC000 - 0xA000, fillByte: 0x00, firstAddress: 0xA000)
+        
+        /// Internal RAM: 0xC000 - 0xCFFF plus switchable RAM (need to implement banking): 0xD000 - 0xDFFF
+        let internalRAM = RAM(size: 0xE000 - 0xC000, fillByte: 0x00, firstAddress: 0xC000)
+        
+        // 0xE000 - 0xFDFF is reserved echo RAM
+        // 0xFE00 - 0xFE9F is unimplemented video stuff
+        // 0xFEA0 - 0xFEFF is unused
+        
+        // 0xFF00 - 0xFF7F is partially unimplemented hardware IO registers
+        /// 0xFF10 - 0xFF3F is the APU memory
         let apu = GameBoyAPU(mixer: mixer)
+        
+        /// High RAM: 0xFF80 - 0xFFFE
+        let highRAM = RAM(size: 0xFFFF - 0xFF80, fillByte: 0x00, firstAddress: 0xFF80)
+        
         
         AudioKit.start()
         
@@ -65,8 +82,8 @@ class ApuTest {
         bus.registerReadable(rom)
         bus.registerReadable(internalRAM)
         bus.registerWriteable(internalRAM)
-        bus.registerReadable(cartridgeRAM)
-        bus.registerWriteable(cartridgeRAM)
+        bus.registerReadable(externalRAM)
+        bus.registerWriteable(externalRAM)
         bus.registerReadable(highRAM)
         bus.registerWriteable(highRAM)
         bus.registerReadable(apu)

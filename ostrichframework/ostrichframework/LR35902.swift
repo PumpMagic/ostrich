@@ -182,6 +182,11 @@ public class LR35902: Intel8080Like {
                 instruction = LDI_LR(pointable: self.HL, other: self.A, direction: .OutOfPointer)
                 instructionLength = 1
                 
+            case 0xD9:
+                // RETI
+                instruction = RETI()
+                instructionLength = 1
+                
             case 0xE0:
                 // LDH (n), A
                 let offset = bus.read(PC.read()+1)

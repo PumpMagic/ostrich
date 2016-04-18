@@ -86,7 +86,7 @@ class Pulse {
     
     
     /** Length Enable is a one-bit value representing whether or not the Length machinery should run */
-    var lengthEnable: Bool = false
+    var lengthEnable: UInt8 = 0
     
     internal func lengthTimerFired() {
         if lengthEnable {
@@ -169,9 +169,9 @@ class Pulse {
         6. Raises noise channel's LFSR bits
         7. Resets wave channel's table position
         8. Stuff for pulse 1's frequency sweep... */
-    var trigger: Bool = false {
+    var trigger: UInt8 = 0 {
         didSet {
-            if trigger == true {
+            if trigger == 1 {
                 self.triggered()
             }
         }
