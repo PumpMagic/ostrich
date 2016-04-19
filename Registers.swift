@@ -43,24 +43,19 @@ class Flag: Readable, Writeable {
     }
     
     func read() -> Bool {
-        let regVal = reg.read()
-        let mask = UInt8(0x01 << bitNumber)
-        
-        if regVal & mask != 0 {
-            return true
-        }
-        
-        return false
+        return bitIsHigh(self.reg.read(), bit: self.bitNumber)
     }
     
     /// not thread safe
     func write(val: Bool) {
         var newVal = reg.read()
         if val {
-            let mask = UInt8(0x01 << bitNumber)
-            newVal |= mask
-            reg.write(newVal)
+            newVal = setBit(newVal, bit: self.bitNumber)
+        } else {
+            newVal = clearBit(newVal, bit: self.bitNumber)
         }
+        
+        reg.write(newVal)
     }
 }
 
