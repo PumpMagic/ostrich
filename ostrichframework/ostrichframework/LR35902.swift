@@ -60,21 +60,25 @@ public class LR35902: Intel8080Like {
     let bus: DataBus
     
     public init(bus: DataBus) {
-        self.A = Register8(val: 0)
-        self.B = Register8(val: 0)
-        self.C = Register8(val: 0)
-        self.D = Register8(val: 0)
-        self.E = Register8(val: 0)
-        self.F = Register8(val: 0)
-        self.H = Register8(val: 0)
-        self.L = Register8(val: 0)
+        func random8() -> UInt8 {
+            return UInt8(truncatingBitPattern: arc4random() % 256)
+        }
         
-        self.SP = Register16(val: 0)
+        self.A = Register8(val: 0xFF)
+        self.B = Register8(val: random8())
+        self.C = Register8(val: random8())
+        self.D = Register8(val: random8())
+        self.E = Register8(val: random8())
+        self.F = Register8(val: 0xFF)
+        self.H = Register8(val: random8())
+        self.L = Register8(val: random8())
         
-        self.I = Register8(val: 0)
-        self.R = Register8(val: 0)
+        self.SP = Register16(val: 0xFFFF)
         
-        self.PC = Register16(val: 0)
+        self.I = Register8(val: random8())
+        self.R = Register8(val: random8())
+        
+        self.PC = Register16(val: 0x0000)
         
         self.ZF = Flag(reg: F, bitNumber: 7)
         self.NF = Flag(reg: F, bitNumber: 6)
