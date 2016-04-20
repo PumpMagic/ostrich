@@ -27,6 +27,9 @@ class ApuTest {
     var apu: GameBoyAPU
     var header: GBSHeader
     var codeAndData: NSData
+    var bus: DataBus
+    
+    var clocks64: Int = 0
     
     init() {
         guard let (theHeader, theCodeAndData) = parseFile(GBS_PATH) else {
@@ -76,7 +79,7 @@ class ApuTest {
         
         AudioKit.start()
         
-        let bus = DataBus()
+        bus = DataBus()
         bus.registerReadable(rom)
         bus.registerReadable(internalRAM)
         bus.registerWriteable(internalRAM)
@@ -102,6 +105,11 @@ class ApuTest {
         cpu.injectCall(header.initAddress)
         cpu.runUntilRet()
         
+        print("TRANSACTION LOG:")
+        self.bus.dumpTransactions()
+        self.bus.clearTransactions()
+        print("\n")
+        
         /* PLAY - Begins after INIT process is complete. The play address is constantly
          called at the rate established in the header (see TIMING). The play code must
          end with a RET instruction. */
@@ -115,6 +123,16 @@ class ApuTest {
     @objc func clock64() {
         cpu.injectCall(header.playAddress)
         cpu.runUntilRet()
+        
+        clocks64 += 1
+        
+        print("TRANSACTION LOG:")
+        self.bus.dumpTransactions()
+        self.bus.clearTransactions()
+        print("\n")
+        if clocks64 == 3 {
+            exit(1)
+        }
     }
     
     @objc func clock256() {
