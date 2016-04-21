@@ -123,11 +123,16 @@ func rotateLeft(num: UInt8) -> UInt8 {
     return newValue
 }
 
-/// Perform a left shift in a way that doesn't depend on Swift's sign-specific shifting behavior
-//@todo
+/// Perform a left shift
 func shiftLeft(num: UInt8) -> UInt8 {
-    // Shift the number
     let shifted = num << 1
+    
+    return shifted
+}
+
+/// Perform a logical right shift (MSB becomes zero)
+func logicalShiftRight(num: UInt8) -> UInt8 {
+    let shifted = num >> 1
     
     return shifted
 }

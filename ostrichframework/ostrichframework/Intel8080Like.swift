@@ -1063,6 +1063,48 @@ extension Intel8080Like {
                 instruction = SLA(op: self.A)
                 instructionLength = 2
                 
+                
+            case 0x38:
+                // SRL B
+                instruction = SRL(op: self.B)
+                instructionLength = 2
+                
+            case 0x39:
+                // SRL C
+                instruction = SRL(op: self.C)
+                instructionLength = 2
+                
+            case 0x3A:
+                // SRL D
+                instruction = SRL(op: self.D)
+                instructionLength = 2
+                
+            case 0x3B:
+                // SRL E
+                instruction = SRL(op: self.E)
+                instructionLength = 2
+                
+            case 0x3C:
+                // SRL H
+                instruction = SRL(op: self.H)
+                instructionLength = 2
+                
+            case 0x3D:
+                // SRL L
+                instruction = SRL(op: self.L)
+                instructionLength = 2
+                
+            case 0x3E:
+                // SRL (HL)
+                instruction = SRL(op: self.HL.asPointerOn(self.bus))
+                instructionLength = 2
+                
+            case 0x3F:
+                // SRL A
+                instruction = SRL(op: self.A)
+                instructionLength = 2
+                
+                
             case 0x40:
                 // BIT 0, B
                 instruction = BIT(op: self.B, bit: 0)

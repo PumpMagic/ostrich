@@ -11,7 +11,7 @@ import AudioKit
 import ostrichframework
 
 
-let GBS_PATH: String = "/Users/ryanconway/Dropbox/emu/sml.gbs"
+let GBS_PATH: String = "/Users/ryan.conway/Dropbox/emu/sml.gbs"
 
 
 class ViewController: NSViewController {
@@ -104,8 +104,7 @@ class ApuTest {
          with a RET instruction. */
         print("Calling and running INIT...")
         cpu.setA(header.firstSong)
-        cpu.injectCall(header.initAddress)
-        cpu.runUntilRet()
+        cpu.call(header.initAddress)
         
         /* PLAY - Begins after INIT process is complete. The play address is constantly
          called at the rate established in the header (see TIMING). The play code must
@@ -120,8 +119,7 @@ class ApuTest {
     }
     
     @objc func clock64() {
-        cpu.injectCall(header.playAddress)
-        cpu.runUntilRet()
+        cpu.call(header.playAddress)
     }
     
     @objc func clock256() {

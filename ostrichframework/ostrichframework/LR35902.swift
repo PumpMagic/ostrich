@@ -111,41 +111,28 @@ public class LR35902: Intel8080Like {
         self.A.write(a)
     }
     
-    public func injectCall(addr: Address) {
-        let instruction = CALL(condition: nil, dest: Immediate16(val: addr))
-        instruction.runOn(self)
-    }
-    
     /// Stack pointer and program counter debug string
     var pcsp: String { return "\tSP: \(self.SP.read().hexString)\n\tPC: \(self.PC.read().hexString)" }
     
-    
-    public func runUntilRet() {
-        //@todo this is a hacky convenience function, how can we better detect a given instruction without inspecting type?
-        var callsDeep = 1
+    /// Hacky convenience function for calling some subroutine and running instructions until a corresponding return is
+    /// detected
+    public func call(addr: Address) {
+        let priorPC = self.PC.read()
+        
+        let callInstruction = CALL(condition: nil, dest: Immediate16(val: addr))
+        callInstruction.runOn(self)
+        
         repeat {
-            let lastInstruction = doInstructionCycle()
-            /*
-            let inspectedType = String(Mirror(reflecting: lastInstruction).subjectType)
-            if inspectedType.rangeOfString("CALL") != nil {
-                callsDeep += 1
-            } else if inspectedType.rangeOfString("RET") != nil {
-                callsDeep -= 1
-                
-                if callsDeep == 0 {
-                    return
-                }
-            }
-            */
+            self.doInstructionCycle()
             
-            if self.PC.read() == 0 {
+            if self.PC.read() == priorPC {
                 return
             }
         } while true
     }
     
     
-    /// Fetches an instruction, runs it, and returns it
+    /// Fetch an instruction, run it, and return it
     func doInstructionCycle() -> LR35902Instruction {
         guard let instruction = self.fetchInstruction() else {
             print("FATAL: unable to fetch instruction")
@@ -251,6 +238,56 @@ public class LR35902: Intel8080Like {
                 let val = bus.read16(PC.read()+1)
                 instruction = LD(dest: self.A, src: Pointer(source: Immediate16(val: val), bus: bus))
                 instructionLength = 3
+                
+            case 0xCB:
+                // bit instructions
+                let secondByte = bus.read(PC.read()+1)
+                switch secondByte {
+                    
+                case 0x30:
+                    // SWAP B
+                    instruction = SWAP(op: self.B)
+                    instructionLength = 2
+                    
+                case 0x31:
+                    // SWAP C
+                    instruction = SWAP(op: self.C)
+                    instructionLength = 2
+                    
+                case 0x32:
+                    // SWAP D
+                    instruction = SWAP(op: self.D)
+                    instructionLength = 2
+                    
+                case 0x33:
+                    // SWAP E
+                    instruction = SWAP(op: self.E)
+                    instructionLength = 2
+                    
+                case 0x34:
+                    // SWAP H
+                    instruction = SWAP(op: self.H)
+                    instructionLength = 2
+                    
+                case 0x35:
+                    // SWAP L
+                    instruction = SWAP(op: self.L)
+                    instructionLength = 2
+                    
+                case 0x36:
+                    // SWAP (HL)
+                    instruction = SWAP(op: self.HL.asPointerOn(self.bus))
+                    instructionLength = 2
+                    
+                case 0x37:
+                    // SWAP A
+                    instruction = SWAP(op: self.A)
+                    instructionLength = 2
+                    
+                default:
+                    let combinedOpcode: UInt16 = make16(high: firstByte, low: secondByte)
+                    print("Unrecognized opcode \(combinedOpcode.hexString) at PC \(PC.read())")
+                }
                 
             default:
                 print("Unrecognized opcode \(firstByte.hexString) at PC \(PC.read())")
