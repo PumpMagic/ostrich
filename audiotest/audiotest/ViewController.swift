@@ -28,6 +28,8 @@ class ApuTest {
     var header: GBSHeader
     var codeAndData: NSData
     var bus: DataBus
+    var externalRAM: RAM
+    var internalRAM: RAM
     
     var clocks64: Int = 0
     
@@ -39,7 +41,7 @@ class ApuTest {
         self.header = theHeader
         self.codeAndData = theCodeAndData
         
-        print(header)
+        print("\(header)\n")
         
         // Instantiate some prep stuff
         let mixer = AKMixer()
@@ -60,10 +62,10 @@ class ApuTest {
         
         /// External (cartridge) RAM: 0xA000 - 0xBFFF
         /// @todo this exists only on a per-cartridge basis
-        let externalRAM = RAM(size: 0xC000 - 0xA000, fillByte: 0x00, firstAddress: 0xA000)
+        externalRAM = RAM(size: 0xC000 - 0xA000, fillByte: 0x00, firstAddress: 0xA000)
         
         /// Internal RAM: 0xC000 - 0xCFFF plus switchable RAM (need to implement banking): 0xD000 - 0xDFFF
-        let internalRAM = RAM(size: 0xE000 - 0xC000, fillByte: 0x00, firstAddress: 0xC000)
+        internalRAM = RAM(size: 0xE000 - 0xC000, fillByte: 0x00, firstAddress: 0xC000)
         
         // 0xE000 - 0xFDFF is reserved echo RAM
         // 0xFE00 - 0xFE9F is unimplemented video stuff
@@ -105,11 +107,6 @@ class ApuTest {
         cpu.injectCall(header.initAddress)
         cpu.runUntilRet()
         
-        print("TRANSACTION LOG:")
-        self.bus.dumpTransactions()
-        self.bus.clearTransactions()
-        print("\n")
-        
         /* PLAY - Begins after INIT process is complete. The play address is constantly
          called at the rate established in the header (see TIMING). The play code must
          end with a RET instruction. */
@@ -118,21 +115,13 @@ class ApuTest {
         //@todo listen to timerModulo / timerControl
         let _ = NSTimer.scheduledTimerWithTimeInterval(0.015625, target: self, selector: #selector(ApuTest.clock64), userInfo: nil, repeats: true)
         let _ = NSTimer.scheduledTimerWithTimeInterval(0.00391, target: self, selector: #selector(ApuTest.clock256), userInfo: nil, repeats: true)
+//        let _ = NSTimer.scheduledTimerWithTimeInterval(0.15625, target: self, selector: #selector(ApuTest.clock64), userInfo: nil, repeats: true)
+//        let _ = NSTimer.scheduledTimerWithTimeInterval(0.0391, target: self, selector: #selector(ApuTest.clock256), userInfo: nil, repeats: true)
     }
     
     @objc func clock64() {
         cpu.injectCall(header.playAddress)
         cpu.runUntilRet()
-        
-        clocks64 += 1
-        
-        print("TRANSACTION LOG:")
-        self.bus.dumpTransactions()
-        self.bus.clearTransactions()
-        print("\n")
-        if clocks64 == 3 {
-            exit(1)
-        }
     }
     
     @objc func clock256() {

@@ -85,7 +85,7 @@ struct RRCA: Z80Instruction, LR35902Instruction {
     }
     
     private func modifyCommonFlags(cpu: Intel8080Like, oldValue: UInt8) {
-        // Z is not affected.
+        // Z is affected differently!
         // H is reset.
         // N is reset.
         // C is data from bit 0 of Accumulator.
@@ -96,6 +96,8 @@ struct RRCA: Z80Instruction, LR35902Instruction {
     }
     
     func modifyFlags(cpu: Z80, oldValue: UInt8) {
+        // Z is not affected.
+        
         modifyCommonFlags(cpu, oldValue: oldValue)
         
         // S is not affected.
@@ -103,6 +105,12 @@ struct RRCA: Z80Instruction, LR35902Instruction {
     }
     
     private func modifyFlags(cpu: LR35902, oldValue: UInt8) {
+        // The GB CPU manual says Z is set if the result is 0.
+        // The BSNES core always resets Z.
+        // We go with the BSNES core.
+        
+        cpu.ZF.write(false)
+        
         modifyCommonFlags(cpu, oldValue: oldValue)
     }
 }

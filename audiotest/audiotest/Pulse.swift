@@ -242,7 +242,9 @@ class Pulse {
     
     /** Update the frequency of this channel to whatever audio library we're using */
     func updateImplFrequency() {
-        self.oscillator.frequency = toImplFrequency(self.frequency)
+        let newFrequency = toImplFrequency(self.frequency)
+        
+        self.oscillator.frequency = newFrequency
     }
     
     // AudioKit represents wavetables as arrays of floats of value [-1.0, 1.0]
@@ -251,7 +253,7 @@ class Pulse {
     var akTables: [AKTable]
     
     
-    init(mixer: AKMixer) {
+    init(mixer: AKMixer, connected: Bool) {
         //@todo there must be a better way to do this
         self.akTables = [AKTable(.Square, size: 8), AKTable(.Square, size: 8),
                          AKTable(.Square, size: 8), AKTable(.Square, size: 8)]
@@ -264,7 +266,13 @@ class Pulse {
         self.oscillator = AKMorphingOscillator(waveformArray: akTables, amplitude: 1.0)
         self.mixer = mixer
         
-        self.mixer.connect(self.oscillator)
+        if connected {
+            self.mixer.connect(self.oscillator)
+        }
         self.oscillator.start()
+    }
+    
+    convenience init(mixer: AKMixer) {
+        self.init(mixer: mixer, connected: true)
     }
 }

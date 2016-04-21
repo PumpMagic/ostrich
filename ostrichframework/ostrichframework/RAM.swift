@@ -48,4 +48,16 @@ public class RAM: Memory, HandlesWrites {
     public func write(val: UInt8, to addr: Address) {
         self.data[Int(addr - self.firstAddress)] = val
     }
+    
+    public func nonzeroes() -> String {
+        var nonzeroes: String = ""
+        
+        for (index, datum) in self.data.enumerate() {
+            if datum != 0x00 {
+                nonzeroes += "\((firstAddress + UInt16(index)).hexString): \(datum.hexString) "
+            }
+        }
+        
+        return nonzeroes
+    }
 }

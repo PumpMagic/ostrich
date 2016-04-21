@@ -122,8 +122,7 @@ struct ADD16
 }
 
 /// Add an immediate to the stack pointer
-struct ADDSP: LR35902Instruction
-{
+struct ADDSP: LR35902Instruction {
     let value: Int8
     
     let cycleCount = 0

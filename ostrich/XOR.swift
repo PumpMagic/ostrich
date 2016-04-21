@@ -50,13 +50,13 @@ struct XOR
     
     private func modifyCommonFlags(cpu: Intel8080Like, op1: UInt8, op2: T.ReadType, result: UInt8) {
         // Z is set if result is 0; otherwise, it is reset.
-        // H is set.
+        // H is reset.
         // N is reset.
         // C is reset.
         
         
         cpu.ZF.write(result == 0x00)
-        cpu.HF.write(true)
+        cpu.HF.write(false)
         cpu.NF.write(false)
         cpu.CF.write(false)
     }

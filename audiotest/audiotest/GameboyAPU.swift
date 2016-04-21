@@ -46,8 +46,8 @@ class GameBoyAPU: Memory, HandlesWrites {
     }
     
     init(mixer: AKMixer) {
-        self.pulse1 = Pulse(mixer: mixer)
-        self.pulse2 = Pulse(mixer: mixer)
+        self.pulse1 = Pulse(mixer: mixer, connected: true)
+        self.pulse2 = Pulse(mixer: mixer, connected: true)
         
         self.pulse2.volume = 0
         

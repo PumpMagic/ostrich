@@ -53,7 +53,7 @@ struct INC8<T: protocol<Writeable, Readable, OperandType> where T.ReadType == T.
         // C is not affected.
         
         cpu.ZF.write(newValue == 0x00)
-        cpu.HF.write(oldValue == 0x0F)
+        cpu.HF.write(newValue & 0x0F == 0x00)
         cpu.NF.write(false)
     }
     

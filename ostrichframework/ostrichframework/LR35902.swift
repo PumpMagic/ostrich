@@ -125,6 +125,7 @@ public class LR35902: Intel8080Like {
         var callsDeep = 1
         repeat {
             let lastInstruction = doInstructionCycle()
+            /*
             let inspectedType = String(Mirror(reflecting: lastInstruction).subjectType)
             if inspectedType.rangeOfString("CALL") != nil {
                 callsDeep += 1
@@ -134,6 +135,11 @@ public class LR35902: Intel8080Like {
                 if callsDeep == 0 {
                     return
                 }
+            }
+            */
+            
+            if self.PC.read() == 0 {
+                return
             }
         } while true
     }
@@ -181,9 +187,24 @@ public class LR35902: Intel8080Like {
             let firstByte = bus.read(PC.read())
             
             switch firstByte {
+            case 0x22:
+                // LD (HL+), A
+                instruction = LDI_LR(pointable: self.HL, other: self.A, direction: .IntoPointer)
+                instructionLength = 1
+                
             case 0x2A:
                 // LD A, (HL+)
                 instruction = LDI_LR(pointable: self.HL, other: self.A, direction: .OutOfPointer)
+                instructionLength = 1
+                
+            case 0x32:
+                // LD (HL-), A
+                instruction = LDD_LR(pointable: self.HL, other: self.A, direction: .IntoPointer)
+                instructionLength = 1
+                
+            case 0x3A:
+                // LD A, (HL-)
+                instruction = LDD_LR(pointable: self.HL, other: self.A, direction: .OutOfPointer)
                 instructionLength = 1
                 
             case 0xD9:
@@ -232,15 +253,15 @@ public class LR35902: Intel8080Like {
                 instructionLength = 3
                 
             default:
-                break
+                print("Unrecognized opcode \(firstByte.hexString) at PC \(PC.read())")
             }
             
             if let instruction = instruction {
-                print("L \(PC.read().hexString): ", terminator: "")
-                for i in 0..<instructionLength {
-                    print("\(bus.read(PC.read()+i).hexString) ", terminator: "")
-                }
-                print("\n\t\(instruction)\n")
+//                print("L \(PC.read().hexString): ", terminator: "")
+//                for i in 0..<instructionLength {
+//                    print("\(bus.read(PC.read()+i).hexString) ", terminator: "")
+//                }
+//                print("\n\t\(instruction)\n")
                 
                 //@todo make PC-incrementing common
                 self.PC.write(self.PC.read() + instructionLength)

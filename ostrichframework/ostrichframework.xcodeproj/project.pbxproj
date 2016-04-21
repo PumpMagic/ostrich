@@ -28,6 +28,8 @@
 		58BB139A1CACF0FA00D7FD06 /* DJNZ.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BB13991CACF0FA00D7FD06 /* DJNZ.swift */; };
 		58DA2C311CB4C04C00786344 /* DI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DA2C301CB4C04C00786344 /* DI.swift */; };
 		58DA2C331CB4CA5400786344 /* EI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DA2C321CB4CA5400786344 /* EI.swift */; };
+		58E31CD51CC8CC99003D5C20 /* SLA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58E31CD41CC8CC99003D5C20 /* SLA.swift */; };
+		58E31CD71CC8D084003D5C20 /* RES.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58E31CD61CC8D084003D5C20 /* RES.swift */; };
 		FC11AA9E1CBED5BD0085D12B /* SUB.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC11AA9D1CBED5BD0085D12B /* SUB.swift */; };
 		FCF9A3321CAB86BD00EA79F0 /* ostrichframework.h in Headers */ = {isa = PBXBuildFile; fileRef = FCF9A3311CAB86BD00EA79F0 /* ostrichframework.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FCF9A3A11CAB8AA900EA79F0 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF9A38A1CAB8AA900EA79F0 /* Util.swift */; };
@@ -71,6 +73,8 @@
 		58BB13991CACF0FA00D7FD06 /* DJNZ.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DJNZ.swift; sourceTree = "<group>"; };
 		58DA2C301CB4C04C00786344 /* DI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DI.swift; sourceTree = "<group>"; };
 		58DA2C321CB4CA5400786344 /* EI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EI.swift; sourceTree = "<group>"; };
+		58E31CD41CC8CC99003D5C20 /* SLA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLA.swift; sourceTree = "<group>"; };
+		58E31CD61CC8D084003D5C20 /* RES.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RES.swift; sourceTree = "<group>"; };
 		FC11AA9D1CBED5BD0085D12B /* SUB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SUB.swift; sourceTree = "<group>"; };
 		FCF9A32E1CAB86BD00EA79F0 /* ostrichframework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ostrichframework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCF9A3311CAB86BD00EA79F0 /* ostrichframework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ostrichframework.h; sourceTree = "<group>"; };
@@ -191,11 +195,13 @@
 				586D39441CBF792500087457 /* OR.swift */,
 				FCF9A3961CAB8AA900EA79F0 /* POP.swift */,
 				FCF9A3971CAB8AA900EA79F0 /* PUSH.swift */,
+				58E31CD61CC8D084003D5C20 /* RES.swift */,
 				FCF9A3931CAB8AA900EA79F0 /* RET.swift */,
 				5854A0901CAE34610044A766 /* RLC.swift */,
 				5854A08E1CAE29EE0044A766 /* RRC.swift */,
 				58BB13951CACD95D00D7FD06 /* RST.swift */,
 				586D39481CC0DA8600087457 /* SET.swift */,
+				58E31CD41CC8CC99003D5C20 /* SLA.swift */,
 				FC11AA9D1CBED5BD0085D12B /* SUB.swift */,
 				586D39461CBF797000087457 /* XOR.swift */,
 			);
@@ -287,6 +293,7 @@
 				5812333B1CB36EC300A2D1A5 /* DataBus.swift in Sources */,
 				581233391CB36E7400A2D1A5 /* Peripherals.swift in Sources */,
 				FCF9A3A71CAB8AA900EA79F0 /* Instruction.swift in Sources */,
+				58E31CD51CC8CC99003D5C20 /* SLA.swift in Sources */,
 				FCF9A3AF1CAB8AA900EA79F0 /* DEC.swift in Sources */,
 				FCF9A3A21CAB8AA900EA79F0 /* ROM.swift in Sources */,
 				FCF9A3A51CAB8AA900EA79F0 /* Immediates.swift in Sources */,
@@ -304,6 +311,7 @@
 				FCF9A3AB1CAB8AA900EA79F0 /* JP.swift in Sources */,
 				586D39451CBF792500087457 /* OR.swift in Sources */,
 				FCF9A3B41CAB8AA900EA79F0 /* EX.swift in Sources */,
+				58E31CD71CC8D084003D5C20 /* RES.swift in Sources */,
 				5854A08F1CAE29EE0044A766 /* RRC.swift in Sources */,
 				58DA2C331CB4CA5400786344 /* EI.swift in Sources */,
 				5854A0911CAE34610044A766 /* RLC.swift in Sources */,

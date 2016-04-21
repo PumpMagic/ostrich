@@ -196,7 +196,7 @@ extension Intel8080Like {
             
         case 0x18:
             // JR n
-            let displacement = Int8(bus.read(PC.read()+1))
+            let displacement = Int8(bitPattern: bus.read(PC.read()+1))
             instruction = JR(condition: nil, displacementMinusTwo: displacement)
             instructionLength = 2
             
@@ -224,6 +224,12 @@ extension Intel8080Like {
             // DEC E
             instruction = DEC8(operand: self.E)
             instructionLength = 1
+            
+        case 0x1E:
+            // LD E, n
+            let val = bus.read(PC.read()+1)
+            instruction = LD(dest: self.E, src: Immediate8(val: val))
+            instructionLength = 2
  
  
  
@@ -1016,6 +1022,46 @@ extension Intel8080Like {
             // bit instructions
             let secondByte = bus.read(PC.read()+1)
             switch secondByte {
+
+            case 0x20:
+                // SLA B
+                instruction = SLA(op: self.B)
+                instructionLength = 2
+                
+            case 0x21:
+                // SLA C
+                instruction = SLA(op: self.C)
+                instructionLength = 2
+                
+            case 0x22:
+                // SLA D
+                instruction = SLA(op: self.D)
+                instructionLength = 2
+                
+            case 0x23:
+                // SLA E
+                instruction = SLA(op: self.E)
+                instructionLength = 2
+                
+            case 0x24:
+                // SLA H
+                instruction = SLA(op: self.H)
+                instructionLength = 2
+                
+            case 0x25:
+                // SLA L
+                instruction = SLA(op: self.L)
+                instructionLength = 2
+                
+            case 0x26:
+                // SLA (HL)
+                instruction = SLA(op: self.HL.asPointerOn(self.bus))
+                instructionLength = 2
+                
+            case 0x27:
+                // SLA A
+                instruction = SLA(op: self.A)
+                instructionLength = 2
                 
             case 0x40:
                 // BIT 0, B
@@ -1349,6 +1395,338 @@ extension Intel8080Like {
                 instructionLength = 2
                 
                 
+            case 0x80:
+                // RES 0, B
+                instruction = RES(op: self.B, bit: 0)
+                instructionLength = 2
+                
+            case 0x81:
+                // RES 0, C
+                instruction = RES(op: self.C, bit: 0)
+                instructionLength = 2
+                
+            case 0x82:
+                // RES 0, D
+                instruction = RES(op: self.D, bit: 0)
+                instructionLength = 2
+                
+            case 0x83:
+                // RES 0, E
+                instruction = RES(op: self.E, bit: 0)
+                instructionLength = 2
+                
+            case 0x84:
+                // RES 0, H
+                instruction = RES(op: self.H, bit: 0)
+                instructionLength = 2
+                
+            case 0x85:
+                // RES 0, L
+                instruction = RES(op: self.L, bit: 0)
+                instructionLength = 2
+                
+            case 0x86:
+                // RES 0, (HL)
+                instruction = RES(op: self.HL.asPointerOn(self.bus), bit: 0)
+                instructionLength = 2
+                
+            case 0x87:
+                // RES 0, A
+                instruction = RES(op: self.A, bit: 0)
+                instructionLength = 2
+                
+                
+            case 0x88:
+                // RES 1, B
+                instruction = RES(op: self.B, bit: 1)
+                instructionLength = 2
+                
+            case 0x89:
+                // RES 1, C
+                instruction = RES(op: self.C, bit: 1)
+                instructionLength = 2
+                
+            case 0x8A:
+                // RES 1, D
+                instruction = RES(op: self.D, bit: 1)
+                instructionLength = 2
+                
+            case 0x8B:
+                // RES 1, E
+                instruction = RES(op: self.E, bit: 1)
+                instructionLength = 2
+                
+            case 0x8C:
+                // RES 1, H
+                instruction = RES(op: self.H, bit: 1)
+                instructionLength = 2
+                
+            case 0x8D:
+                // RES 1, L
+                instruction = RES(op: self.L, bit: 1)
+                instructionLength = 2
+                
+            case 0x8E:
+                // RES 1, (HL)
+                instruction = RES(op: self.HL.asPointerOn(self.bus), bit: 1)
+                instructionLength = 2
+                
+            case 0x8F:
+                // RES 1, A
+                instruction = RES(op: self.A, bit: 1)
+                instructionLength = 2
+                
+                
+            case 0x90:
+                // RES 2, B
+                instruction = RES(op: self.B, bit: 2)
+                instructionLength = 2
+                
+            case 0x91:
+                // RES 2, C
+                instruction = RES(op: self.C, bit: 2)
+                instructionLength = 2
+                
+            case 0x92:
+                // RES 2, D
+                instruction = RES(op: self.D, bit: 2)
+                instructionLength = 2
+                
+            case 0x93:
+                // RES 2, E
+                instruction = RES(op: self.E, bit: 2)
+                instructionLength = 2
+                
+            case 0x94:
+                // RES 2, H
+                instruction = RES(op: self.H, bit: 2)
+                instructionLength = 2
+                
+            case 0x95:
+                // RES 2, L
+                instruction = RES(op: self.L, bit: 2)
+                instructionLength = 2
+                
+            case 0x96:
+                // RES 2, (HL)
+                instruction = RES(op: self.HL.asPointerOn(self.bus), bit: 2)
+                instructionLength = 2
+                
+            case 0x97:
+                // RES 2, A
+                instruction = RES(op: self.A, bit: 2)
+                instructionLength = 2
+                
+                
+            case 0x98:
+                // RES 3, B
+                instruction = RES(op: self.B, bit: 3)
+                instructionLength = 2
+                
+            case 0x99:
+                // RES 3, C
+                instruction = RES(op: self.C, bit: 3)
+                instructionLength = 2
+                
+            case 0x9A:
+                // RES 3, D
+                instruction = RES(op: self.D, bit: 3)
+                instructionLength = 2
+                
+            case 0x9B:
+                // RES 3, E
+                instruction = RES(op: self.E, bit: 3)
+                instructionLength = 2
+                
+            case 0x9C:
+                // RES 3, H
+                instruction = RES(op: self.H, bit: 3)
+                instructionLength = 2
+                
+            case 0x9D:
+                // RES 3, L
+                instruction = RES(op: self.L, bit: 3)
+                instructionLength = 2
+                
+            case 0x9E:
+                // RES 3, (HL)
+                instruction = RES(op: self.HL.asPointerOn(self.bus), bit: 3)
+                instructionLength = 2
+                
+            case 0x9F:
+                // RES 3, A
+                instruction = RES(op: self.A, bit: 3)
+                instructionLength = 2
+                
+                
+                
+            case 0xA0:
+                // RES 4, B
+                instruction = RES(op: self.B, bit: 4)
+                instructionLength = 2
+                
+            case 0xA1:
+                // RES 4, C
+                instruction = RES(op: self.C, bit: 4)
+                instructionLength = 2
+                
+            case 0xA2:
+                // RES 4, D
+                instruction = RES(op: self.D, bit: 4)
+                instructionLength = 2
+                
+            case 0xA3:
+                // RES 4, E
+                instruction = RES(op: self.E, bit: 4)
+                instructionLength = 2
+                
+            case 0xA4:
+                // RES 4, H
+                instruction = RES(op: self.H, bit: 4)
+                instructionLength = 2
+                
+            case 0xA5:
+                // RES 4, L
+                instruction = RES(op: self.L, bit: 4)
+                instructionLength = 2
+                
+            case 0xA6:
+                // RES 4, (HL)
+                instruction = RES(op: self.HL.asPointerOn(self.bus), bit: 4)
+                instructionLength = 2
+                
+            case 0xA7:
+                // RES 4, A
+                instruction = RES(op: self.A, bit: 4)
+                instructionLength = 2
+                
+                
+                
+            case 0xA8:
+                // RES 5, B
+                instruction = RES(op: self.B, bit: 5)
+                instructionLength = 2
+                
+            case 0xA9:
+                // RES 5, C
+                instruction = RES(op: self.C, bit: 5)
+                instructionLength = 2
+                
+            case 0xAA:
+                // RES 5, D
+                instruction = RES(op: self.D, bit: 5)
+                instructionLength = 2
+                
+            case 0xAB:
+                // RES 5, E
+                instruction = RES(op: self.E, bit: 5)
+                instructionLength = 2
+                
+            case 0xAC:
+                // RES 5, H
+                instruction = RES(op: self.H, bit: 5)
+                instructionLength = 2
+                
+            case 0xAD:
+                // RES 5, L
+                instruction = RES(op: self.L, bit: 5)
+                instructionLength = 2
+                
+            case 0xAE:
+                // RES 5, (HL)
+                instruction = RES(op: self.HL.asPointerOn(self.bus), bit: 5)
+                instructionLength = 2
+                
+            case 0xAF:
+                // RES 5, A
+                instruction = RES(op: self.A, bit: 5)
+                instructionLength = 2
+                
+                
+                
+            case 0xB0:
+                // RES 6, B
+                instruction = RES(op: self.B, bit: 6)
+                instructionLength = 2
+                
+            case 0xB1:
+                // RES 6, C
+                instruction = RES(op: self.C, bit: 6)
+                instructionLength = 2
+                
+            case 0xB2:
+                // RES 6, D
+                instruction = RES(op: self.D, bit: 6)
+                instructionLength = 2
+                
+            case 0xB3:
+                // RES 6, E
+                instruction = RES(op: self.E, bit: 6)
+                instructionLength = 2
+                
+            case 0xB4:
+                // RES 6, H
+                instruction = RES(op: self.H, bit: 6)
+                instructionLength = 2
+                
+            case 0xB5:
+                // RES 6, L
+                instruction = RES(op: self.L, bit: 6)
+                instructionLength = 2
+                
+            case 0xB6:
+                // RES 6, (HL)
+                instruction = RES(op: self.HL.asPointerOn(self.bus), bit: 6)
+                instructionLength = 2
+                
+            case 0xB7:
+                // RES 6, A
+                instruction = RES(op: self.A, bit: 6)
+                instructionLength = 2
+                
+                
+                
+            case 0xB8:
+                // RES 7, B
+                instruction = RES(op: self.B, bit: 7)
+                instructionLength = 2
+                
+            case 0xB9:
+                // RES 7, C
+                instruction = RES(op: self.C, bit: 7)
+                instructionLength = 2
+                
+            case 0xBA:
+                // RES 7, D
+                instruction = RES(op: self.D, bit: 7)
+                instructionLength = 2
+                
+            case 0xBB:
+                // RES 7, E
+                instruction = RES(op: self.E, bit: 7)
+                instructionLength = 2
+                
+            case 0xBC:
+                // RES 7, H
+                instruction = RES(op: self.H, bit: 7)
+                instructionLength = 2
+                
+            case 0xBD:
+                // RES 7, L
+                instruction = RES(op: self.L, bit: 7)
+                instructionLength = 2
+                
+            case 0xBE:
+                // RES 7, (HL)
+                instruction = RES(op: self.HL.asPointerOn(self.bus), bit: 7)
+                instructionLength = 2
+                
+            case 0xBF:
+                // RES 7, A
+                instruction = RES(op: self.A, bit: 7)
+                instructionLength = 2
+                
+                
                 
             case 0xFE:
                 // SET 7, (HL)
@@ -1366,11 +1744,11 @@ extension Intel8080Like {
         
         
         if let instruction = instruction {
-            print("C \(PC.read().hexString): ", terminator: "")
-            for i in 0..<instructionLength {
-                print("\(bus.read(PC.read()+i).hexString) ", terminator: "")
-            }
-            print("\n\t\(instruction)\n")
+//            print("C \(PC.read().hexString): ", terminator: "")
+//            for i in 0..<instructionLength {
+//                print("\(bus.read(PC.read()+i).hexString) ", terminator: "")
+//            }
+//            print("\n\t\(instruction)\n")
             
             //@todo make PC-incrementing common
             self.PC.write(self.PC.read() + instructionLength)
