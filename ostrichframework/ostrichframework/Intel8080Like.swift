@@ -1776,8 +1776,7 @@ extension Intel8080Like {
                 instructionLength = 2
                 
             default:
-                let combinedOpcode: UInt16 = make16(high: firstByte, low: secondByte)
-                print("Unrecognized opcode \(combinedOpcode.hexString) at PC \(PC.read())")
+                break
             }
             
         default:
