@@ -25,5 +25,6 @@ func toImplFrequency(frequency: UInt16) -> Double {
         return 0
     }
     
-    return GB_CLOCK_HZ / SAMPLES_PER_PULSE_WAVE_PERIOD / Double(frequency)
+    //@todo this is channel type-specific
+    return (GB_CLOCK_HZ / SAMPLES_PER_PULSE_WAVE_PERIOD) / Double((2048-frequency)) / 4
 }

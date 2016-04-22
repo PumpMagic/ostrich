@@ -45,6 +45,8 @@ class Pulse {
     static let MAX_LENGTH_ENABLE: UInt8 = 1
     static let MIN_VOLUME: UInt8 = 0
     static let MAX_VOLUME: UInt8 = 15
+    static let MIN_FREQUENCY: UInt16 = 0
+    static let MAX_FREQUENCY: UInt16 = 2047
     
     /* DUTY CYCLE STUFF
         The pulse channel has a variable-width duty cycle */
@@ -166,6 +168,11 @@ class Pulse {
         8 samples wide  */
     var frequency: UInt16 = 1192 {
         didSet {
+            if frequency < Pulse.MIN_FREQUENCY || frequency > Pulse.MAX_FREQUENCY {
+                print("FATAL: invalid frequency assigned: \(frequency)")
+                exit(1)
+            }
+            
             updateImplFrequency()
         }
     }
