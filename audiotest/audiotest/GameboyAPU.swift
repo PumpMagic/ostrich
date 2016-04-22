@@ -46,7 +46,7 @@ class GameBoyAPU: Memory, HandlesWrites {
     }
     
     init(mixer: AKMixer) {
-        self.pulse1 = Pulse(mixer: mixer, connected: true)
+        self.pulse1 = Pulse(mixer: mixer, connected: false)
         self.pulse2 = Pulse(mixer: mixer, connected: true)
         
         self.pulse2.volume = 0
@@ -69,7 +69,7 @@ class GameBoyAPU: Memory, HandlesWrites {
         //@todo there's a better way to do this
         switch addr {
             
-        // 0xFF10 - 0xFF14: Pulse 2
+        // 0xFF10 - 0xFF14: Pulse 1
         case 0xFF10:
             // sweep period
             // negate
@@ -78,11 +78,11 @@ class GameBoyAPU: Memory, HandlesWrites {
             
         case 0xFF11:
             pulse1.duty = getValueOfBits(val, bits: 6...7)
-            pulse1.lengthCounter = getValueOfBits(val, bits: 0...5)
+            pulse1.lengthCounterLoad = getValueOfBits(val, bits: 0...5)
             
         case 0xFF12:
-            pulse1.volume = getValueOfBits(val, bits: 4...7)
-            pulse1.addMode = getValueOfBits(val, bits: 3...3)
+            pulse1.volumeLoad = getValueOfBits(val, bits: 4...7)
+            pulse1.envelopeAddMode = getValueOfBits(val, bits: 3...3)
             pulse1.envelopePeriod = getValueOfBits(val, bits: 0...2)
             
         case 0xFF13:
@@ -90,7 +90,7 @@ class GameBoyAPU: Memory, HandlesWrites {
             let ff14 = self.ram.read(0xFF14)
             let frequencyHigh = getValueOfBits(ff14, bits: 0...2)
             let frequency = make16(high: frequencyHigh, low: frequencyLow)
-            pulse1.frequency = frequency
+//            pulse1.frequency = frequency
             
         case 0xFF14:
             let frequencyLow = self.ram.read(0xFF13)
@@ -98,9 +98,11 @@ class GameBoyAPU: Memory, HandlesWrites {
             let frequencyHigh = getValueOfBits(ff14, bits: 0...2)
             let frequency = make16(high: frequencyHigh, low: frequencyLow)
             
+//            print("high: \(val), low: \(frequencyLow) -> \(frequency)")
+            
             pulse1.frequency = frequency
             pulse1.trigger = getValueOfBits(val, bits: 7...7)
-            pulse1.lengthEnable = getValueOfBits(val, bits: 6...6)
+            pulse1.lengthEnableLoad = getValueOfBits(val, bits: 6...6)
             
             
         // 0xFF15 - 0xFF19: Pulse 2
@@ -110,30 +112,32 @@ class GameBoyAPU: Memory, HandlesWrites {
             
         case 0xFF16:
             pulse2.duty = getValueOfBits(val, bits: 6...7)
-            pulse2.lengthCounter = getValueOfBits(val, bits: 0...5)
+            pulse2.lengthCounterLoad = getValueOfBits(val, bits: 0...5)
             
         case 0xFF17:
-            pulse2.volume = getValueOfBits(val, bits: 4...7)
-            pulse2.addMode = getValueOfBits(val, bits: 3...3)
+            pulse2.volumeLoad = getValueOfBits(val, bits: 4...7)
+            pulse2.envelopeAddMode = getValueOfBits(val, bits: 3...3)
             pulse2.envelopePeriod = getValueOfBits(val, bits: 0...2)
             
         case 0xFF18:
             let frequencyLow = val
-            let ff14 = self.ram.read(0xFF14)
-            let frequencyHigh = getValueOfBits(ff14, bits: 0...2)
+            let ff19 = self.ram.read(0xFF19)
+            let frequencyHigh = getValueOfBits(ff19, bits: 0...2)
             let frequency = make16(high: frequencyHigh, low: frequencyLow)
             
-            pulse2.frequency = frequency
+//            pulse2.frequency = frequency
             
         case 0xFF19:
-            let frequencyLow = self.ram.read(0xFF13)
-            let ff14 = val
-            let frequencyHigh = getValueOfBits(ff14, bits: 0...2)
+            let frequencyLow = self.ram.read(0xFF18)
+            let ff19 = val
+            let frequencyHigh = getValueOfBits(ff19, bits: 0...2)
             let frequency = make16(high: frequencyHigh, low: frequencyLow)
+            
+                        print("high: \(val), low: \(frequencyLow) -> \(frequency)")
             
             pulse2.frequency = frequency
             pulse2.trigger = getValueOfBits(val, bits: 7...7)
-            pulse2.lengthEnable = getValueOfBits(val, bits: 6...6)
+            pulse2.lengthEnableLoad = getValueOfBits(val, bits: 6...6)
             
         default:
             //print("Ignoring!")

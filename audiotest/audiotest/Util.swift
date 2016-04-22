@@ -11,11 +11,10 @@ import Foundation
 
 let GB_CLOCK_HZ = 4194304.0
 let SAMPLES_PER_PULSE_WAVE_PERIOD = 8.0
-let MAX_VOLUME_REGISTER_VALUE: UInt8 = 15
 
 func toImplAmplitude(volume: UInt8) -> Double {
-    if volume <= MAX_VOLUME_REGISTER_VALUE {
-        return Double(volume) / Double(MAX_VOLUME_REGISTER_VALUE)
+    if volume <= Pulse.MAX_VOLUME {
+        return Double(volume) / Double(Pulse.MAX_VOLUME)
     }
     
     return 1.0

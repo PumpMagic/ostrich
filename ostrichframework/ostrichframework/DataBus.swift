@@ -17,6 +17,8 @@ protocol DelegatesWrites: HandlesWrites {
 }
 
 public class DataBus: DelegatesReads, DelegatesWrites {
+    //@todo consider using Intervals instead of Ranges:
+    //http://oleb.net/blog/2015/09/swift-ranges-and-intervals/
     var readables: [(HandlesReads, Range<Address>)]
     var writeables: [(HandlesWrites, Range<Address>)]
     
@@ -101,9 +103,9 @@ public class DataBus: DelegatesReads, DelegatesWrites {
         // Hack: memory bank controller is unimplemented for now; ignore communication with it
         //@todo implement the memory bank controller
         if 0x0000 ... 0x7FFF as Range<Address> ~= addr {
-            print("WARNING! Ignoring memory bank controller communication in the form of writing \(val.hexString) to \(addr.hexString)")
+//            print("WARNING! Ignoring memory bank controller communication in the form of writing \(val.hexString) to \(addr.hexString)")
             if 0x0000 ... 0x1FFF as Range<Address> ~= addr {
-                print("(external RAM control)")
+//                print("(external RAM control)")
             }
             return
         }
