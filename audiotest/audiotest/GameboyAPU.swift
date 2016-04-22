@@ -46,8 +46,8 @@ class GameBoyAPU: Memory, HandlesWrites {
     }
     
     init(mixer: AKMixer) {
-        self.pulse1 = Pulse(mixer: mixer, connected: false)
-        self.pulse2 = Pulse(mixer: mixer, connected: true)
+        self.pulse1 = Pulse(mixer: mixer, hasFrequencySweep: true, connected: true)
+        self.pulse2 = Pulse(mixer: mixer, hasFrequencySweep: false, connected: true)
         
         self.pulse2.volume = 0
         
@@ -61,7 +61,7 @@ class GameBoyAPU: Memory, HandlesWrites {
     }
     
     func write(val: UInt8, to addr: Address) {
-        print("APU write! \(val.hexString) to \(addr.hexString)")
+//        print("APU write! \(val.hexString) to \(addr.hexString)")
         
         self.ram.write(val, to: addr)
         
@@ -71,9 +71,10 @@ class GameBoyAPU: Memory, HandlesWrites {
             
         // 0xFF10 - 0xFF14: Pulse 1
         case 0xFF10:
-            // sweep period
-            // negate
-            // shift
+            print("Write to 0xFF10! \(val)")
+            pulse1.frequencySweepPeriod = getValueOfBits(val, bits: 4...6)
+            pulse1.frequencySweepNegate = getValueOfBits(val, bits: 3...3)
+            pulse1.frequencySweepShift = getValueOfBits(val, bits: 0...2)
             break
             
         case 0xFF11:
@@ -133,8 +134,6 @@ class GameBoyAPU: Memory, HandlesWrites {
             let frequencyHigh = getValueOfBits(ff19, bits: 0...2)
             let frequency = make16(high: frequencyHigh, low: frequencyLow)
             
-                        print("high: \(val), low: \(frequencyLow) -> \(frequency)")
-            
             pulse2.frequency = frequency
             pulse2.trigger = getValueOfBits(val, bits: 7...7)
             pulse2.lengthEnableLoad = getValueOfBits(val, bits: 6...6)
@@ -154,7 +153,7 @@ class GameBoyAPU: Memory, HandlesWrites {
         pulse2.lengthTimerFired()
         
         if clockIndex == 1 || clockIndex == 3 {
-            // sweep stuff
+            pulse1.sweepTimerFired()
         }
         
         if clockIndex == 3 {

@@ -25,15 +25,6 @@ NR23 FF18 FFFF FFFF Frequency LSB
 NR24 FF19 TL-- -FFF Trigger, Length enable, Frequency MSB
 */
 
-func delay(delay: Int64, closure: ()->()) {
-    dispatch_after(
-        dispatch_time(
-            DISPATCH_TIME_NOW,
-            Int64(delay)
-        ),
-        dispatch_get_main_queue(), closure)
-}
-
 /** Representation of a Game Boy pulse wave channel */
 class Pulse {
     
@@ -177,6 +168,62 @@ class Pulse {
         }
     }
     
+    /* FREQUENCY SWEEP STUFF */
+    /** Pulse 1 supports frequency sweeping */
+    internal let hasFrequencySweep: Bool
+    
+    var frequencySweepPeriod: UInt8 = 0
+    var frequencySweepNegate: UInt8 = 0
+    var frequencySweepShift: UInt8 = 0
+    internal var frequencySweepCounter: UInt8 = 0
+    internal var frequencySweepEnabled: Bool = false
+    internal var frequencyShadow: UInt16 = 1192
+    internal var nextFrequency: UInt16 {
+        get {
+            let shifted = self.frequencyShadow >> UInt16(self.frequencySweepShift)
+            var newFreq: UInt16
+            
+            if self.frequencySweepNegate == 0 {
+                newFreq = self.frequencyShadow &+ shifted
+            } else if self.frequencySweepNegate == 1 {
+                newFreq = self.frequencyShadow &- shifted
+            } else {
+                print("FATAL: invalid frequency shift negate!")
+                exit(1)
+            }
+            
+            return newFreq
+        }
+    }
+    internal func frequencyOverflowCheck() {
+        let newFrequency = self.nextFrequency
+        if newFrequency > Pulse.MAX_FREQUENCY {
+            self.enabled = false
+        }
+    }
+    func sweepTimerFired() {
+        if self.frequencySweepCounter == 0 {
+            self.frequencySweepCounter = self.frequencySweepPeriod
+        }
+        
+        if self.frequencySweepCounter == 0 {
+            return
+        }
+        
+        self.frequencySweepCounter -= 1
+        
+        if self.frequencySweepCounter == 0 {
+            self.frequencyOverflowCheck()
+            if self.frequencySweepShift != 0 {
+                //@todo this actually writes back to NR1x
+                print("\(self.frequency) -> \(self.nextFrequency)")
+                self.frequency = self.nextFrequency
+                self.frequencyShadow = self.frequency
+                self.frequencyOverflowCheck()
+            }
+        }
+    }
+    
     
     
     /* TRIGGER STUFF */
@@ -217,7 +264,23 @@ class Pulse {
         
         // 6. Raises noise channel's LFSR bits
         // 7. Resets wave channel's table position
-        // 8. Stuff for pulse 1's frequency sweep...
+        
+        // 8. Stuff for pulse 1's frequency sweep
+        if self.hasFrequencySweep {
+            self.frequencyShadow = self.frequency
+            
+            self.frequencySweepCounter = self.frequencySweepPeriod
+            
+            if self.frequencySweepPeriod != 0 || self.frequencySweepShift != 0 {
+                self.frequencySweepEnabled = true
+            } else {
+                self.frequencySweepEnabled = false
+            }
+            
+            if self.frequencySweepShift != 0 {
+                self.frequencyOverflowCheck()
+            }
+        }
         
         return
     }
@@ -259,7 +322,7 @@ class Pulse {
     var akTables: [AKTable]
     
     
-    init(mixer: AKMixer, connected: Bool) {
+    init(mixer: AKMixer, hasFrequencySweep: Bool, connected: Bool) {
         //@todo there must be a better way to do this
         self.akTables = [AKTable(.Square, size: 8), AKTable(.Square, size: 8),
                          AKTable(.Square, size: 8), AKTable(.Square, size: 8)]
@@ -268,6 +331,8 @@ class Pulse {
             akTables[i].values = pattern
             i = i+1
         }
+        
+        self.hasFrequencySweep = hasFrequencySweep
         
         self.oscillator = AKMorphingOscillator(waveformArray: akTables, amplitude: 1.0)
         self.mixer = mixer
@@ -279,6 +344,6 @@ class Pulse {
     }
     
     convenience init(mixer: AKMixer) {
-        self.init(mixer: mixer, connected: true)
+        self.init(mixer: mixer, hasFrequencySweep: false, connected: true)
     }
 }

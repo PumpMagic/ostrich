@@ -9,7 +9,7 @@
 import Foundation
 
 
-/// Right rotate with carry
+/// Right rotate, copying into carry
 struct RRC<T: protocol<Writeable, Readable, OperandType> where T.ReadType == T.WriteType, T.ReadType == UInt8>: Z80Instruction, LR35902Instruction
 {
     let op: T
@@ -66,7 +66,8 @@ struct RRC<T: protocol<Writeable, Readable, OperandType> where T.ReadType == T.W
     }
 }
 
-/// Right rotate with carry A
+/// Right rotate A, copying into carry
+//@todo model this after RRC
 struct RRCA: Z80Instruction, LR35902Instruction {
     let cycleCount = 0
     
@@ -80,7 +81,7 @@ struct RRCA: Z80Instruction, LR35902Instruction {
     func runOn(cpu: LR35902) {
         let oldA = cpu.A.read()
         
-        cpu.A.write(rotateLeft(oldA))
+        cpu.A.write(rotateRight(oldA))
         modifyFlags(cpu, oldValue: oldA)
     }
     
@@ -112,5 +113,73 @@ struct RRCA: Z80Instruction, LR35902Instruction {
         cpu.ZF.write(false)
         
         modifyCommonFlags(cpu, oldValue: oldValue)
+    }
+}
+
+/// Right rotate A through carry (9-bit rotate)
+struct RRA: Z80Instruction, LR35902Instruction {
+    let cycleCount = 0
+    
+    
+    private func runCommon(cpu: Intel8080Like) -> (UInt8, UInt8) {
+        let oldValue = cpu.A.read()
+        var newValue = logicalShiftRight(oldValue)
+        if cpu.CF.read() {
+            newValue = setBit(newValue, bit: 7)
+        }
+        
+        cpu.A.write(newValue)
+        
+        return (oldValue, newValue)
+    }
+    
+    func runOn(cpu: Z80) {
+        let (oldValue, newValue) = runCommon(cpu)
+        
+        modifyFlags(cpu, oldValue: oldValue, newValue: newValue)
+    }
+    
+    func runOn(cpu: LR35902) {
+        let (oldValue, newValue) = runCommon(cpu)
+        
+        modifyFlags(cpu, oldValue: oldValue, newValue: newValue)
+    }
+    
+    
+    private func modifyCommonFlags(cpu: Intel8080Like, oldValue: UInt8, newValue: UInt8) {
+        // Z behaves differently!
+        // H is reset.
+        // N is reset.
+        // C is data from bit 0 of source register.
+        
+        cpu.HF.write(false)
+        cpu.NF.write(false)
+        cpu.CF.write(bitIsHigh(oldValue, bit: 0))
+    }
+    
+    private func modifyFlags(cpu: Z80, oldValue: UInt8, newValue: UInt8) {
+        modifyCommonFlags(cpu, oldValue: oldValue, newValue: newValue)
+        
+        // Z is set if result is 0; otherwise, it is reset.
+        // S is set if result is negative; otherwise, it is reset.
+        // P/V is set if parity even; otherwise, it is reset.
+        
+        cpu.ZF.write(newValue == 0x00)
+        cpu.SF.write(numberIsNegative(newValue))
+        cpu.PVF.write(parity(newValue))
+    }
+    
+    private func modifyFlags(cpu: LR35902, oldValue: UInt8, newValue: UInt8) {
+        modifyCommonFlags(cpu, oldValue: oldValue, newValue: newValue)
+        
+        // The GB CPU manual says Z is set if the result is 0.
+        // The BSNES core always resets Z.
+        // We go with the BSNES core.
+        
+        // N - Reset.
+        // H - Reset.
+        // C - Contains old bit 0 data.
+        
+        cpu.ZF.write(false)
     }
 }

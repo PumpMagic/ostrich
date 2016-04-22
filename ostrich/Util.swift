@@ -91,10 +91,10 @@ func clearBit(num: UInt8, bit: UInt8) -> UInt8 {
     return num & mask
 }
 
-/// Perform a right rotate in a way that doesn't depend on Swift's sign-specific shifting behavior
+/// Perform a right rotate
 func rotateRight(num: UInt8) -> UInt8 {
     // Shift the number
-    let shifted = num >> 1
+    let shifted = logicalShiftRight(num)
     
     // Loop the number's least-significant bit back to the most-significant bit
     let newValue: UInt8
@@ -125,16 +125,12 @@ func rotateLeft(num: UInt8) -> UInt8 {
 
 /// Perform a left shift
 func shiftLeft(num: UInt8) -> UInt8 {
-    let shifted = num << 1
-    
-    return shifted
+    return num << 1
 }
 
 /// Perform a logical right shift (MSB becomes zero)
 func logicalShiftRight(num: UInt8) -> UInt8 {
-    let shifted = num >> 1
-    
-    return shifted
+    return num >> 1
 }
 
 // ADD STUFF

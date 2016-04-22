@@ -11,7 +11,7 @@ import AudioKit
 import ostrichframework
 
 
-let GBS_PATH: String = "/Users/ryan.conway/Dropbox/emu/tetris.gbs"
+let GBS_PATH: String = "/Users/ryanconway/Dropbox/emu/battletoads.gbs"
 
 
 class ViewController: NSViewController {

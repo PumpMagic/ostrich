@@ -230,6 +230,11 @@ extension Intel8080Like {
             let val = bus.read(PC.read()+1)
             instruction = LD(dest: self.E, src: Immediate8(val: val))
             instructionLength = 2
+            
+        case 0x1F:
+            // RRCA
+            instruction = RRCA()
+            instructionLength = 1
  
  
  
@@ -293,6 +298,12 @@ extension Intel8080Like {
             instruction = DEC8(operand: self.L)
             instructionLength = 1
             
+        case 0x2E:
+            // LD L, n
+            let val = bus.read(PC.read()+1)
+            instruction = LD(dest: self.L, src: Immediate8(val: val))
+            instructionLength = 2
+            
         case 0x30:
             // JR NC n
             let displacement = Int8(bus.read(PC.read()+1))
@@ -328,7 +339,7 @@ extension Intel8080Like {
             
         case 0x38:
             // JR C n
-            let displacement = Int8(bus.read(PC.read()+1))
+            let displacement = Int8(bitPattern: bus.read(PC.read()+1))
             instruction = JR(condition: Condition(flag: self.CF, target: true), displacementMinusTwo: displacement)
             instructionLength = 2
             
