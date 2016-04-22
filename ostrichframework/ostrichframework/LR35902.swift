@@ -99,23 +99,26 @@ public class LR35902: Intel8080Like {
     }
     
     // Utility methods
+    /// Set SP (the stack pointer)
     public func setSP(sp: Address) {
         self.SP.write(sp)
     }
     
+    /// Set PC (the program counter)
     public func setPC(pc: Address) {
         self.PC.write(pc)
     }
     
+    /// Set A (the accumulator)
     public func setA(a: UInt8) {
         self.A.write(a)
     }
     
     /// Stack pointer and program counter debug string
-    var pcsp: String { return "\tSP: \(self.SP.read().hexString)\n\tPC: \(self.PC.read().hexString)" }
+    internal var pcsp: String { return "\tSP: \(self.SP.read().hexString)\n\tPC: \(self.PC.read().hexString)" }
     
-    /// Hacky convenience function for calling some subroutine and running instructions until a corresponding return is
-    /// detected
+    /// Call a subroutine and run instructions until a corresponding return is detected.
+    /// This function detects a return by checking to see if the PC has whatever value it was before the call
     public func call(addr: Address) {
         let priorPC = self.PC.read()
         
@@ -131,9 +134,8 @@ public class LR35902: Intel8080Like {
         } while true
     }
     
-    
     /// Fetch an instruction, run it, and return it
-    func doInstructionCycle() -> LR35902Instruction {
+    private func doInstructionCycle() -> LR35902Instruction {
         guard let instruction = self.fetchInstruction() else {
             print("FATAL: unable to fetch instruction")
             exit(1)
@@ -145,7 +147,7 @@ public class LR35902: Intel8080Like {
     
     /// Execute an instruction.
     /// This function has some additional behavior to support things like EI, which has effects delayed by an instruction.
-    func executeInstruction(instruction: LR35902Instruction) {
+    private func executeInstruction(instruction: LR35902Instruction) {
         let willEnableInterrupts = self.instructionContext.lastInstructionWasEI
         
         instruction.runOn(self)

@@ -146,16 +146,18 @@ class GameBoyAPU: Memory, HandlesWrites {
     }
     
     
-    //@todo we shouldn't rely on our caller to call this - we should have some internal timer
+    //@todo should we rely on our caller to call this? Or should we have some internal timer?
     var clockIndex = 0 // 0-3
     func clock256() {
         pulse1.lengthTimerFired()
         pulse2.lengthTimerFired()
         
+        // 128Hz
         if clockIndex == 1 || clockIndex == 3 {
             pulse1.sweepTimerFired()
         }
         
+        // 64Hz
         if clockIndex == 3 {
             pulse1.envelopeTimerFired()
             pulse2.envelopeTimerFired()

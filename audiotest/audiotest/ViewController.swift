@@ -1,6 +1,6 @@
 //
 //  ViewController.swift
-//  HelloWorld
+//  audiotest
 //
 //  Created by Ryan Conway.
 //  Copyright © 2016 conwarez. All rights reserved.
@@ -11,7 +11,7 @@ import AudioKit
 import ostrichframework
 
 
-let GBS_PATH: String = "/Users/ryanconway/Dropbox/emu/battletoads.gbs"
+let GBS_PATH: String = "/Users/ryan.conway/Dropbox/emu/tetris.gbs"
 
 
 class ViewController: NSViewController {
@@ -31,8 +31,6 @@ class ApuTest {
     var externalRAM: RAM
     var internalRAM: RAM
     
-    var clocks64: Int = 0
-    
     init() {
         guard let (theHeader, theCodeAndData) = parseFile(GBS_PATH) else {
             exit(1)
@@ -45,14 +43,13 @@ class ApuTest {
         
         // Instantiate some prep stuff
         let mixer = AKMixer()
-        AudioKit.output = mixer
         
         /* LOAD - The ripped code and data is read into the player program's address space
          starting at the load address and proceeding until end-of-file or address $7fff
          is reached. After loading, Page 0 is in Bank 0 (which never changes), and Page
          1 is in Bank 1 (which can be changed during init or play). Finally, the INIT
          is called with the first song defined in the header. */
-        print("Instantiating Z80 and executing LOAD...")
+        print("Instantiating LR35902 and peripherals and executing LOAD...")
         
         /// ROM: Generally 0x0000 - 0x3FFF and 0x4000 - 0x7FFF, but sometimes incomplete subregions of such
         /// (at least in the case of GBS files)
@@ -64,33 +61,34 @@ class ApuTest {
         /// @todo this exists only on a per-cartridge basis
         externalRAM = RAM(size: 0xC000 - 0xA000, fillByte: 0x00, firstAddress: 0xA000)
         
-        /// Internal RAM: 0xC000 - 0xCFFF plus switchable RAM (need to implement banking): 0xD000 - 0xDFFF
+        /// Internal (work) RAM bank 0: 0xC000 - 0xCFFF
+        /// Internal (work) RAM bank 1-7: 0xD000 - 0xDFFF
+        //@todo implement bank switching to support CGB
         internalRAM = RAM(size: 0xE000 - 0xC000, fillByte: 0x00, firstAddress: 0xC000)
         
         // 0xE000 - 0xFDFF is reserved echo RAM
+        
         // 0xFE00 - 0xFE9F is unimplemented video stuff
+        
         // 0xFEA0 - 0xFEFF is unused
         
         // 0xFF00 - 0xFF7F is partially unimplemented hardware IO registers
         /// 0xFF10 - 0xFF3F is the APU memory
         apu = GameBoyAPU(mixer: mixer)
         
-        /// High RAM: 0xFF80 - 0xFFFE
+        /// 0xFF80 - 0xFFFE is high RAM
         let highRAM = RAM(size: 0xFFFF - 0xFF80, fillByte: 0x00, firstAddress: 0xFF80)
         
-        
-        AudioKit.start()
-        
         bus = DataBus()
-        bus.registerReadable(rom)
-        bus.registerReadable(internalRAM)
-        bus.registerWriteable(internalRAM)
-        bus.registerReadable(externalRAM)
-        bus.registerWriteable(externalRAM)
-        bus.registerReadable(highRAM)
-        bus.registerWriteable(highRAM)
-        bus.registerReadable(apu)
-        bus.registerWriteable(apu)
+        bus.connectReadable(rom)
+        bus.connectReadable(internalRAM)
+        bus.connectWriteable(internalRAM)
+        bus.connectReadable(externalRAM)
+        bus.connectWriteable(externalRAM)
+        bus.connectReadable(highRAM)
+        bus.connectWriteable(highRAM)
+        bus.connectReadable(apu)
+        bus.connectWriteable(apu)
         
         cpu = LR35902(bus: bus)
         
@@ -103,7 +101,7 @@ class ApuTest {
          in the accumulator is zero-based (the first song is 0). The init code must end
          with a RET instruction. */
         print("Calling and running INIT...")
-        cpu.setA(header.firstSong)
+        cpu.setA(header.firstSong+2)
         cpu.call(header.initAddress)
         
         /* PLAY - Begins after INIT process is complete. The play address is constantly
@@ -111,18 +109,25 @@ class ApuTest {
          end with a RET instruction. */
         print("Calling and running PLAY...")
         
-        //@todo listen to timerModulo / timerControl
-        let _ = NSTimer.scheduledTimerWithTimeInterval(0.015625, target: self, selector: #selector(ApuTest.clock64), userInfo: nil, repeats: true)
-        let _ = NSTimer.scheduledTimerWithTimeInterval(0.00391, target: self, selector: #selector(ApuTest.clock256), userInfo: nil, repeats: true)
-//        let _ = NSTimer.scheduledTimerWithTimeInterval(0.15625, target: self, selector: #selector(ApuTest.clock64), userInfo: nil, repeats: true)
-//        let _ = NSTimer.scheduledTimerWithTimeInterval(0.0391, target: self, selector: #selector(ApuTest.clock256), userInfo: nil, repeats: true)
+        //@todo listen to the GBS header's timerModulo and timerControl fields and set this timer accordingly
+        NSTimer.scheduledTimerWithTimeInterval(0.00391, target: self, selector: #selector(ApuTest.clock256), userInfo: nil, repeats: true)
+        
+        AudioKit.output = mixer
+        AudioKit.start()
     }
     
-    @objc func clock64() {
-        cpu.call(header.playAddress)
-    }
-    
+    var clockIndex = 0 // 0-3
     @objc func clock256() {
         apu.clock256()
+        
+        // 64Hz
+        if clockIndex == 3 {
+            cpu.call(header.playAddress)
+        }
+        
+        clockIndex += 1
+        if clockIndex > 3 {
+            clockIndex = 0
+        }
     }
 }

@@ -10,10 +10,10 @@ import Foundation
 
 
 protocol DelegatesReads: HandlesReads {
-    func registerReadable(readable: protocol<BusListener, HandlesReads>)
+    func connectReadable(readable: protocol<BusListener, HandlesReads>)
 }
 protocol DelegatesWrites: HandlesWrites {
-    func registerWriteable(writeable: protocol<BusListener, HandlesWrites>)
+    func connectWriteable(writeable: protocol<BusListener, HandlesWrites>)
 }
 
 public class DataBus: DelegatesReads, DelegatesWrites {
@@ -48,10 +48,10 @@ public class DataBus: DelegatesReads, DelegatesWrites {
         self.writeables = [(HandlesWrites, Range<Address>)]()
     }
     
-    public func registerReadable(readable: protocol<BusListener, HandlesReads>) {
+    public func connectReadable(readable: protocol<BusListener, HandlesReads>) {
         self.readables.append((readable, readable.addressRange))
     }
-    public func registerWriteable(writeable: protocol<BusListener, HandlesWrites>) {
+    public func connectWriteable(writeable: protocol<BusListener, HandlesWrites>) {
         self.writeables.append((writeable, writeable.addressRange))
     }
     
