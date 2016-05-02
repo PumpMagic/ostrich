@@ -11,7 +11,7 @@ import AudioKit
 import ostrichframework
 
 
-let GBS_PATH: String = "/Users/ryan.conway/Dropbox/emu/tetris.gbs"
+let GBS_PATH: String = "/Users/ryanconway/Dropbox/emu/castlevania.gbs"
 
 
 class ViewController: NSViewController {
@@ -101,7 +101,7 @@ class ApuTest {
          in the accumulator is zero-based (the first song is 0). The init code must end
          with a RET instruction. */
         print("Calling and running INIT...")
-        cpu.setA(header.firstSong+2)
+        cpu.setA(header.firstSong+3)
         cpu.call(header.initAddress)
         
         /* PLAY - Begins after INIT process is complete. The play address is constantly
@@ -109,25 +109,46 @@ class ApuTest {
          end with a RET instruction. */
         print("Calling and running PLAY...")
         
-        //@todo listen to the GBS header's timerModulo and timerControl fields and set this timer accordingly
         NSTimer.scheduledTimerWithTimeInterval(0.00391, target: self, selector: #selector(ApuTest.clock256), userInfo: nil, repeats: true)
+        
+        var audioRoutineCallRate = 1.0
+        
+        if bitIsHigh(header.timerControl, bit: 2) { // interrupt type
+            // use timer
+            // interrupt rate = counter rate / (256 - TMA)
+            var clockRate = 0
+            switch getValueOfBits(header.timerControl, bits: 0...1) { // counter rate
+            case 0b00:
+                clockRate = 4096
+            case 0b01:
+                clockRate = 262144
+            case 0b10:
+                clockRate = 65536
+            case 0b11:
+                clockRate = 16384
+            default:
+                print("FATAL: invalid timer control!")
+                exit(1)
+            }
+            audioRoutineCallRate = Double(256 - Int(header.timerModulo)) / Double(clockRate)
+        } else {
+            // use v-blank, ~59.7Hz (@todo get exact period)
+            audioRoutineCallRate = 0.01675
+        }
+        
+        print("Audio routine call rate is \(1/audioRoutineCallRate)Hz")
+        
+        NSTimer.scheduledTimerWithTimeInterval(audioRoutineCallRate, target: self, selector: #selector(ApuTest.callAudioRoutine), userInfo: nil, repeats: true)
         
         AudioKit.output = mixer
         AudioKit.start()
     }
     
-    var clockIndex = 0 // 0-3
     @objc func clock256() {
         apu.clock256()
-        
-        // 64Hz
-        if clockIndex == 3 {
-            cpu.call(header.playAddress)
-        }
-        
-        clockIndex += 1
-        if clockIndex > 3 {
-            clockIndex = 0
-        }
+    }
+    
+    @objc func callAudioRoutine() {
+        cpu.call(header.playAddress)
     }
 }

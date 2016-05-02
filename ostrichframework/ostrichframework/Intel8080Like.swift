@@ -194,6 +194,11 @@ extension Intel8080Like {
             instruction = LD(dest: self.D, src: Immediate8(val: val))
             instructionLength = 2
             
+        case 0x17:
+            // RLA
+            instruction = RLA()
+            instructionLength = 1
+            
         case 0x18:
             // JR n
             let displacement = Int8(bitPattern: bus.read(PC.read()+1))
@@ -303,6 +308,11 @@ extension Intel8080Like {
             let val = bus.read(PC.read()+1)
             instruction = LD(dest: self.L, src: Immediate8(val: val))
             instructionLength = 2
+            
+        case 0x2F:
+            // CPL
+            instruction = CPL()
+            instructionLength = 1
             
         case 0x30:
             // JR NC n
@@ -721,6 +731,39 @@ extension Intel8080Like {
             // ADD A, A
             instruction = ADD8(op1: self.A, op2: self.A)
             instructionLength = 1
+
+        case 0x90:
+            // SUB B
+            instruction = SUB(op: self.B)
+            instructionLength = 1
+        case 0x91:
+            // SUB C
+            instruction = SUB(op: self.C)
+            instructionLength = 1
+        case 0x92:
+            // SUB D
+            instruction = SUB(op: self.D)
+            instructionLength = 1
+        case 0x93:
+            // SUB E
+            instruction = SUB(op: self.E)
+            instructionLength = 1
+        case 0x94:
+            // SUB H
+            instruction = SUB(op: self.H)
+            instructionLength = 1
+        case 0x95:
+            // SUB L
+            instruction = SUB(op: self.L)
+            instructionLength = 1
+        case 0x96:
+            // SUB (HL)
+            instruction = SUB(op: self.HL.asPointerOn(self.bus))
+            instructionLength = 1
+        case 0x97:
+            // SUB A
+            instruction = SUB(op: self.A)
+            instructionLength = 1
             
         case 0xA0:
             // AND B
@@ -1033,6 +1076,72 @@ extension Intel8080Like {
             // bit instructions
             let secondByte = bus.read(PC.read()+1)
             switch secondByte {
+
+            case 0x10:
+                // RL B
+                instruction = RL(op: self.B)
+                instructionLength = 2
+            case 0x11:
+                // RL C
+                instruction = RL(op: self.C)
+                instructionLength = 2
+            case 0x12:
+                // RL D
+                instruction = RL(op: self.D)
+                instructionLength = 2
+            case 0x13:
+                // RL E
+                instruction = RL(op: self.E)
+                instructionLength = 2
+            case 0x14:
+                // RL H
+                instruction = RL(op: self.H)
+                instructionLength = 2
+            case 0x15:
+                // RL L
+                instruction = RL(op: self.L)
+                instructionLength = 2
+            case 0x16:
+                // RL (HL)
+                instruction = RL(op: self.HL.asPointerOn(self.bus))
+                instructionLength = 2
+            case 0x17:
+                // RL A
+                instruction = RL(op: self.A)
+                instructionLength = 2
+                
+            case 0x18:
+                // RR B
+                instruction = RR(op: self.B)
+                instructionLength = 2
+            case 0x19:
+                // RR C
+                instruction = RR(op: self.C)
+                instructionLength = 2
+            case 0x1A:
+                // RR D
+                instruction = RR(op: self.D)
+                instructionLength = 2
+            case 0x1B:
+                // RR E
+                instruction = RR(op: self.E)
+                instructionLength = 2
+            case 0x1C:
+                // RR H
+                instruction = RR(op: self.H)
+                instructionLength = 2
+            case 0x1D:
+                // RR L
+                instruction = RR(op: self.L)
+                instructionLength = 2
+            case 0x1E:
+                // RR (HL)
+                instruction = RR(op: self.HL.asPointerOn(self.bus))
+                instructionLength = 2
+            case 0x1F:
+                // RR A
+                instruction = RR(op: self.A)
+                instructionLength = 2
 
             case 0x20:
                 // SLA B
@@ -1779,7 +1888,10 @@ extension Intel8080Like {
                 instruction = RES(op: self.A, bit: 7)
                 instructionLength = 2
                 
-                
+            case 0xC6:
+                // SET 0, (HL)
+                instruction = SET(op: self.HL.asPointerOn(self.bus), bit: 0)
+                instructionLength = 2
                 
             case 0xFE:
                 // SET 7, (HL)

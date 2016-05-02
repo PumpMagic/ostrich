@@ -11,6 +11,7 @@
 		580FCC741CA8BCAE00506FF8 /* GameboyAPU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580FCC731CA8BCAE00506FF8 /* GameboyAPU.swift */; };
 		580FCC911CA8C16100506FF8 /* GBSPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580FCC901CA8C16100506FF8 /* GBSPlayer.swift */; };
 		581222A51CA116EA0033B2B7 /* Pulse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581222A41CA116EA0033B2B7 /* Pulse.swift */; };
+		58379F341CD731DD0088BB02 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58379F331CD731DD0088BB02 /* Channel.swift */; };
 		5893ED121C9FAA66002AA01C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5893ED111C9FAA66002AA01C /* AppDelegate.swift */; };
 		5893ED141C9FAA66002AA01C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5893ED131C9FAA66002AA01C /* ViewController.swift */; };
 		5893ED161C9FAA66002AA01C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5893ED151C9FAA66002AA01C /* Assets.xcassets */; };
@@ -38,6 +39,7 @@
 		580FCC731CA8BCAE00506FF8 /* GameboyAPU.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameboyAPU.swift; sourceTree = "<group>"; };
 		580FCC901CA8C16100506FF8 /* GBSPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GBSPlayer.swift; sourceTree = "<group>"; };
 		581222A41CA116EA0033B2B7 /* Pulse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pulse.swift; sourceTree = "<group>"; };
+		58379F331CD731DD0088BB02 /* Channel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
 		5893ED0E1C9FAA66002AA01C /* audiotest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = audiotest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5893ED111C9FAA66002AA01C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5893ED131C9FAA66002AA01C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 		587D12951CAA41C20083E14C /* Channels */ = {
 			isa = PBXGroup;
 			children = (
+				58379F331CD731DD0088BB02 /* Channel.swift */,
 				581222A41CA116EA0033B2B7 /* Pulse.swift */,
 			);
 			name = Channels;
@@ -187,6 +190,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58379F341CD731DD0088BB02 /* Channel.swift in Sources */,
 				5893ED141C9FAA66002AA01C /* ViewController.swift in Sources */,
 				580FCC741CA8BCAE00506FF8 /* GameboyAPU.swift in Sources */,
 				581222A51CA116EA0033B2B7 /* Pulse.swift in Sources */,

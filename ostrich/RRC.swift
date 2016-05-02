@@ -116,7 +116,66 @@ struct RRCA: Z80Instruction, LR35902Instruction {
     }
 }
 
-/// Right rotate A through carry (9-bit rotate)
+/// Right rotate through carry (9-bit rotate)
+struct RR<T: protocol<Writeable, Readable, OperandType> where T.ReadType == T.WriteType, T.ReadType == UInt8>: Z80Instruction, LR35902Instruction {
+    let op: T
+    
+    let cycleCount = 0
+    
+    
+    private func runCommon(cpu: Intel8080Like) -> (UInt8, UInt8) {
+        let oldValue = op.read()
+        var newValue = logicalShiftRight(oldValue)
+        if cpu.CF.read() {
+            newValue = setBit(newValue, bit: 7)
+        }
+        
+        op.write(newValue)
+        
+        return (oldValue, newValue)
+    }
+    
+    func runOn(cpu: Z80) {
+        let (oldValue, newValue) = runCommon(cpu)
+        
+        modifyFlags(cpu, oldValue: oldValue, newValue: newValue)
+    }
+    
+    func runOn(cpu: LR35902) {
+        let (oldValue, newValue) = runCommon(cpu)
+        
+        modifyFlags(cpu, oldValue: oldValue, newValue: newValue)
+    }
+    
+    
+    private func modifyCommonFlags(cpu: Intel8080Like, oldValue: UInt8, newValue: UInt8) {
+        // Z is set if result is 0; otherwise, it is reset.
+        // H is reset.
+        // N is reset.
+        // C is data from bit 0 of source register.
+        
+        cpu.ZF.write(newValue == 0x00)
+        cpu.HF.write(false)
+        cpu.NF.write(false)
+        cpu.CF.write(bitIsHigh(oldValue, bit: 0))
+    }
+    
+    private func modifyFlags(cpu: Z80, oldValue: UInt8, newValue: UInt8) {
+        modifyCommonFlags(cpu, oldValue: oldValue, newValue: newValue)
+        
+        // S is set if result is negative; otherwise, it is reset.
+        // P/V is set if parity even; otherwise, it is reset.
+        
+        cpu.SF.write(numberIsNegative(newValue))
+        cpu.PVF.write(parity(newValue))
+    }
+    
+    private func modifyFlags(cpu: LR35902, oldValue: UInt8, newValue: UInt8) {
+        modifyCommonFlags(cpu, oldValue: oldValue, newValue: newValue)
+    }
+}
+
+/// Special instruction for right rotate through carry (9-bit rotate) of A
 struct RRA: Z80Instruction, LR35902Instruction {
     let cycleCount = 0
     

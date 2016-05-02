@@ -26,12 +26,10 @@ NR24 FF19 TL-- -FFF Trigger, Length enable, Frequency MSB
 */
 
 /** Representation of a Game Boy pulse wave channel */
-class Pulse {
+class Pulse: HasLengthCounter, HasVolumeEnvelope {
     
     static let MIN_DUTY: UInt8 = 0
     static let MAX_DUTY: UInt8 = 3
-    static let MIN_LENGTH_COUNTER: UInt8 = 0
-    static let MAX_LENGTH_COUNTER: UInt8 = 63
     static let MIN_LENGTH_ENABLE: UInt8 = 0
     static let MAX_LENGTH_ENABLE: UInt8 = 1
     static let MIN_VOLUME: UInt8 = 0
@@ -63,45 +61,27 @@ class Pulse {
         If length transitions to 0, the channel gets disabled (by clearing an internal enabled flag) */
     
     /** lengthCounterLoad is a six-bit value that, when written to, sets the internal length counter */
-    var lengthCounterLoad: UInt8 = Pulse.MIN_LENGTH_COUNTER {
+    var lengthCounterLoad: UInt8 = 0 {
         didSet {
-            if lengthCounterLoad < Pulse.MIN_LENGTH_COUNTER || lengthCounterLoad > Pulse.MAX_LENGTH_COUNTER {
-                print("FATAL: invalid length loaded: \(lengthCounterLoad)")
+            self.lengthCounter.load(lengthCounterLoad)
+        }
+    }
+    /** lengthCounter is an internal six-bit counter that, when fired, disables the channel */
+    private var lengthCounter: Counter<UInt8> = Counter(value: 0, maxValue: 63, onFire: nil)
+    
+    private func lengthCounterFired() {
+        self.enabled = false
+    }
+    
+    /** lengthEnable is a one-bit value representing whether or not the length counter will actually decrement when clocked */
+    var lengthEnable: UInt8 = 0 {
+        didSet {
+            if lengthEnable < Pulse.MIN_LENGTH_ENABLE || lengthEnable > Pulse.MIN_LENGTH_ENABLE {
+                print("FATAL: invalid length enable loaded: \(lengthEnable)")
                 exit(1)
             }
             
-            self.lengthCounter = lengthCounterLoad
-        }
-    }
-    /** lengthCounter is an internal six-bit vaule representing the time, in 1/256ths of a second, after which the
-     channel should be disabled */
-    internal var lengthCounter: UInt8 = 0 {
-        didSet {
-            if lengthCounter == Pulse.MIN_LENGTH_COUNTER {
-                self.enabled = false
-            }
-        }
-    }
-    
-    /** lengthEnableLoad is a one-bit value that, when written to, sets the internal length enable */
-    var lengthEnableLoad: UInt8 = 0 {
-        didSet {
-            if lengthEnableLoad < Pulse.MIN_LENGTH_ENABLE || lengthEnableLoad > Pulse.MIN_LENGTH_ENABLE {
-                print("FATAL: invalid length enable loaded: \(lengthEnableLoad)")
-                exit(1)
-            }
-            
-            self.lengthEnable = lengthEnableLoad
-        }
-    }
-    /** Length Enable is a one-bit value representing whether or not the Length machinery should run */
-    internal var lengthEnable: UInt8 = 0
-    
-    func lengthTimerFired() {
-        if lengthEnable == 1 {
-            if lengthCounter > 0 {
-                lengthCounter -= 1
-            }
+            self.lengthCounter.enabled = lengthEnable != 0
         }
     }
     
@@ -109,19 +89,17 @@ class Pulse {
     
     /* VOLUME STUFF */
     
-    /** volumeLoad is a 4-bit value that sets the initial volume of the channel */
-    var volumeLoad: UInt8 = Pulse.MIN_VOLUME {
+    /** startingVolume is a 4-bit value that sets the initial volume of the channel */
+    var startingVolume: UInt8 = Pulse.MIN_VOLUME {
         didSet {
-            if volumeLoad < Pulse.MIN_VOLUME || volumeLoad > Pulse.MAX_VOLUME {
-                print("FATAL: invalid volume assigned: \(volumeLoad)")
+            if startingVolume < Pulse.MIN_VOLUME || startingVolume > Pulse.MAX_VOLUME {
+                print("FATAL: invalid starting volume assigned: \(startingVolume)")
                 exit(1)
             }
-            
-            self.volume = volumeLoad
         }
     }
     /** volume is an internal 4-bit value that controls the output volume of the channel */
-    internal var volume: UInt8 = Pulse.MIN_VOLUME {
+    private var volume: UInt8 = Pulse.MIN_VOLUME {
         didSet {
             updateImplVolume()
         }
@@ -132,9 +110,10 @@ class Pulse {
     
     /** Envelope period specifies how many times the envelope clock needs to fire before the envelope triggers */
     var envelopePeriod: UInt8 = 0
-    internal var envelopeCounter: UInt8 = 0
     
-    func envelopeTimerFired() {
+    private var envelopeCounter: Counter<UInt8> = Counter(value: 0, maxValue: 7, onFire: nil)
+    
+    private func envelopeCounterFired() {
         switch self.envelopeAddMode {
         case 0:
             if self.volume > Pulse.MIN_VOLUME {
@@ -170,15 +149,15 @@ class Pulse {
     
     /* FREQUENCY SWEEP STUFF */
     /** Pulse 1 supports frequency sweeping */
-    internal let hasFrequencySweep: Bool
+    private let hasFrequencySweep: Bool
     
     var frequencySweepPeriod: UInt8 = 0
     var frequencySweepNegate: UInt8 = 0
     var frequencySweepShift: UInt8 = 0
-    internal var frequencySweepCounter: UInt8 = 0
-    internal var frequencySweepEnabled: Bool = false
-    internal var frequencyShadow: UInt16 = 1192
-    internal var nextFrequency: UInt16 {
+    private var frequencySweepCounter: UInt8 = 0 //@todo make this a Counter
+    private var frequencySweepEnabled: Bool = false
+    private var frequencyShadow: UInt16 = 1192
+    private var nextFrequency: UInt16 {
         get {
             let shifted = self.frequencyShadow >> UInt16(self.frequencySweepShift)
             var newFreq: UInt16
@@ -195,7 +174,7 @@ class Pulse {
             return newFreq
         }
     }
-    internal func frequencyOverflowCheck() {
+    private func frequencyOverflowCheck() {
         let newFrequency = self.nextFrequency
         if newFrequency > Pulse.MAX_FREQUENCY {
             self.enabled = false
@@ -244,23 +223,21 @@ class Pulse {
         }
     }
     
-    internal func triggered() {
+    private func triggered() {
         // 1. Raises the internal enable flag
         self.enabled = true
         
         // 2. If length counter is currently zero, set it to max
-        if self.lengthCounter == Pulse.MIN_LENGTH_COUNTER {
-            self.lengthCounter = Pulse.MAX_LENGTH_COUNTER
-        }
+        self.lengthCounter.resetIfFired()
         
         // 3. Reloads the frequency timer with period
         //@todo we would need model frequency more accurately than AudioKit allows to do anything here
         
         // 4. Reloads the volume envelope timer with period
-        self.envelopeCounter = self.envelopePeriod
+        self.envelopeCounter.load(self.envelopePeriod)
         
         // 5. Reloads the channel volume
-        self.volume = self.volumeLoad
+        self.volume = self.startingVolume
         
         // 6. Raises noise channel's LFSR bits
         // 7. Resets wave channel's table position
@@ -288,7 +265,7 @@ class Pulse {
     
     
     /** INTERNAL REGISTERS */
-    internal var enabled: Bool = true {
+    private var enabled: Bool = true {
         didSet {
             if !enabled {
                 self.oscillator.amplitude = 0.0
@@ -299,10 +276,19 @@ class Pulse {
     }
     
     
+    func clock256() {
+        self.lengthCounter.clock()
+    }
+    
+    func clock64() {
+        self.envelopeCounter.clock()
+    }
+    
+    
     
     /* INTERNAL IMPLEMENTATION (AUDIOKIT) STUFF */
-    internal var oscillator: AKMorphingOscillator
-    internal var mixer: AKMixer
+    private var oscillator: AKMorphingOscillator
+    private var mixer: AKMixer
     
     /** Update the volume of this channel to whatever audio library we're using */
     func updateImplVolume() {
@@ -341,6 +327,11 @@ class Pulse {
             self.mixer.connect(self.oscillator)
         }
         self.oscillator.start()
+    }
+    //@todo this is a hack. how can we pass in our blocks to the counter constructors in our init?
+    func initializeCounterCallbacks() {
+        self.lengthCounter.onFire = self.lengthCounterFired
+        self.envelopeCounter.onFire = self.envelopeCounterFired
     }
     
     convenience init(mixer: AKMixer) {
