@@ -12,6 +12,7 @@
 		581233391CB36E7400A2D1A5 /* Peripherals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581233381CB36E7400A2D1A5 /* Peripherals.swift */; };
 		5812333B1CB36EC300A2D1A5 /* DataBus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5812333A1CB36EC300A2D1A5 /* DataBus.swift */; };
 		5812333D1CB383C000A2D1A5 /* RAM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5812333C1CB383C000A2D1A5 /* RAM.swift */; };
+		58379F361CD887E80088BB02 /* SCF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58379F351CD887E80088BB02 /* SCF.swift */; };
 		5854A08F1CAE29EE0044A766 /* RRC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5854A08E1CAE29EE0044A766 /* RRC.swift */; };
 		5854A0911CAE34610044A766 /* RLC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5854A0901CAE34610044A766 /* RLC.swift */; };
 		586D39411CBF6DA100087457 /* CP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586D39401CBF6DA100087457 /* CP.swift */; };
@@ -60,6 +61,7 @@
 		581233381CB36E7400A2D1A5 /* Peripherals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Peripherals.swift; sourceTree = "<group>"; };
 		5812333A1CB36EC300A2D1A5 /* DataBus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataBus.swift; sourceTree = "<group>"; };
 		5812333C1CB383C000A2D1A5 /* RAM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RAM.swift; sourceTree = "<group>"; };
+		58379F351CD887E80088BB02 /* SCF.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCF.swift; sourceTree = "<group>"; };
 		5854A08E1CAE29EE0044A766 /* RRC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RRC.swift; sourceTree = "<group>"; };
 		5854A0901CAE34610044A766 /* RLC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLC.swift; sourceTree = "<group>"; };
 		586D39401CBF6DA100087457 /* CP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CP.swift; sourceTree = "<group>"; };
@@ -207,6 +209,7 @@
 				5854A0901CAE34610044A766 /* RLC.swift */,
 				5854A08E1CAE29EE0044A766 /* RRC.swift */,
 				58BB13951CACD95D00D7FD06 /* RST.swift */,
+				58379F351CD887E80088BB02 /* SCF.swift */,
 				586D39481CC0DA8600087457 /* SET.swift */,
 				58E31CD41CC8CC99003D5C20 /* SLA.swift */,
 				FC04A8861CC9924400EAB1DE /* SRL.swift */,
@@ -318,6 +321,7 @@
 				58BB13941CACD63600D7FD06 /* CCF.swift in Sources */,
 				580216CC1CAD0B2B00913FCE /* ADD.swift in Sources */,
 				5871BCDC1CAB97C3002A799C /* Z80.swift in Sources */,
+				58379F361CD887E80088BB02 /* SCF.swift in Sources */,
 				FCF9A3AB1CAB8AA900EA79F0 /* JP.swift in Sources */,
 				586D39451CBF792500087457 /* OR.swift in Sources */,
 				FCF9A3B41CAB8AA900EA79F0 /* EX.swift in Sources */,

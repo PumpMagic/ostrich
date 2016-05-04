@@ -347,6 +347,11 @@ extension Intel8080Like {
             instruction = LD(dest: self.HL.asPointerOn(bus), src: Immediate8(val: val))
             instructionLength = 2
             
+        case 0x37:
+            // SCF
+            instruction = SCF()
+            instructionLength = 1
+            
         case 0x38:
             // JR C n
             let displacement = Int8(bitPattern: bus.read(PC.read()+1))
@@ -731,6 +736,39 @@ extension Intel8080Like {
             // ADD A, A
             instruction = ADD8(op1: self.A, op2: self.A)
             instructionLength = 1
+            
+        case 0x88:
+            // ADC A, B
+            instruction = ADC8(op1: self.A, op2: self.B)
+            instructionLength = 1
+        case 0x89:
+            // ADC A, C
+            instruction = ADC8(op1: self.A, op2: self.C)
+            instructionLength = 1
+        case 0x8A:
+            // ADC A, D
+            instruction = ADC8(op1: self.A, op2: self.D)
+            instructionLength = 1
+        case 0x8B:
+            // ADC A, E
+            instruction = ADC8(op1: self.A, op2: self.E)
+            instructionLength = 1
+        case 0x8C:
+            // ADC A, H
+            instruction = ADC8(op1: self.A, op2: self.H)
+            instructionLength = 1
+        case 0x8D:
+            // ADC A, L
+            instruction = ADC8(op1: self.A, op2: self.L)
+            instructionLength = 1
+        case 0x8E:
+            // ADC A, (HL)
+            instruction = ADC8(op1: self.A, op2: self.HL.asPointerOn(self.bus))
+            instructionLength = 1
+        case 0x8F:
+            // ADC A, A
+            instruction = ADC8(op1: self.A, op2: self.A)
+            instructionLength = 1
 
         case 0x90:
             // SUB B
@@ -764,6 +802,41 @@ extension Intel8080Like {
             // SUB A
             instruction = SUB(op: self.A)
             instructionLength = 1
+            
+        case 0x98:
+            // SBC B
+            instruction = SBC(op: self.B)
+            instructionLength = 1
+        case 0x99:
+            // SBC C
+            instruction = SBC(op: self.C)
+            instructionLength = 1
+        case 0x9A:
+            // SBC D
+            instruction = SBC(op: self.D)
+            instructionLength = 1
+        case 0x9B:
+            // SBC E
+            instruction = SBC(op: self.E)
+            instructionLength = 1
+        case 0x9C:
+            // SBC H
+            instruction = SBC(op: self.H)
+            instructionLength = 1
+        case 0x9D:
+            // SBC L
+            instruction = SBC(op: self.L)
+            instructionLength = 1
+        case 0x9E:
+            // SBC (HL)
+            instruction = SBC(op: self.HL.asPointerOn(self.bus))
+            instructionLength = 1
+        case 0x9F:
+            // SBC A
+            instruction = SBC(op: self.A)
+            instructionLength = 1
+            
+            
             
         case 0xA0:
             // AND B

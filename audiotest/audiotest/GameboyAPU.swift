@@ -48,8 +48,6 @@ class GameBoyAPU: Memory, HandlesWrites {
     init(mixer: AKMixer) {
         self.pulse1 = Pulse(mixer: mixer, hasFrequencySweep: true, connected: true)
         self.pulse2 = Pulse(mixer: mixer, hasFrequencySweep: false, connected: true)
-        self.pulse1.initializeCounterCallbacks()
-        self.pulse2.initializeCounterCallbacks()
         
         //@todo we can't use LAST or FIRST here for calculations. what can we do instead?
         self.ram = RAM(size: 0x30, fillByte: 0x00, firstAddress: 0xFF10)

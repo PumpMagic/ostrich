@@ -16,7 +16,7 @@ public class ROM: Memory {
     public let firstAddress: Address
     
     public var lastAddress: Address {
-        return self.firstAddress + UInt16(self.data.length)
+        return self.firstAddress + UInt16(self.data.length - 1 - 1)
     }
     public var addressRange: Range<Address> {
         return self.firstAddress ... self.lastAddress
@@ -28,6 +28,12 @@ public class ROM: Memory {
     public init(data: NSData, firstAddress: Address) {
         self.data = data
         self.firstAddress = firstAddress
+        
+        let overflowedMaxAddress: UInt32 = UInt32(self.firstAddress) + UInt32(self.data.length) - 1
+        if overflowedMaxAddress > 0xFFFF {
+            print("FATAL: ROM too large! Overflowed max address is \(overflowedMaxAddress)")
+            exit(1)
+        }
     }
     
     public convenience init(data: NSData) {

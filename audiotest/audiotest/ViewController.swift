@@ -11,7 +11,7 @@ import AudioKit
 import ostrichframework
 
 
-let GBS_PATH: String = "/Users/ryanconway/Dropbox/emu/castlevania.gbs"
+let GBS_PATH: String = "/Users/ryanconway/Dropbox/emu/doubledragon.gbs"
 
 
 class ViewController: NSViewController {
@@ -101,7 +101,7 @@ class ApuTest {
          in the accumulator is zero-based (the first song is 0). The init code must end
          with a RET instruction. */
         print("Calling and running INIT...")
-        cpu.setA(header.firstSong+3)
+        cpu.setA(header.firstSong+7)
         cpu.call(header.initAddress)
         
         /* PLAY - Begins after INIT process is complete. The play address is constantly

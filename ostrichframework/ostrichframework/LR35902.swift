@@ -176,6 +176,15 @@ public class LR35902: Intel8080Like {
             let firstByte = bus.read(PC.read())
             
             switch firstByte {
+                /*
+            case 0x08:
+                // LD (nn), SP
+                let val = bus.read16(PC.read()+1)
+                //@todo need pointers that dereference to 16-bit values
+                instruction = LD(dest: Pointer(source: Immediate16(val: val), bus: bus), src: self.SP)
+                instructionLength = 3
+                */
+                
             case 0x22:
                 // LD (HL+), A
                 instruction = LDI_LR(pointable: self.HL, other: self.A, direction: .IntoPointer)
@@ -288,11 +297,11 @@ public class LR35902: Intel8080Like {
                     
                 default:
                     let combinedOpcode: UInt16 = make16(high: firstByte, low: secondByte)
-                    print("Unrecognized opcode \(combinedOpcode.hexString) at PC \(PC.read())")
+                    print("Unrecognized opcode \(combinedOpcode.hexString) at PC \(PC.read().hexString)")
                 }
                 
             default:
-                print("Unrecognized opcode \(firstByte.hexString) at PC \(PC.read())")
+                print("Unrecognized opcode \(firstByte.hexString) at PC \(PC.read().hexString)")
             }
             
             if let instruction = instruction {

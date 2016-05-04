@@ -151,33 +151,38 @@ func addHalfCarryProne(op1: UInt8, _ op2: UInt8) -> Bool {
 }
 
 /// 8080 half-carry for 16-bit numbers is on bit 11, not bit 7
-// This behavior is consistent with the BSNES core
 func addHalfCarryProne(op1: UInt16, _ op2: UInt16) -> Bool {
     return (op1 & 0x0FFF) + (op2 & 0x0FFF) >= 0x0FFF
 }
 
-// This behavior is consistent with the BSNES core
 func addHalfCarryProne(op1: UInt16, _ op2: Int8) -> Bool {
     return (op1 & 0x000F) + (UInt16(UInt8(bitPattern: op2)) & 0x000F) >= 0x000F
 }
 
-// This behavior is consistent with the BSNES core
+func addHalfCarryProne(op1: UInt8, _ op2: UInt8, _ op3: UInt8) -> Bool {
+    return (op1 & 0x0F) + (op2 & 0x0F) + (op3 & 0x0F) >= 0x10
+}
+
 func addCarryProne(op1: UInt8, _ op2: UInt8) -> Bool {
     let overflowedResult: UInt16 = UInt16(op1) + UInt16(op2)
     
     return overflowedResult > 0xFF
 }
 
-// This behavior is consistent with the BSNES core
 func addCarryProne(op1: UInt16, _ op2: UInt16) -> Bool {
     let overflowedResult: UInt32 = UInt32(op1) + UInt32(op2)
     
     return overflowedResult > 0xFFFF
 }
 
-// This behavior is consistent with the BSNES core
 func addCarryProne(op1: UInt16, _ op2: Int8) -> Bool {
     return addCarryProne(UInt8(truncatingBitPattern: op1), UInt8(bitPattern: op2))
+}
+
+func addCarryProne(op1: UInt8, _ op2: UInt8, _ op3: UInt8) -> Bool {
+    let overflowedResult: UInt16 = UInt16(op1) + UInt16(op2) + UInt16(op3)
+    
+    return overflowedResult > 0xFF
 }
 
 // SUB STUFF
@@ -194,15 +199,20 @@ func subOverflowOccurred(op1: UInt8, op2: UInt8, result: UInt8) -> Bool {
     return false
 }
 
-// This behavior is consistent with the BSNES core
 func subHalfBorrowProne(op1: UInt8, _ op2: UInt8) -> Bool {
     return sub(op1 & 0x0F, op2 & 0x0F) > 0x0F
 }
 
-//@todo verify this behavior is correct
-//took this logic from https://gist.github.com/Palmr/4526839
+func subHalfBorrowProne(op1: UInt8, _ op2: UInt8, _ op3: UInt8) -> Bool {
+    return sub(sub(op1 & 0x0F, op2 & 0x0F), op3 & 0x0F) > 0x0F
+}
+
 func subBorrowProne(op1: UInt8, _ op2: UInt8) -> Bool {
     return sub(UInt16(op1), UInt16(op2)) > 0xFF
+}
+
+func subBorrowProne(op1: UInt8, _ op2: UInt8, _ op3: UInt8) -> Bool {
+    return sub(sub(UInt16(op1), UInt16(op2)), UInt16(op3)) > 0xFF
 }
 
 
