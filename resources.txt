@@ -1,0 +1,3 @@
+http://gameboy.mongenel.com/dmg/asmmemmap.html
+http://www.pastraiser.com/cpu/gameboy/gameboy_opcodes.html
+http://clrhome.org/table
