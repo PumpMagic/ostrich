@@ -2,12 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:audiotest/audiotest.xcodeproj">
+      location = "group:gbsplayer/gbsplayer.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:ostrich/ostrich.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:ostrichframework/ostrichframework.xcodeproj">
+      location = "container:ostrich.xcodeproj">
    </FileRef>
 </Workspace>
