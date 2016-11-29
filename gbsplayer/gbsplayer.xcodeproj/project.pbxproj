@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		EB089C151D68340C00CED5C8 /* AudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB089C141D68340C00CED5C8 /* AudioKit.framework */; };
-		EB089C161D68341200CED5C8 /* AudioKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EB089C141D68340C00CED5C8 /* AudioKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		EBBC3A131D6580FE00AC529E /* GBSPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC3A121D6580FE00AC529E /* GBSPlayer.swift */; };
 		EBD958DB1D65802400963E2F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD958DA1D65802400963E2F /* AppDelegate.swift */; };
 		EBD958DD1D65802400963E2F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD958DC1D65802400963E2F /* ViewController.swift */; };
@@ -16,6 +14,8 @@
 		EBD958E21D65802400963E2F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBD958E01D65802400963E2F /* Main.storyboard */; };
 		EBD958ED1D65802500963E2F /* gbsplayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD958EC1D65802500963E2F /* gbsplayerTests.swift */; };
 		EBD958F81D65802500963E2F /* gbsplayerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD958F71D65802500963E2F /* gbsplayerUITests.swift */; };
+		EBDE43751DED814B0019ABF3 /* AudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDE43741DED814B0019ABF3 /* AudioKit.framework */; };
+		EBDE43761DED849F0019ABF3 /* AudioKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EBDE43741DED814B0019ABF3 /* AudioKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,7 +42,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				EB089C161D68341200CED5C8 /* AudioKit.framework in Embed Frameworks */,
+				EBDE43761DED849F0019ABF3 /* AudioKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -50,7 +50,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		EB089C141D68340C00CED5C8 /* AudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AudioKit.framework; sourceTree = "<group>"; };
 		EBB7DA9F1D67C18800C18160 /* ostrich.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ostrich.framework; path = "../../../Library/Developer/Xcode/DerivedData/ostrich-foboudusbfzudvglxzssqmwvcqrd/Build/Products/Debug/ostrich.framework"; sourceTree = "<group>"; };
 		EBBC3A121D6580FE00AC529E /* GBSPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GBSPlayer.swift; sourceTree = "<group>"; };
 		EBD958D71D65802400963E2F /* gbsplayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gbsplayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,6 +64,7 @@
 		EBD958F31D65802500963E2F /* gbsplayerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = gbsplayerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EBD958F71D65802500963E2F /* gbsplayerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gbsplayerUITests.swift; sourceTree = "<group>"; };
 		EBD958F91D65802500963E2F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EBDE43741DED814B0019ABF3 /* AudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AudioKit.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,7 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EB089C151D68340C00CED5C8 /* AudioKit.framework in Frameworks */,
+				EBDE43751DED814B0019ABF3 /* AudioKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,7 +96,7 @@
 		EBD958CE1D65802400963E2F = {
 			isa = PBXGroup;
 			children = (
-				EB089C141D68340C00CED5C8 /* AudioKit.framework */,
+				EBDE43741DED814B0019ABF3 /* AudioKit.framework */,
 				EBB7DA9F1D67C18800C18160 /* ostrich.framework */,
 				EBD958D91D65802400963E2F /* gbsplayer */,
 				EBD958EB1D65802500963E2F /* gbsplayerTests */,

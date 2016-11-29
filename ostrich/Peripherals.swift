@@ -15,7 +15,7 @@ public typealias Address = UInt16
 public protocol BusListener {
     var firstAddress: Address { get }
     var lastAddress: Address { get }
-    var addressRange: CountableRange<Address> { get }
+    var addressRange: CountableClosedRange<Address> { get }
 }
 public protocol HandlesReads {
     func read(_ addr: Address) -> UInt8

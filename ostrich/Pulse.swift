@@ -341,11 +341,14 @@ class Pulse: HasLengthCounter, HasVolumeEnvelope {
     
     init(mixer: AKMixer, hasFrequencySweep: Bool, connected: Bool) {
         //@todo there must be a better way to do this
-        self.akTables = [AKTable(.Square, size: 8), AKTable(.Square, size: 8),
-                         AKTable(.Square, size: 8), AKTable(.Square, size: 8)]
+        self.akTables = [AKTable(.square, count: 8), AKTable(.square, count: 8),
+                         AKTable(.square, count: 8), AKTable(.square, count: 8)]
         var i = 0
         for pattern in Pulse.wavetablesAsFloats {
-            akTables[i].values = pattern
+            //@todo hardcoded value
+            for j in 0...7 {
+                akTables[i][j] = pattern[j]
+            }
             i = i+1
         }
         

@@ -220,7 +220,7 @@ func subBorrowProne(_ op1: UInt8, _ op2: UInt8, _ op3: UInt8) -> Bool {
 func parity(_ num: UInt8) -> Bool {
     var highBits = 0
     
-    for i in 0...7 as CountableRange<UInt8> {
+    for i in UInt8(0) ... UInt8(7) {
         if bitIsHigh(num, bit: i) {
             highBits = highBits + 1
         }

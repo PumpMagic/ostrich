@@ -7,9 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		EB089C121D68340100CED5C8 /* AudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB089C111D68340100CED5C8 /* AudioKit.framework */; };
-		EB089C131D68340600CED5C8 /* AudioKit.framework in Resources */ = {isa = PBXBuildFile; fileRef = EB089C111D68340100CED5C8 /* AudioKit.framework */; };
 		EBB7DA9C1D67B87B00C18160 /* Counter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB7DA9B1D67B87B00C18160 /* Counter.swift */; };
+		EBD31DD81DED76BF00FFD5DE /* AudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBD31DD71DED76BF00FFD5DE /* AudioKit.framework */; };
 		EBD503441D65731800B60856 /* ostrich.h in Headers */ = {isa = PBXBuildFile; fileRef = EBD503431D65731800B60856 /* ostrich.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EBD5034B1D65731800B60856 /* ostrich.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBD503401D65731800B60856 /* ostrich.framework */; };
 		EBD503501D65731800B60856 /* ostrichTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD5034F1D65731800B60856 /* ostrichTests.swift */; };
@@ -75,8 +74,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		EB089C111D68340100CED5C8 /* AudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AudioKit.framework; sourceTree = "<group>"; };
 		EBB7DA9B1D67B87B00C18160 /* Counter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Counter.swift; sourceTree = "<group>"; };
+		EBD31DD71DED76BF00FFD5DE /* AudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AudioKit.framework; sourceTree = "<group>"; };
 		EBD503401D65731800B60856 /* ostrich.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ostrich.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EBD503431D65731800B60856 /* ostrich.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ostrich.h; sourceTree = "<group>"; };
 		EBD503451D65731800B60856 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -139,7 +138,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EB089C121D68340100CED5C8 /* AudioKit.framework in Frameworks */,
+				EBD31DD81DED76BF00FFD5DE /* AudioKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -157,7 +156,7 @@
 		EBD503361D65731800B60856 = {
 			isa = PBXGroup;
 			children = (
-				EB089C111D68340100CED5C8 /* AudioKit.framework */,
+				EBD31DD71DED76BF00FFD5DE /* AudioKit.framework */,
 				EBD503421D65731800B60856 /* ostrich */,
 				EBD5034E1D65731800B60856 /* ostrichTests */,
 				EBD503411D65731800B60856 /* Products */,
@@ -382,7 +381,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EB089C131D68340600CED5C8 /* AudioKit.framework in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

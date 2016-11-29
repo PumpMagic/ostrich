@@ -19,8 +19,8 @@ protocol DelegatesWrites: HandlesWrites {
 open class DataBus: DelegatesReads, DelegatesWrites {
     //@todo consider using Intervals instead of Ranges:
     //http://oleb.net/blog/2015/09/swift-ranges-and-intervals/
-    var readables: [(HandlesReads, CountableRange<Address>)]
-    var writeables: [(HandlesWrites, CountableRange<Address>)]
+    var readables: [(HandlesReads, CountableClosedRange<Address>)]
+    var writeables: [(HandlesWrites, CountableClosedRange<Address>)]
     
     enum TransactionDirection {
         case read
@@ -44,8 +44,8 @@ open class DataBus: DelegatesReads, DelegatesWrites {
     var transactions: [Transaction] = []
     
     public init() {
-        self.readables = [(HandlesReads, CountableRange<Address>)]()
-        self.writeables = [(HandlesWrites, CountableRange<Address>)]()
+        self.readables = [(HandlesReads, CountableClosedRange<Address>)]()
+        self.writeables = [(HandlesWrites, CountableClosedRange<Address>)]()
     }
     
     open func connectReadable(_ readable: BusListener & HandlesReads) {
@@ -102,9 +102,9 @@ open class DataBus: DelegatesReads, DelegatesWrites {
         
         // Hack: memory bank controller is unimplemented for now; ignore communication with it
         //@todo implement the memory bank controller
-        if 0x0000 ... 0x7FFF as CountableRange<Address> ~= addr {
+        if Address(0x0000) ... Address(0x7FFF) ~= addr {
 //            print("WARNING! Ignoring memory bank controller communication in the form of writing \(val.hexString) to \(addr.hexString)")
-            if 0x0000 ... 0x1FFF as CountableRange<Address> ~= addr {
+            if Address(0x0000) ... Address(0x1FFF) ~= addr {
 //                print("(external RAM control)")
             }
             return

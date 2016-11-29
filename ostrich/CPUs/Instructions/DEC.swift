@@ -30,7 +30,7 @@ func decAndStore<T: Readable & Writeable>(_ op: T) -> (T.ReadType, T.WriteType) 
 
 
 /// Decrement an 8-bit operand
-struct DEC8<T: Writeable & Readable & OperandType>: Z80Instruction, LR35902Instruction where T.ReadType == T.WriteType, T.WriteType: Integer, T.ReadType == UInt8 {
+struct DEC8<T: Readable & Writeable & OperandType>: Z80Instruction, LR35902Instruction where T.ReadType == T.WriteType, T.WriteType == UInt8, T.ReadType == UInt8 {
     let operand: T
     
     let cycleCount = 0
@@ -78,7 +78,7 @@ struct DEC8<T: Writeable & Readable & OperandType>: Z80Instruction, LR35902Instr
 }
 
 /// Decrement a 16-bit operand
-struct DEC16<T: Writeable & Readable & OperandType>: Z80Instruction, LR35902Instruction where T.ReadType == T.WriteType, T.WriteType: Integer, T.ReadType == UInt16 {
+struct DEC16<T: Writeable & Readable & OperandType>: Z80Instruction, LR35902Instruction where T.ReadType == T.WriteType, T.ReadType == UInt16 {
     let operand: T
     
     let cycleCount = 0

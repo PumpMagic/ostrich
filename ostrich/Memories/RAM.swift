@@ -18,7 +18,7 @@ open class RAM: Memory, HandlesWrites {
     open var lastAddress: Address {
         return UInt16(UInt32(self.firstAddress) + UInt32(self.data.count) - 1)
     }
-    open var addressRange: CountableRange<Address> {
+    open var addressRange: CountableClosedRange<Address> {
         return self.firstAddress ... self.lastAddress
     }
     var addressRangeString: String {

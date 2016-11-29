@@ -155,7 +155,9 @@ func parseFile(_ path: String) -> (header: GBSHeader, codeAndData: Data)? {
     
     let header = GBSHeader(id: id, version: version, numSongs: numSongs, firstSong: firstSong, loadAddress: loadAddress, initAddress: initAddress, playAddress: playAddress, stackPointer: stackPointer, timerModulo: timerModulo, timerControl: timerControl, title: title, author: author, copyright: copyright)
     
-    let codeAndData = rawData.subdata(in: NSMakeRange(GBS_CODE_AND_DATA_OFFSET, rawData.count-GBS_CODE_AND_DATA_OFFSET))
+    //@todo learn the new non-NS Data class and get the subdata without using this unchecked-bounds Range
+    let foo = Range(uncheckedBounds: (GBS_CODE_AND_DATA_OFFSET, (rawData.count-GBS_CODE_AND_DATA_OFFSET+1)))
+    let codeAndData = rawData.subdata(in: foo)
     
     return (header, codeAndData)
 }

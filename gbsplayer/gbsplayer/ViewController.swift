@@ -8,7 +8,6 @@
 
 import Cocoa
 import AudioKit
-import UIKit
 @testable import ostrich
 
 
@@ -24,16 +23,14 @@ class ViewController: NSViewController {
         
         var lastClock256 = Date()
         var lastCPUCall = Date()
-        
-        let displayLink = CADisplayLink(target: self, selector: Selector("handleTimer"))
 
         while true {
-            if Date().timeIntervalSince(lastClock256) > 0.00391 {
+            if Date().timeIntervalSince(lastClock256) > 0.00391 /*0.007*/ {
                 apuTest.clock256()
                 lastClock256 = Date()
             }
             
-            if Date().timeIntervalSince(lastCPUCall) > /*0.01675*/0.012 {
+            if Date().timeIntervalSince(lastCPUCall) > /*0.01675*/ 0.01 {
                 apuTest.callAudioRoutine()
                 lastCPUCall = Date()
             }
@@ -151,7 +148,7 @@ class ApuTest {
             audioRoutineCallRate = 0.01675
         }
         
-//        audioRoutineCallRate *= 4
+        //audioRoutineCallRate *= 4
         
         print("Calling and running PLAY...")
         print("Audio routine call rate is \(1/audioRoutineCallRate)Hz")

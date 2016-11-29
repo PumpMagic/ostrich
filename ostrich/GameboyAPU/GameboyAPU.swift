@@ -10,15 +10,19 @@ import Foundation
 import AudioKit
 
 
-func getValueOfBits(_ num: UInt8, bits: Range<UInt8>) -> UInt8 {
+/// Get the value of a certain range of bits in a number, as though the bits were their own value
+/// whose LSB is the lowest bit in the range and represents 1
+/// For example, getValueOfBits(0b10101010, 2...4) selects bits 2-4 (010) and returns 2
+func getValueOfBits(_ num: UInt8, bits: CountableClosedRange<UInt8>) -> UInt8 {
     guard let minIndex = bits.min() else {
         exit(1)
     }
     
     var result: UInt8 = 0
     for bitIndex in bits {
+        let relativeIndex = bitIndex - minIndex
         if bitIsHigh(num, bit: bitIndex) {
-            result = result + (0x01 << (bitIndex - minIndex))
+            result = result + (0x01 << relativeIndex)
         }
     }
     
@@ -40,8 +44,8 @@ class GameBoyAPU: Memory, HandlesWrites {
     var lastAddress: Address {
         return LAST_ADDRESS
     }
-    var addressRange: CountableRange<Address> {
-        return self.firstAddress ... self.lastAddress
+    var addressRange: CountableClosedRange<Address> {
+        return Address(self.firstAddress) ... Address(self.lastAddress)
     }
     
     init(mixer: AKMixer) {

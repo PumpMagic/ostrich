@@ -65,6 +65,7 @@ struct ADD8
         modifyFlags(cpu, op1: op1v, op2: op2v, result: result)
     }
     
+    //@todo change these and all other fileprivates in this project to privates
     fileprivate func modifyCommonFlags(_ cpu: Intel8080Like, op1: T.ReadType, op2: U.ReadType, result: T.ReadType)
     {
         // Z is set if result is 0; otherwise, it is reset.
