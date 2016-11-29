@@ -12,11 +12,11 @@ import Foundation
 struct DI: Z80Instruction, LR35902Instruction {
     let cycleCount: Int = 0
     
-    func runOn(cpu: Z80) {
+    func runOn(_ cpu: Z80) {
         cpu.instructionContext.lastInstructionWasDI = true
     }
     
-    func runOn(cpu: LR35902) {
+    func runOn(_ cpu: LR35902) {
         cpu.instructionContext.lastInstructionWasDI = true
     }
 }

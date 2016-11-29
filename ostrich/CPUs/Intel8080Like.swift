@@ -15,8 +15,8 @@ struct Intel8080InstructionContext {
 }
 
 enum FlipFlop {
-    case Enabled
-    case Disabled
+    case enabled
+    case disabled
 }
 
 /// Everything in common between the Z80 and the LR35902.
@@ -51,14 +51,14 @@ protocol Intel8080Like {
     
     var bus: DataBus { get }
     
-    func push(val: UInt16)
+    func push(_ val: UInt16)
     func pop() -> UInt16
 }
 
 extension Intel8080Like {
     /// Push a two-byte value onto the stack.
     /// Adjusts the stack pointer accordingly.
-    func push(val: UInt16) {
+    func push(_ val: UInt16) {
         let oldAddr = self.SP.read()
         let newAddr = oldAddr - 2
         

@@ -69,9 +69,9 @@ class Pulse: HasLengthCounter, HasVolumeEnvelope {
         }
     }
     /** lengthCounter is an internal six-bit counter that, when fired, disables the channel */
-    private var lengthCounter: Counter<UInt8> = Counter(value: 0, maxValue: 63, onFire: nil)
+    fileprivate var lengthCounter: Counter<UInt8> = Counter(value: 0, maxValue: 63, onFire: nil)
     
-    private func lengthCounterFired() {
+    fileprivate func lengthCounterFired() {
         self.enabled = false
     }
     
@@ -103,7 +103,7 @@ class Pulse: HasLengthCounter, HasVolumeEnvelope {
     }
     /** volume is an internal 4-bit value that controls the output volume of the channel.
         It is the product of startingVolume plus any volume sweeping effects over time. */
-    private var volume: UInt8 = Pulse.MIN_VOLUME {
+    fileprivate var volume: UInt8 = Pulse.MIN_VOLUME {
         didSet {
             updateImplVolume()
         }
@@ -117,10 +117,10 @@ class Pulse: HasLengthCounter, HasVolumeEnvelope {
     
     /** envelopeCounter is an internal four-bit counter that, when fired, changes the internal channel volume
         according to envelopeAddMode */
-    private var envelopeCounter: Counter<UInt8> = Counter(value: 0, maxValue: 7, onFire: nil)
+    fileprivate var envelopeCounter: Counter<UInt8> = Counter(value: 0, maxValue: 7, onFire: nil)
     
     /** Registered as the callback of envelopeCounter */
-    private func envelopeCounterFired() {
+    fileprivate func envelopeCounterFired() {
         switch self.envelopeAddMode {
         case 0:
             if self.volume > Pulse.MIN_VOLUME {
@@ -156,15 +156,15 @@ class Pulse: HasLengthCounter, HasVolumeEnvelope {
     
     /* FREQUENCY SWEEP STUFF */
     /** Pulse 1 supports frequency sweeping */
-    private let hasFrequencySweep: Bool
+    fileprivate let hasFrequencySweep: Bool
     
     var frequencySweepPeriod: UInt8 = 0
     var frequencySweepNegate: UInt8 = 0
     var frequencySweepShift: UInt8 = 0
-    private var frequencySweepCounter: UInt8 = 0 //@todo make this a Counter
-    private var frequencySweepEnabled: Bool = false
-    private var frequencyShadow: UInt16 = 1192
-    private var nextFrequency: UInt16 {
+    fileprivate var frequencySweepCounter: UInt8 = 0 //@todo make this a Counter
+    fileprivate var frequencySweepEnabled: Bool = false
+    fileprivate var frequencyShadow: UInt16 = 1192
+    fileprivate var nextFrequency: UInt16 {
         get {
             let shifted = self.frequencyShadow >> UInt16(self.frequencySweepShift)
             var newFreq: UInt16
@@ -181,7 +181,7 @@ class Pulse: HasLengthCounter, HasVolumeEnvelope {
             return newFreq
         }
     }
-    private func frequencyOverflowCheck() {
+    fileprivate func frequencyOverflowCheck() {
         let newFrequency = self.nextFrequency
         if newFrequency > Pulse.MAX_FREQUENCY {
             self.enabled = false
@@ -230,7 +230,7 @@ class Pulse: HasLengthCounter, HasVolumeEnvelope {
         }
     }
     
-    private func triggered() {
+    fileprivate func triggered() {
         // 1. Raises the internal enable flag
         self.enabled = true
         
@@ -275,7 +275,7 @@ class Pulse: HasLengthCounter, HasVolumeEnvelope {
     
     
     /** INTERNAL REGISTERS */
-    private var enabled: Bool = true {
+    fileprivate var enabled: Bool = true {
         didSet {
             if !enabled {
                 muteImplOutput()
@@ -303,8 +303,8 @@ class Pulse: HasLengthCounter, HasVolumeEnvelope {
     
     
     /* INTERNAL IMPLEMENTATION (AUDIOKIT) STUFF */
-    private var oscillator: AKMorphingOscillator
-    private var mixer: AKMixer
+    fileprivate var oscillator: AKMorphingOscillator
+    fileprivate var mixer: AKMixer
     
     /** Update the duty cycle (bit pattern) of this channel */
     func updateImplDuty() {

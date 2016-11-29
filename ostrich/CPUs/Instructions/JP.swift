@@ -10,7 +10,7 @@ import Foundation
 
 
 /// Jump
-struct JP<T: protocol<Readable, OperandType> where T.ReadType == UInt16>: Z80Instruction, LR35902Instruction
+struct JP<T: Readable & OperandType>: Z80Instruction, LR35902Instruction where T.ReadType == UInt16
 {
     /// Condition: if present, the jump will only happen if the flag evaluates to the boolean value
     let condition: Condition?
@@ -20,7 +20,7 @@ struct JP<T: protocol<Readable, OperandType> where T.ReadType == UInt16>: Z80Ins
     
     let cycleCount = 0
     
-    private func jump(cpu: Intel8080Like) {
+    fileprivate func jump(_ cpu: Intel8080Like) {
         // Only jump if the condition is absent or met
         let conditionSatisfied = condition?.evaluate() ?? true
         
@@ -29,13 +29,13 @@ struct JP<T: protocol<Readable, OperandType> where T.ReadType == UInt16>: Z80Ins
         }
     }
     
-    func runOn(cpu: Z80) {
+    func runOn(_ cpu: Z80) {
         jump(cpu)
         
         // Never affects flag bits
     }
     
-    func runOn(cpu: LR35902) {
+    func runOn(_ cpu: LR35902) {
         jump(cpu)
         
         // Never affects flag bits
@@ -55,7 +55,7 @@ struct JR: Z80Instruction, LR35902Instruction
     let cycleCount = 0
     
     
-    private func jump(cpu: Intel8080Like) {
+    fileprivate func jump(_ cpu: Intel8080Like) {
         // Only jump if the condition is absent or met
         let conditionSatisfied = condition?.evaluate() ?? true
         
@@ -64,13 +64,13 @@ struct JR: Z80Instruction, LR35902Instruction
         }
     }
     
-    func runOn(cpu: Z80) {
+    func runOn(_ cpu: Z80) {
         jump(cpu)
         
         // Never affects flag bits
     }
     
-    func runOn(cpu: LR35902) {
+    func runOn(_ cpu: LR35902) {
         jump(cpu)
         
         // Never affects flag bits

@@ -12,11 +12,11 @@ import Foundation
 /// Exchange: exchange the contents of two sets of operands.
 /// This is really just a set of specialized LDs.
 struct EX
-    <T: protocol<Readable, Writeable, OperandType>,
-    U: protocol<Readable, Writeable, OperandType>
+    <T: Readable & Writeable & OperandType,
+    U: Readable & Writeable & OperandType>: Z80Instruction
     where T.WriteType == U.ReadType,
     U.WriteType == T.ReadType,
-    T.WriteType == UInt16>: Z80Instruction
+    T.WriteType == UInt16
 {
     // legal combinations are quite limited: DE <-> HL, AF <-> AF', (SP) <-> HL, (SP) <-> IX, (SP) <-> IY
     // really, we should somehow limit this struct's parameters to these combinations only
@@ -29,13 +29,13 @@ struct EX
     var cycleCount: Int {
         get {
             //@todo switch, accurate values, etc
-            if op1.operandType == .Register8Like && op2.operandType == .Register8Like { return 1 }
+            if op1.operandType == .register8Like && op2.operandType == .register8Like { return 1 }
             
             return 0
         }
     }
     
-    func runOn(cpu: Z80) {
+    func runOn(_ cpu: Z80) {
         let tmp = op2.read()
         
         op2.write(op1.read())

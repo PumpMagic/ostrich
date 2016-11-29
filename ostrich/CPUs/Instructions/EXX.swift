@@ -13,7 +13,7 @@ import Foundation
 struct EXX: Z80Instruction {
     let cycleCount = 0
     
-    func runOn(cpu: Z80) {
+    func runOn(_ cpu: Z80) {
         let bcValue = cpu.BC.read()
         let bcpValue = cpu.BCp.read()
         let deValue = cpu.DE.read()

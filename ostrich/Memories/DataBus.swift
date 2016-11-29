@@ -10,21 +10,21 @@ import Foundation
 
 
 protocol DelegatesReads: HandlesReads {
-    func connectReadable(readable: protocol<BusListener, HandlesReads>)
+    func connectReadable(_ readable: BusListener & HandlesReads)
 }
 protocol DelegatesWrites: HandlesWrites {
-    func connectWriteable(writeable: protocol<BusListener, HandlesWrites>)
+    func connectWriteable(_ writeable: BusListener & HandlesWrites)
 }
 
-public class DataBus: DelegatesReads, DelegatesWrites {
+open class DataBus: DelegatesReads, DelegatesWrites {
     //@todo consider using Intervals instead of Ranges:
     //http://oleb.net/blog/2015/09/swift-ranges-and-intervals/
-    var readables: [(HandlesReads, Range<Address>)]
-    var writeables: [(HandlesWrites, Range<Address>)]
+    var readables: [(HandlesReads, CountableRange<Address>)]
+    var writeables: [(HandlesWrites, CountableRange<Address>)]
     
     enum TransactionDirection {
-        case Read
-        case Write
+        case read
+        case write
     }
     struct Transaction: CustomStringConvertible {
         let direction: TransactionDirection
@@ -33,9 +33,9 @@ public class DataBus: DelegatesReads, DelegatesWrites {
         
         var description: String {
             switch direction {
-            case .Read:
+            case .read:
                 return "\(address.hexString) -> \(number.hexString)"
-            case .Write:
+            case .write:
                 return "\(address.hexString) <- \(number.hexString)"
             }
         }
@@ -44,25 +44,25 @@ public class DataBus: DelegatesReads, DelegatesWrites {
     var transactions: [Transaction] = []
     
     public init() {
-        self.readables = [(HandlesReads, Range<Address>)]()
-        self.writeables = [(HandlesWrites, Range<Address>)]()
+        self.readables = [(HandlesReads, CountableRange<Address>)]()
+        self.writeables = [(HandlesWrites, CountableRange<Address>)]()
     }
     
-    public func connectReadable(readable: protocol<BusListener, HandlesReads>) {
+    open func connectReadable(_ readable: BusListener & HandlesReads) {
         self.readables.append((readable, readable.addressRange))
     }
-    public func connectWriteable(writeable: protocol<BusListener, HandlesWrites>) {
+    open func connectWriteable(_ writeable: BusListener & HandlesWrites) {
         self.writeables.append((writeable, writeable.addressRange))
     }
     
-    public func read(addr: Address) -> UInt8 {
+    open func read(_ addr: Address) -> UInt8 {
         for (readable, range) in self.readables {
             if range ~= addr {
                 let val = readable.read(addr)
                 
                 if self.logTransactions {
                     if addr > 0x7FFF {
-                        let transaction = Transaction(direction: .Read, address: addr, number: val)
+                        let transaction = Transaction(direction: .read, address: addr, number: val)
                         self.transactions.append(transaction)
                     }
                 }
@@ -76,23 +76,23 @@ public class DataBus: DelegatesReads, DelegatesWrites {
         // 8-bit value -> overflows at (16384/256) = 64Hz
         //@todo don't be so sloppy
         if addr == 0xFF04 {
-            let secs = NSDate().timeIntervalSince1970
+            let secs = Date().timeIntervalSince1970
             let remainder = secs - round(secs)
             let us = remainder*1000000
-            return UInt8(truncatingBitPattern: (Int((us/61) % 255)))
+            return UInt8(truncatingBitPattern: (Int((us/61).truncatingRemainder(dividingBy: 255))))
         }
         
         print("FATAL: no one listening to read of address \(addr.hexString)")
         exit(1)
     }
     
-    public func write(val: UInt8, to addr: Address) {
+    open func write(_ val: UInt8, to addr: Address) {
         for (writeable, range) in self.writeables {
             if range ~= addr {
                 writeable.write(val, to: addr)
                 
                 if self.logTransactions {
-                    let transaction = Transaction(direction: .Write, address: addr, number: val)
+                    let transaction = Transaction(direction: .write, address: addr, number: val)
                     self.transactions.append(transaction)
                 }
                 
@@ -102,9 +102,9 @@ public class DataBus: DelegatesReads, DelegatesWrites {
         
         // Hack: memory bank controller is unimplemented for now; ignore communication with it
         //@todo implement the memory bank controller
-        if 0x0000 ... 0x7FFF as Range<Address> ~= addr {
+        if 0x0000 ... 0x7FFF as CountableRange<Address> ~= addr {
 //            print("WARNING! Ignoring memory bank controller communication in the form of writing \(val.hexString) to \(addr.hexString)")
-            if 0x0000 ... 0x1FFF as Range<Address> ~= addr {
+            if 0x0000 ... 0x1FFF as CountableRange<Address> ~= addr {
 //                print("(external RAM control)")
             }
             return
@@ -116,12 +116,12 @@ public class DataBus: DelegatesReads, DelegatesWrites {
     
     
     // Convenience functions
-    func readSigned(addr: Address) -> Int8 {
+    func readSigned(_ addr: Address) -> Int8 {
         return Int8(bitPattern: self.read(addr))
     }
     
     /// Reads two bytes of memory and returns them in host endianness
-    func read16(addr: Address) -> UInt16 {
+    func read16(_ addr: Address) -> UInt16 {
         let low = self.read(addr)
         let high = self.read(addr+1)
         
@@ -129,16 +129,16 @@ public class DataBus: DelegatesReads, DelegatesWrites {
     }
     
     /// Writes two bytes of memory (given in host endianness)
-    func write16(val: UInt16, to addr: Address) {
+    func write16(_ val: UInt16, to addr: Address) {
         self.write(getLow(val), to: addr)
         self.write(getHigh(val), to: addr+1)
     }
     
-    public func dumpTransactions() {
+    open func dumpTransactions() {
         print(self.transactions)
     }
     
-    public func clearTransactions() {
+    open func clearTransactions() {
         self.transactions = []
     }
 }

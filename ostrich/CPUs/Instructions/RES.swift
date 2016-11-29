@@ -11,7 +11,7 @@ import Foundation
 
 /// Reset a given bit of an operand
 struct RES
-    <T: protocol<Readable, Writeable, OperandType> where T.ReadType == UInt8, T.WriteType == T.ReadType>: Z80Instruction, LR35902Instruction
+    <T: Readable & Writeable & OperandType>: Z80Instruction, LR35902Instruction where T.ReadType == UInt8, T.WriteType == T.ReadType
 {
     let op: T
     let bit: UInt8
@@ -19,11 +19,11 @@ struct RES
     let cycleCount = 0
     
     
-    func runOn(cpu: Z80) {
+    func runOn(_ cpu: Z80) {
         op.write(clearBit(op.read(), bit: bit))
     }
     
-    func runOn(cpu: LR35902) {
+    func runOn(_ cpu: LR35902) {
         op.write(clearBit(op.read(), bit: bit))
     }
 }

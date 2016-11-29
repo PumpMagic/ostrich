@@ -10,7 +10,7 @@ import Foundation
 
 
 /// Representation a Zilog Z80 CPU.
-public class Z80: Intel8080Like {
+open class Z80: Intel8080Like {
     // main registers
     /// A, AKA the Accumulator
     let A: Register8
@@ -135,8 +135,8 @@ public class Z80: Intel8080Like {
         self.HLp = Register16Computed(high: self.Hp, low: self.Lp)
         
         
-        self.IFF1 = .Disabled
-        self.IFF2 = .Disabled
+        self.IFF1 = .disabled
+        self.IFF2 = .disabled
         
         self.instructionContext = Intel8080InstructionContext(lastInstructionWasDI: false, lastInstructionWasEI: false)
         
@@ -144,19 +144,19 @@ public class Z80: Intel8080Like {
     }
     
     // Utility methods
-    public func setSP(sp: Address) {
+    open func setSP(_ sp: Address) {
         self.SP.write(sp)
     }
     
-    public func setPC(pc: Address) {
+    open func setPC(_ pc: Address) {
         self.PC.write(pc)
     }
     
-    public func setA(a: UInt8) {
+    open func setA(_ a: UInt8) {
         self.A.write(a)
     }
     
-    public func injectCall(addr: Address) {
+    open func injectCall(_ addr: Address) {
         let instruction = CALL(condition: nil, dest: Immediate16(val: addr))
         instruction.runOn(self)
     }
@@ -165,13 +165,13 @@ public class Z80: Intel8080Like {
     var pcsp: String { return "\tSP: \(self.SP.read().hexString)\n\tPC: \(self.PC.read().hexString)" }
 
     
-    public func runUntil(instructionType: String) {
+    open func runUntil(_ instructionType: String) {
         //@todo this is a hacky convenience function, how can we better detect a given instruction without inspecting type?
         var iteration = 1
         repeat {
             let lastInstruction = doInstructionCycle()
             iteration += 1
-            let inspectedType = String(Mirror(reflecting: lastInstruction).subjectType)
+            let inspectedType = String(describing: Mirror(reflecting: lastInstruction).subjectType)
             if inspectedType == instructionType {
                 return
             }
@@ -192,21 +192,21 @@ public class Z80: Intel8080Like {
     
     /// Execute an instruction.
     /// This function has some additional behavior to support things like EI, which has effects delayed by an instruction.
-    func executeInstruction(instruction: Z80Instruction) {
+    func executeInstruction(_ instruction: Z80Instruction) {
         let oldInstructionContext = self.instructionContext
         
         instruction.runOn(self)
         
         if oldInstructionContext.lastInstructionWasDI {
-            self.IFF1 = .Disabled
-            self.IFF2 = .Disabled
+            self.IFF1 = .disabled
+            self.IFF2 = .disabled
             
             //@warn this behavior may be too lazy
             self.instructionContext.lastInstructionWasDI = false
         }
         if oldInstructionContext.lastInstructionWasEI {
-            self.IFF1 = .Enabled
-            self.IFF2 = .Enabled
+            self.IFF1 = .enabled
+            self.IFF2 = .enabled
             
             //@warn this behavior may be too lazy
             self.instructionContext.lastInstructionWasEI = false

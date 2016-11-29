@@ -15,16 +15,16 @@ struct SCF: Z80Instruction, LR35902Instruction {
     
     let cycleCount = 0
     
-    func runOn(cpu: Z80) {
+    func runOn(_ cpu: Z80) {
         self.modifyFlags(cpu)
     }
     
-    func runOn(cpu: LR35902) {
+    func runOn(_ cpu: LR35902) {
         self.modifyFlags(cpu)
     }
     
     
-    private func modifyCommonFlags(cpu: Intel8080Like) {
+    fileprivate func modifyCommonFlags(_ cpu: Intel8080Like) {
         // Z is not affected.
         // H is reset.
         // N is reset.
@@ -35,14 +35,14 @@ struct SCF: Z80Instruction, LR35902Instruction {
         cpu.CF.write(true)
     }
     
-    private func modifyFlags(cpu: Z80) {
+    fileprivate func modifyFlags(_ cpu: Z80) {
         modifyCommonFlags(cpu)
         
         // S is not affected.
         // P/V is not affected.
     }
     
-    private func modifyFlags(cpu: LR35902) {
+    fileprivate func modifyFlags(_ cpu: LR35902) {
         modifyCommonFlags(cpu)
     }
 }

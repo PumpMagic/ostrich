@@ -10,7 +10,7 @@ import Foundation
 
 
 /// Representation of a Sharp LR35902 CPU.
-public class LR35902: Intel8080Like {
+open class LR35902: Intel8080Like {
     // main registers
     /// A, AKA the Accumulator
     let A: Register8
@@ -90,8 +90,8 @@ public class LR35902: Intel8080Like {
         self.DE = Register16Computed(high: self.D, low: self.E)
         self.HL = Register16Computed(high: self.H, low: self.L)
         
-        self.IFF1 = .Disabled
-        self.IFF2 = .Disabled
+        self.IFF1 = .disabled
+        self.IFF2 = .disabled
         
         self.instructionContext = Intel8080InstructionContext(lastInstructionWasDI: false, lastInstructionWasEI: false)
         
@@ -100,17 +100,17 @@ public class LR35902: Intel8080Like {
     
     // Utility methods
     /// Set SP (the stack pointer)
-    public func setSP(sp: Address) {
+    open func setSP(_ sp: Address) {
         self.SP.write(sp)
     }
     
     /// Set PC (the program counter)
-    public func setPC(pc: Address) {
+    open func setPC(_ pc: Address) {
         self.PC.write(pc)
     }
     
     /// Set A (the accumulator)
-    public func setA(a: UInt8) {
+    open func setA(_ a: UInt8) {
         self.A.write(a)
     }
     
@@ -119,7 +119,7 @@ public class LR35902: Intel8080Like {
     
     /// Call a subroutine and run instructions until a corresponding return is detected.
     /// This function detects a return by checking to see if the PC has whatever value it was before the call
-    public func call(addr: Address) {
+    open func call(_ addr: Address) {
         let priorPC = self.PC.read()
         
         let callInstruction = CALL(condition: nil, dest: Immediate16(val: addr))
@@ -135,7 +135,7 @@ public class LR35902: Intel8080Like {
     }
     
     /// Fetch an instruction, run it, and return it
-    private func doInstructionCycle() -> LR35902Instruction {
+    fileprivate func doInstructionCycle() -> LR35902Instruction {
         guard let instruction = self.fetchInstruction() else {
             print("FATAL: unable to fetch instruction")
             exit(1)
@@ -147,14 +147,14 @@ public class LR35902: Intel8080Like {
     
     /// Execute an instruction.
     /// This function has some additional behavior to support things like EI, which has effects delayed by an instruction.
-    private func executeInstruction(instruction: LR35902Instruction) {
+    fileprivate func executeInstruction(_ instruction: LR35902Instruction) {
         let willEnableInterrupts = self.instructionContext.lastInstructionWasEI
         
         instruction.runOn(self)
         
         if willEnableInterrupts {
-            self.IFF1 = .Enabled
-            self.IFF2 = .Enabled
+            self.IFF1 = .enabled
+            self.IFF2 = .enabled
             
             //@warn this behavior may be too lazy
             self.instructionContext.lastInstructionWasEI = false
@@ -187,22 +187,22 @@ public class LR35902: Intel8080Like {
                 
             case 0x22:
                 // LD (HL+), A
-                instruction = LDI_LR(pointable: self.HL, other: self.A, direction: .IntoPointer)
+                instruction = LDI_LR(pointable: self.HL, other: self.A, direction: .intoPointer)
                 instructionLength = 1
                 
             case 0x2A:
                 // LD A, (HL+)
-                instruction = LDI_LR(pointable: self.HL, other: self.A, direction: .OutOfPointer)
+                instruction = LDI_LR(pointable: self.HL, other: self.A, direction: .outOfPointer)
                 instructionLength = 1
                 
             case 0x32:
                 // LD (HL-), A
-                instruction = LDD_LR(pointable: self.HL, other: self.A, direction: .IntoPointer)
+                instruction = LDD_LR(pointable: self.HL, other: self.A, direction: .intoPointer)
                 instructionLength = 1
                 
             case 0x3A:
                 // LD A, (HL-)
-                instruction = LDD_LR(pointable: self.HL, other: self.A, direction: .OutOfPointer)
+                instruction = LDD_LR(pointable: self.HL, other: self.A, direction: .outOfPointer)
                 instructionLength = 1
                 
             case 0xD9:

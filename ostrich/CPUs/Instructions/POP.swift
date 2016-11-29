@@ -10,7 +10,7 @@ import Foundation
 
 
 /// Pop: pop the top of the stack onto something, and adjust the stack pointer
-struct POP<T: protocol<Writeable, OperandType> where T.WriteType == UInt16>: Z80Instruction, LR35902Instruction
+struct POP<T: Writeable & OperandType>: Z80Instruction, LR35902Instruction where T.WriteType == UInt16
 {
     // qqH ← (SP+1), qqL ← (SP)
     // also increments SP by two
@@ -18,13 +18,13 @@ struct POP<T: protocol<Writeable, OperandType> where T.WriteType == UInt16>: Z80
     let operand: T
     let cycleCount = 0
     
-    func runOn(cpu: Z80) {
+    func runOn(_ cpu: Z80) {
         operand.write(cpu.pop())
         
         // Never affects flag bits
     }
     
-    func runOn(cpu: LR35902) {
+    func runOn(_ cpu: LR35902) {
         operand.write(cpu.pop())
         
         // Never affects flag bits

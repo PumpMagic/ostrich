@@ -10,14 +10,14 @@ import Foundation
 
 
 /// Left rotate with carry
-struct RLC<T: protocol<Writeable, Readable, OperandType> where T.ReadType == T.WriteType, T.ReadType == UInt8>: Z80Instruction, LR35902Instruction
+struct RLC<T: Writeable & Readable & OperandType>: Z80Instruction, LR35902Instruction where T.ReadType == T.WriteType, T.ReadType == UInt8
 {
     let op: T
     
     let cycleCount = 0
     
     
-    private func runCommon(cpu: Intel8080Like) -> (UInt8, UInt8) {
+    fileprivate func runCommon(_ cpu: Intel8080Like) -> (UInt8, UInt8) {
         let oldValue = op.read()
         let newValue = rotateLeft(oldValue)
         
@@ -26,20 +26,20 @@ struct RLC<T: protocol<Writeable, Readable, OperandType> where T.ReadType == T.W
         return (oldValue, newValue)
     }
     
-    func runOn(cpu: Z80) {
+    func runOn(_ cpu: Z80) {
         let (oldValue, newValue) = runCommon(cpu)
         
         modifyFlags(cpu, oldValue: oldValue, newValue: newValue)
     }
     
-    func runOn(cpu: LR35902) {
+    func runOn(_ cpu: LR35902) {
         let (oldValue, newValue) = runCommon(cpu)
         
         modifyFlags(cpu, oldValue: oldValue, newValue: newValue)
     }
     
     
-    private func modifyCommonFlags(cpu: Intel8080Like, oldValue: UInt8, newValue: UInt8) {
+    fileprivate func modifyCommonFlags(_ cpu: Intel8080Like, oldValue: UInt8, newValue: UInt8) {
         // Z is set if result is 0; otherwise, it is reset.
         // H is reset.
         // N is reset.
@@ -51,7 +51,7 @@ struct RLC<T: protocol<Writeable, Readable, OperandType> where T.ReadType == T.W
         cpu.CF.write(bitIsHigh(oldValue, bit: 7))
     }
     
-    private func modifyFlags(cpu: Z80, oldValue: UInt8, newValue: UInt8) {
+    fileprivate func modifyFlags(_ cpu: Z80, oldValue: UInt8, newValue: UInt8) {
         modifyCommonFlags(cpu, oldValue: oldValue, newValue: newValue)
         
         // S is set if result is negative; otherwise, it is reset.
@@ -61,7 +61,7 @@ struct RLC<T: protocol<Writeable, Readable, OperandType> where T.ReadType == T.W
         cpu.PVF.write(parity(newValue))
     }
     
-    private func modifyFlags(cpu: LR35902, oldValue: UInt8, newValue: UInt8) {
+    fileprivate func modifyFlags(_ cpu: LR35902, oldValue: UInt8, newValue: UInt8) {
         modifyCommonFlags(cpu, oldValue: oldValue, newValue: newValue)
     }
 }
@@ -70,21 +70,21 @@ struct RLC<T: protocol<Writeable, Readable, OperandType> where T.ReadType == T.W
 struct RLCA: Z80Instruction, LR35902Instruction {
     let cycleCount = 0
     
-    func runOn(cpu: Z80) {
+    func runOn(_ cpu: Z80) {
         let oldA = cpu.A.read()
         
         cpu.A.write(rotateLeft(oldA))
         modifyFlags(cpu, oldValue: oldA)
     }
     
-    func runOn(cpu: LR35902) {
+    func runOn(_ cpu: LR35902) {
         let oldA = cpu.A.read()
         
         cpu.A.write(rotateLeft(oldA))
         modifyFlags(cpu, oldValue: oldA)
     }
     
-    private func modifyCommonFlags(cpu: Intel8080Like, oldValue: UInt8) {
+    fileprivate func modifyCommonFlags(_ cpu: Intel8080Like, oldValue: UInt8) {
         // Z is affected differently!
         // H is reset.
         // N is reset.
@@ -95,7 +95,7 @@ struct RLCA: Z80Instruction, LR35902Instruction {
         cpu.CF.write(bitIsHigh(oldValue, bit: 7))
     }
     
-    func modifyFlags(cpu: Z80, oldValue: UInt8) {
+    func modifyFlags(_ cpu: Z80, oldValue: UInt8) {
         // Z is not affected.
         
         modifyCommonFlags(cpu, oldValue: oldValue)
@@ -104,7 +104,7 @@ struct RLCA: Z80Instruction, LR35902Instruction {
         // P/V is not affected.
     }
     
-    private func modifyFlags(cpu: LR35902, oldValue: UInt8) {
+    fileprivate func modifyFlags(_ cpu: LR35902, oldValue: UInt8) {
         // The GB CPU manual says Z is set if the result is 0.
         // The BSNES core always resets Z.
         // We go with the BSNES core.
@@ -117,13 +117,13 @@ struct RLCA: Z80Instruction, LR35902Instruction {
 
 
 /// Left rotate through carry (9-bit rotate)
-struct RL<T: protocol<Writeable, Readable, OperandType> where T.ReadType == T.WriteType, T.ReadType == UInt8>: Z80Instruction, LR35902Instruction {
+struct RL<T: Writeable & Readable & OperandType>: Z80Instruction, LR35902Instruction where T.ReadType == T.WriteType, T.ReadType == UInt8 {
     let op: T
     
     let cycleCount = 0
     
     
-    private func runCommon(cpu: Intel8080Like) -> (UInt8, UInt8) {
+    fileprivate func runCommon(_ cpu: Intel8080Like) -> (UInt8, UInt8) {
         let oldValue = op.read()
         var newValue = shiftLeft(oldValue)
         if cpu.CF.read() {
@@ -135,20 +135,20 @@ struct RL<T: protocol<Writeable, Readable, OperandType> where T.ReadType == T.Wr
         return (oldValue, newValue)
     }
     
-    func runOn(cpu: Z80) {
+    func runOn(_ cpu: Z80) {
         let (oldValue, newValue) = runCommon(cpu)
         
         modifyFlags(cpu, oldValue: oldValue, newValue: newValue)
     }
     
-    func runOn(cpu: LR35902) {
+    func runOn(_ cpu: LR35902) {
         let (oldValue, newValue) = runCommon(cpu)
         
         modifyFlags(cpu, oldValue: oldValue, newValue: newValue)
     }
     
     
-    private func modifyCommonFlags(cpu: Intel8080Like, oldValue: UInt8, newValue: UInt8) {
+    fileprivate func modifyCommonFlags(_ cpu: Intel8080Like, oldValue: UInt8, newValue: UInt8) {
         // Z is set if result is 0; otherwise, it is reset.
         // H is reset.
         // N is reset.
@@ -160,7 +160,7 @@ struct RL<T: protocol<Writeable, Readable, OperandType> where T.ReadType == T.Wr
         cpu.CF.write(bitIsHigh(oldValue, bit: 7))
     }
     
-    private func modifyFlags(cpu: Z80, oldValue: UInt8, newValue: UInt8) {
+    fileprivate func modifyFlags(_ cpu: Z80, oldValue: UInt8, newValue: UInt8) {
         modifyCommonFlags(cpu, oldValue: oldValue, newValue: newValue)
         
         // S is set if result is negative; otherwise, it is reset.
@@ -170,7 +170,7 @@ struct RL<T: protocol<Writeable, Readable, OperandType> where T.ReadType == T.Wr
         cpu.PVF.write(parity(newValue))
     }
     
-    private func modifyFlags(cpu: LR35902, oldValue: UInt8, newValue: UInt8) {
+    fileprivate func modifyFlags(_ cpu: LR35902, oldValue: UInt8, newValue: UInt8) {
         modifyCommonFlags(cpu, oldValue: oldValue, newValue: newValue)
     }
 }
@@ -181,7 +181,7 @@ struct RLA: Z80Instruction, LR35902Instruction {
     let cycleCount = 0
     
     
-    private func runCommon(cpu: Intel8080Like) -> (UInt8, UInt8) {
+    fileprivate func runCommon(_ cpu: Intel8080Like) -> (UInt8, UInt8) {
         let oldValue = cpu.A.read()
         var newValue = shiftLeft(oldValue)
         if cpu.CF.read() {
@@ -193,20 +193,20 @@ struct RLA: Z80Instruction, LR35902Instruction {
         return (oldValue, newValue)
     }
     
-    func runOn(cpu: Z80) {
+    func runOn(_ cpu: Z80) {
         let (oldValue, newValue) = runCommon(cpu)
         
         modifyFlags(cpu, oldValue: oldValue, newValue: newValue)
     }
     
-    func runOn(cpu: LR35902) {
+    func runOn(_ cpu: LR35902) {
         let (oldValue, newValue) = runCommon(cpu)
         
         modifyFlags(cpu, oldValue: oldValue, newValue: newValue)
     }
     
     
-    private func modifyCommonFlags(cpu: Intel8080Like, oldValue: UInt8, newValue: UInt8) {
+    fileprivate func modifyCommonFlags(_ cpu: Intel8080Like, oldValue: UInt8, newValue: UInt8) {
         // Z is affected differently!
         // H is reset.
         // N is reset.
@@ -217,7 +217,7 @@ struct RLA: Z80Instruction, LR35902Instruction {
         cpu.CF.write(bitIsHigh(oldValue, bit: 7))
     }
     
-    private func modifyFlags(cpu: Z80, oldValue: UInt8, newValue: UInt8) {
+    fileprivate func modifyFlags(_ cpu: Z80, oldValue: UInt8, newValue: UInt8) {
         modifyCommonFlags(cpu, oldValue: oldValue, newValue: newValue)
         
         // S is not affected.
@@ -225,7 +225,7 @@ struct RLA: Z80Instruction, LR35902Instruction {
         // Z is not affected.
     }
     
-    private func modifyFlags(cpu: LR35902, oldValue: UInt8, newValue: UInt8) {
+    fileprivate func modifyFlags(_ cpu: LR35902, oldValue: UInt8, newValue: UInt8) {
         // The GB CPU manual says Z is set if the result is 0.
         // The BSNES core always resets Z.
         // We go with the BSNES core.

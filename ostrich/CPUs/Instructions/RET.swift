@@ -18,7 +18,7 @@ struct RET: Z80Instruction, LR35902Instruction {
     let cycleCount = 0
     
     
-    private func runCommon(cpu: Intel8080Like) {
+    fileprivate func runCommon(_ cpu: Intel8080Like) {
         // Only call if the condition is absent or met
         let conditionSatisfied = condition?.evaluate() ?? true
         
@@ -27,11 +27,11 @@ struct RET: Z80Instruction, LR35902Instruction {
         }
     }
     
-    func runOn(cpu: Z80) {
+    func runOn(_ cpu: Z80) {
         runCommon(cpu)
     }
     
-    func runOn(cpu: LR35902) {
+    func runOn(_ cpu: LR35902) {
         runCommon(cpu)
     }
 }
@@ -44,9 +44,9 @@ struct RETI: LR35902Instruction {
     let cycleCount = 0
     
     
-    func runOn(cpu: LR35902) {
+    func runOn(_ cpu: LR35902) {
         cpu.PC.write(cpu.pop())
-        cpu.IFF1 = .Enabled
-        cpu.IFF2 = .Enabled
+        cpu.IFF1 = .enabled
+        cpu.IFF2 = .enabled
     }
 }

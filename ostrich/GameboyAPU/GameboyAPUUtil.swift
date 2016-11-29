@@ -12,7 +12,7 @@ import Foundation
 let GB_CLOCK_HZ = 4194304.0
 let SAMPLES_PER_PULSE_WAVE_PERIOD = 8.0
 
-func toImplAmplitude(volume: UInt8) -> Double {
+func toImplAmplitude(_ volume: UInt8) -> Double {
     if volume <= Pulse.MAX_VOLUME {
         return Double(volume) / Double(Pulse.MAX_VOLUME)
     }
@@ -20,7 +20,7 @@ func toImplAmplitude(volume: UInt8) -> Double {
     return 1.0
 }
 
-func toImplFrequency(frequency: UInt16) -> Double {
+func toImplFrequency(_ frequency: UInt16) -> Double {
     if frequency == 0 {
         return 0
     }

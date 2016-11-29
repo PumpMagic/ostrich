@@ -13,11 +13,11 @@ import Foundation
 struct NOP: Z80Instruction, LR35902Instruction {
     let cycleCount = 0
     
-    func runOn(cpu: Z80) {
+    func runOn(_ cpu: Z80) {
         // Never affects flag bits
     }
     
-    func runOn(cpu: LR35902) {
+    func runOn(_ cpu: LR35902) {
         // Never affects flag bits
     }
 }

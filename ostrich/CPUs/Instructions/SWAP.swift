@@ -9,7 +9,7 @@
 import Foundation
 
 
-private func swap(num: UInt8) -> UInt8 {
+private func swap(_ num: UInt8) -> UInt8 {
     let lowerNibble = num & 0x0F
     let upperNibble = num & 0xF0
     let swapped: UInt8 = (lowerNibble << 4) | (upperNibble >> 4)
@@ -18,14 +18,14 @@ private func swap(num: UInt8) -> UInt8 {
 }
 
 /// Swap the upper and lower nibbles of an 8-bit number
-struct SWAP<T: protocol<Writeable, Readable, OperandType> where T.ReadType == T.WriteType, T.ReadType == UInt8>: LR35902Instruction
+struct SWAP<T: Writeable & Readable & OperandType>: LR35902Instruction where T.ReadType == T.WriteType, T.ReadType == UInt8
 {
     let op: T
     
     let cycleCount = 0
     
     
-    func runOn(cpu: LR35902) {
+    func runOn(_ cpu: LR35902) {
         let oldValue = op.read()
         let newValue = swap(oldValue)
         
@@ -34,7 +34,7 @@ struct SWAP<T: protocol<Writeable, Readable, OperandType> where T.ReadType == T.
         modifyFlags(cpu, newValue: newValue)
     }
     
-    private func modifyFlags(cpu: LR35902, newValue: UInt8) {
+    fileprivate func modifyFlags(_ cpu: LR35902, newValue: UInt8) {
         // Z - Set if result is zero.
         // N - Reset.
         // H - Reset.

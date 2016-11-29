@@ -10,8 +10,8 @@ import Foundation
 import AudioKit
 
 
-func getValueOfBits(num: UInt8, bits: Range<UInt8>) -> UInt8 {
-    guard let minIndex = bits.minElement() else {
+func getValueOfBits(_ num: UInt8, bits: Range<UInt8>) -> UInt8 {
+    guard let minIndex = bits.min() else {
         exit(1)
     }
     
@@ -40,7 +40,7 @@ class GameBoyAPU: Memory, HandlesWrites {
     var lastAddress: Address {
         return LAST_ADDRESS
     }
-    var addressRange: Range<Address> {
+    var addressRange: CountableRange<Address> {
         return self.firstAddress ... self.lastAddress
     }
     
@@ -54,13 +54,13 @@ class GameBoyAPU: Memory, HandlesWrites {
         self.ram = RAM(size: 0x30, fillByte: 0x00, firstAddress: 0xFF10)
     }
     
-    func read(addr: Address) -> UInt8 {
+    func read(_ addr: Address) -> UInt8 {
         print("APU read! \(addr.hexString)")
         return self.ram.read(addr)
     }
     
     var poop = "."
-    func write(val: UInt8, to addr: Address) {
+    func write(_ val: UInt8, to addr: Address) {
 //        print("APU write! \(val.hexString) to \(addr.hexString)")
         
         self.ram.write(val, to: addr)

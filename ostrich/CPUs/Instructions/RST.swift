@@ -19,16 +19,16 @@ struct RST: Z80Instruction, LR35902Instruction {
     let restartAddress: Address
     
     
-    private func runCommon(cpu: Intel8080Like) {
+    fileprivate func runCommon(_ cpu: Intel8080Like) {
         cpu.push(cpu.PC.read())
         cpu.PC.write(restartAddress)
     }
     
-    func runOn(cpu: Z80) {
+    func runOn(_ cpu: Z80) {
         runCommon(cpu)
     }
     
-    func runOn(cpu: LR35902) {
+    func runOn(_ cpu: LR35902) {
         runCommon(cpu)
     }
 }

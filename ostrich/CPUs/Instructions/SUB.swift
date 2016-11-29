@@ -9,15 +9,15 @@
 import Foundation
 
 
-func sub<T: IntegerType>(v1: T, _ v2: T) -> T {
+func sub<T: Integer>(_ v1: T, _ v2: T) -> T {
     return v1 &- v2
 }
 
 func subWithoutStore
-    <T: protocol<Readable, Writeable>, U: Readable
-    where T.WriteType == U.ReadType, T.ReadType == T.WriteType, T.ReadType: IntegerType>
-    (op1: T, _ op2: U)
+    <T: Readable & Writeable, U: Readable>
+    (_ op1: T, _ op2: U)
     -> (T.ReadType, U.ReadType, T.WriteType)
+    where T.WriteType == U.ReadType, T.ReadType == T.WriteType, T.ReadType: Integer
 {
     let op1v = op1.read()
     let op2v = op2.read()
@@ -27,10 +27,10 @@ func subWithoutStore
 }
 
 func subWithoutStore
-    <T: protocol<Readable, Writeable>, U: Readable
-    where T.WriteType == U.ReadType, T.ReadType == T.WriteType, T.ReadType: IntegerType>
-    (op1: T, _ op2: U, _ op3: Bool)
+    <T: Readable & Writeable, U: Readable>
+    (_ op1: T, _ op2: U, _ op3: Bool)
     -> (T.ReadType, U.ReadType, T.ReadType, T.WriteType)
+    where T.WriteType == U.ReadType, T.ReadType == T.WriteType, T.ReadType: Integer
 {
     let op1v = op1.read()
     let op2v = op2.read()
@@ -41,10 +41,10 @@ func subWithoutStore
 }
 
 private func subAndStore
-    <T: protocol<Readable, Writeable>, U: Readable
-    where T.WriteType == U.ReadType, T.ReadType == T.WriteType, T.ReadType: IntegerType>
-    (op1: T, _ op2: U)
+    <T: Readable & Writeable, U: Readable>
+    (_ op1: T, _ op2: U)
     -> (T.ReadType, U.ReadType, T.WriteType)
+    where T.WriteType == U.ReadType, T.ReadType == T.WriteType, T.ReadType: Integer
 {
     let (op1v, op2v, result) = subWithoutStore(op1, op2)
     op1.write(result)
@@ -53,10 +53,10 @@ private func subAndStore
 }
 
 private func subAndStore
-    <T: protocol<Readable, Writeable>, U: Readable
-    where T.WriteType == U.ReadType, T.ReadType == T.WriteType, T.ReadType: IntegerType>
-    (op1: T, _ op2: U, _ op3: Bool)
+    <T: Readable & Writeable, U: Readable>
+    (_ op1: T, _ op2: U, _ op3: Bool)
     -> (T.ReadType, U.ReadType, T.ReadType, T.WriteType)
+    where T.WriteType == U.ReadType, T.ReadType == T.WriteType, T.ReadType: Integer
 {
     let (op1v, op2v, op3v, result) = subWithoutStore(op1, op2, op3)
     op1.write(result)
@@ -67,24 +67,24 @@ private func subAndStore
 
 /// Subtract from the accumulator an 8-bit operand; overwrite the accumulator with the result
 struct SUB
-    <T: protocol<Readable, OperandType> where T.ReadType == UInt8>: Z80Instruction, LR35902Instruction
+    <T: Readable & OperandType>: Z80Instruction, LR35902Instruction where T.ReadType == UInt8
 {
     let op: T
     
     let cycleCount = 0
     
     
-    func runOn(cpu: Z80) {
+    func runOn(_ cpu: Z80) {
         let (op1v, op2v, result) = subAndStore(cpu.A, op)
         modifyFlags(cpu, op1: op1v, op2: op2v, result: result)
     }
     
-    func runOn(cpu: LR35902) {
+    func runOn(_ cpu: LR35902) {
         let (op1v, op2v, result) = subAndStore(cpu.A, op)
         modifyFlags(cpu, op1: op1v, op2: op2v, result: result)
     }
     
-    private func modifyCommonFlags(cpu: Intel8080Like, op1: UInt8, op2: T.ReadType, result: UInt8) {
+    fileprivate func modifyCommonFlags(_ cpu: Intel8080Like, op1: UInt8, op2: T.ReadType, result: UInt8) {
         // Z is set if result is 0; otherwise, it is reset.
         // H is set if borrow from bit 4; otherwise, it is reset.
         // N is set.
@@ -96,7 +96,7 @@ struct SUB
         cpu.CF.write(subBorrowProne(op1, op2))
     }
     
-    private func modifyFlags(cpu: Z80, op1: UInt8, op2: T.ReadType, result: UInt8) {
+    fileprivate func modifyFlags(_ cpu: Z80, op1: UInt8, op2: T.ReadType, result: UInt8) {
         modifyCommonFlags(cpu, op1: op1, op2: op2, result: result)
         
         // S is set if result is negative; otherwise, it is reset.
@@ -105,7 +105,7 @@ struct SUB
         cpu.PVF.write(subOverflowOccurred(op1, op2: op2, result: result))
     }
     
-    private func modifyFlags(cpu: LR35902, op1: UInt8, op2: T.ReadType, result: UInt8) {
+    fileprivate func modifyFlags(_ cpu: LR35902, op1: UInt8, op2: T.ReadType, result: UInt8) {
         modifyCommonFlags(cpu, op1: op1, op2: op2, result: result)
     }
 }
@@ -114,24 +114,24 @@ struct SUB
 
 /// Subtract from the accumulator an 8-bit operand and the carry flag; overwrite the accumulator with the result
 struct SBC
-    <T: protocol<Readable, OperandType> where T.ReadType == UInt8>: Z80Instruction, LR35902Instruction
+    <T: Readable & OperandType>: Z80Instruction, LR35902Instruction where T.ReadType == UInt8
 {
     let op: T
     
     let cycleCount = 0
     
     
-    func runOn(cpu: Z80) {
+    func runOn(_ cpu: Z80) {
         let (op1v, op2v, op3v, result) = subAndStore(cpu.A, op, cpu.CF.read())
         modifyFlags(cpu, op1: op1v, op2: op2v, op3: op3v, result: result)
     }
     
-    func runOn(cpu: LR35902) {
+    func runOn(_ cpu: LR35902) {
         let (op1v, op2v, op3v, result) = subAndStore(cpu.A, op, cpu.CF.read())
         modifyFlags(cpu, op1: op1v, op2: op2v, op3: op3v, result: result)
     }
     
-    private func modifyCommonFlags(cpu: Intel8080Like, op1: UInt8, op2: T.ReadType, op3: UInt8, result: UInt8) {
+    fileprivate func modifyCommonFlags(_ cpu: Intel8080Like, op1: UInt8, op2: T.ReadType, op3: UInt8, result: UInt8) {
         // Z is set if result is 0; otherwise, it is reset.
         // H is set if borrow from bit 4; otherwise, it is reset.
         // N is set.
@@ -143,7 +143,7 @@ struct SBC
         cpu.CF.write(subBorrowProne(op1, op2, op3))
     }
     
-    private func modifyFlags(cpu: Z80, op1: UInt8, op2: T.ReadType, op3: UInt8, result: UInt8) {
+    fileprivate func modifyFlags(_ cpu: Z80, op1: UInt8, op2: T.ReadType, op3: UInt8, result: UInt8) {
         modifyCommonFlags(cpu, op1: op1, op2: op2, op3: op3, result: result)
         
         // S is set if result is negative; otherwise, it is reset.
@@ -153,7 +153,7 @@ struct SBC
         cpu.PVF.write(subOverflowOccurred(op1, op2: op2, result: result))
     }
     
-    private func modifyFlags(cpu: LR35902, op1: UInt8, op2: T.ReadType, op3: UInt8, result: UInt8) {
+    fileprivate func modifyFlags(_ cpu: LR35902, op1: UInt8, op2: T.ReadType, op3: UInt8, result: UInt8) {
         modifyCommonFlags(cpu, op1: op1, op2: op2, op3: op3, result: result)
     }
 }

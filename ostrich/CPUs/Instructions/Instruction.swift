@@ -15,11 +15,11 @@ protocol Instruction {
 }
 
 protocol Z80Instruction: Instruction {
-    func runOn(cpu: Z80)
+    func runOn(_ cpu: Z80)
 }
 
 protocol LR35902Instruction: Instruction {
-    func runOn(cpu: LR35902)
+    func runOn(_ cpu: LR35902)
 }
 
 /// Condition: a flag and a target value

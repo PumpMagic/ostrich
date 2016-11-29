@@ -11,24 +11,24 @@ import Foundation
 
 /// Load: store an operand in another operand.
 struct LD
-    <T: protocol<Writeable, OperandType>,
-    U: protocol<Readable, OperandType>
-    where T.WriteType == U.ReadType>: Z80Instruction, LR35902Instruction
+    <T: Writeable & OperandType,
+    U: Readable & OperandType>: Z80Instruction, LR35902Instruction
+    where T.WriteType == U.ReadType
 {
     let dest: T
     let src: U
     
     let cycleCount = 0
     
-    private func load() {
+    fileprivate func load() {
         dest.write(src.read())
     }
     
-    func runOn(cpu: Z80) {
+    func runOn(_ cpu: Z80) {
         load()
     }
     
-    func runOn(cpu: LR35902) {
+    func runOn(_ cpu: LR35902) {
         load()
     }
 }
@@ -39,7 +39,7 @@ struct LD
 struct LDI_Z80: Z80Instruction {
     let cycleCount = 0
     
-    func runOn(cpu: Z80) {
+    func runOn(_ cpu: Z80) {
         cpu.DE.asPointerOn(cpu.bus).write(cpu.HL.asPointerOn(cpu.bus).read())
         incAndStore(cpu.DE)
         incAndStore(cpu.HL)
@@ -48,7 +48,7 @@ struct LDI_Z80: Z80Instruction {
         modifyFlags(cpu)
     }
     
-    func modifyFlags(cpu: Z80) {
+    func modifyFlags(_ cpu: Z80) {
         // S is not affected.
         // Z is not affected.
         // H is reset.
@@ -72,7 +72,7 @@ struct LDI_Z80: Z80Instruction {
 struct LDAC: LR35902Instruction {
     let cycleCount = 0
     
-    func runOn(cpu: LR35902) {
+    func runOn(_ cpu: LR35902) {
         cpu.A.write(PseudoPointer8(base: 0xFF00, offset: cpu.C, bus: cpu.bus).read())
     }
 }
@@ -83,7 +83,7 @@ struct LDAC: LR35902Instruction {
 struct LDCA: LR35902Instruction {
     let cycleCount = 0
     
-    func runOn(cpu: LR35902) {
+    func runOn(_ cpu: LR35902) {
         PseudoPointer8(base: 0xFF00, offset: cpu.C, bus: cpu.bus).write(cpu.A.read())
     }
 }
@@ -95,7 +95,7 @@ struct LDHAN: LR35902Instruction {
     
     let cycleCount = 0
     
-    func runOn(cpu: LR35902) {
+    func runOn(_ cpu: LR35902) {
         cpu.A.write(PseudoPointer8(base: 0xFF00, offset: Immediate8(val: offset), bus: cpu.bus).read())
     }
 }
@@ -107,7 +107,7 @@ struct LDHNA: LR35902Instruction {
     
     let cycleCount = 0
     
-    func runOn(cpu: LR35902) {
+    func runOn(_ cpu: LR35902) {
         PseudoPointer8(base: 0xFF00, offset: Immediate8(val: offset), bus: cpu.bus).write(cpu.A.read())
     }
 }
@@ -118,7 +118,7 @@ struct LDHLSP: LR35902Instruction {
     
     let cycleCount = 0
     
-    func runOn(cpu: LR35902) {
+    func runOn(_ cpu: LR35902) {
         let sp = cpu.SP.read()
         let n = offset
         
@@ -126,7 +126,7 @@ struct LDHLSP: LR35902Instruction {
     }
     
     //@todo is this done right? what resource talks about how these flags are set?
-    private func modifyFlags(cpu: LR35902, sp: UInt16, n: Int8) {
+    fileprivate func modifyFlags(_ cpu: LR35902, sp: UInt16, n: Int8) {
         cpu.ZF.write(false)
         cpu.NF.write(false)
         cpu.HF.write(addHalfCarryProne(sp, n))
@@ -135,16 +135,16 @@ struct LDHLSP: LR35902Instruction {
 }
 
 enum LDDIDirection {
-    case IntoPointer
-    case OutOfPointer
+    case intoPointer
+    case outOfPointer
 }
 
 /// Load and decrement: store whatever a dereferenceable points to into something else, or vice versa, then
 /// decrement the dereferenceable
 struct LDD_LR
-    <T: protocol<Readable, Writeable, CanActAsPointer, OperandType>,
-    U: protocol<Readable, Writeable, OperandType>
-    where T.ReadType == Address, U.ReadType == UInt8, T.WriteType == T.ReadType, U.WriteType == U.ReadType>: LR35902Instruction
+    <T: Readable & Writeable & CanActAsPointer & OperandType,
+    U: Readable & Writeable & OperandType>: LR35902Instruction
+    where T.ReadType == Address, U.ReadType == UInt8, T.WriteType == T.ReadType, U.WriteType == U.ReadType
 {
     let pointable: T
     let other: U
@@ -152,11 +152,11 @@ struct LDD_LR
     
     let cycleCount = 0
     
-    func runOn(cpu: LR35902) {
+    func runOn(_ cpu: LR35902) {
         switch direction {
-        case .IntoPointer:
+        case .intoPointer:
             pointable.storeInLocation(cpu.bus, val: other.read())
-        case .OutOfPointer:
+        case .outOfPointer:
             other.write(pointable.dereferenceOn(cpu.bus))
         }
         
@@ -167,9 +167,9 @@ struct LDD_LR
 /// Load and increment: store whatever a dereferenceable points to into something else, or vice versa, then
 /// increment the dereferenceable
 struct LDI_LR
-    <T: protocol<Readable, Writeable, CanActAsPointer, OperandType>,
-    U: protocol<Readable, Writeable, OperandType>
-    where T.ReadType == Address, U.ReadType == UInt8, T.WriteType == T.ReadType, U.WriteType == U.ReadType>: LR35902Instruction
+    <T: Readable & Writeable & CanActAsPointer & OperandType,
+    U: Readable & Writeable & OperandType>: LR35902Instruction
+    where T.ReadType == Address, U.ReadType == UInt8, T.WriteType == T.ReadType, U.WriteType == U.ReadType
 {
     let pointable: T
     let other: U
@@ -177,11 +177,11 @@ struct LDI_LR
     
     let cycleCount = 0
     
-    func runOn(cpu: LR35902) {
+    func runOn(_ cpu: LR35902) {
         switch direction {
-        case .IntoPointer:
+        case .intoPointer:
             pointable.storeInLocation(cpu.bus, val: other.read())
-        case .OutOfPointer:
+        case .outOfPointer:
             other.write(pointable.dereferenceOn(cpu.bus))
         }
         

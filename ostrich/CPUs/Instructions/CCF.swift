@@ -15,16 +15,16 @@ struct CCF: Z80Instruction, LR35902Instruction {
     
     let cycleCount = 0
     
-    func runOn(cpu: Z80) {
+    func runOn(_ cpu: Z80) {
         self.modifyFlags(cpu)
     }
     
-    func runOn(cpu: LR35902) {
+    func runOn(_ cpu: LR35902) {
         self.modifyFlags(cpu)
     }
     
     
-    private func modifyCommonFlags(cpu: Intel8080Like) {
+    fileprivate func modifyCommonFlags(_ cpu: Intel8080Like) {
         // Z is not affected.
         // H behavior is different between Z80 and LR35902!!
         // N is reset.
@@ -36,7 +36,7 @@ struct CCF: Z80Instruction, LR35902Instruction {
         cpu.CF.write(!currentCarry)
     }
     
-    private func modifyFlags(cpu: Z80) {
+    fileprivate func modifyFlags(_ cpu: Z80) {
         // H, previous carry is copied.
         // S is not affected.
         // P/V is not affected.
@@ -48,7 +48,7 @@ struct CCF: Z80Instruction, LR35902Instruction {
         modifyCommonFlags(cpu)
     }
     
-    private func modifyFlags(cpu: LR35902) {
+    fileprivate func modifyFlags(_ cpu: LR35902) {
         cpu.HF.write(false)
         
         modifyCommonFlags(cpu)

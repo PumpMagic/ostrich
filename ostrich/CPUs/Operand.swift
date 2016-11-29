@@ -24,24 +24,24 @@ protocol Writeable {
     associatedtype WriteType
     
     /// Write a value. Value is treated as though it has host endianness
-    func write(val: WriteType)
+    func write(_ val: WriteType)
 }
 
 enum OperandKind {
-    case Register8Like
-    case Register16Like
-    case Register16Indirect8Like
-    case Register16ComputedLike
-    case Memory8Like
-    case Memory16Like
-    case Immediate8Like
-    case Immediate16Like
-    case ImmediateDisplaced16Like
-    case Indexed16Like
+    case register8Like
+    case register16Like
+    case register16Indirect8Like
+    case register16ComputedLike
+    case memory8Like
+    case memory16Like
+    case immediate8Like
+    case immediate16Like
+    case immediateDisplaced16Like
+    case indexed16Like
     
     func is8Bit() -> Bool{
         switch self {
-        case .Register8Like, .Register16Indirect8Like, .Memory8Like, .Immediate8Like:
+        case .register8Like, .register16Indirect8Like, .memory8Like, .immediate8Like:
             return true
         default:
             return false

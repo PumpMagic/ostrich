@@ -10,7 +10,7 @@ import Foundation
 
 
 /// Call: call a function by pushing the PC onto the stack and jumping
-struct CALL<T: protocol<Readable, OperandType> where T.ReadType == UInt16>: Z80Instruction, LR35902Instruction
+struct CALL<T: Readable & OperandType>: Z80Instruction, LR35902Instruction where T.ReadType == UInt16
 {
     // (SP – 1) ← PCH, (SP – 2) ← PCL, PC ← nn
     
@@ -20,7 +20,7 @@ struct CALL<T: protocol<Readable, OperandType> where T.ReadType == UInt16>: Z80I
     let cycleCount = 0
     
     
-    private func runCommon(cpu: Intel8080Like) {
+    fileprivate func runCommon(_ cpu: Intel8080Like) {
         // Only call if the condition is absent or met
         let conditionSatisfied = condition?.evaluate() ?? true
         
@@ -30,11 +30,11 @@ struct CALL<T: protocol<Readable, OperandType> where T.ReadType == UInt16>: Z80I
         }
     }
     
-    func runOn(cpu: Z80) {
+    func runOn(_ cpu: Z80) {
         runCommon(cpu)
     }
     
-    func runOn(cpu: LR35902) {
+    func runOn(_ cpu: LR35902) {
         runCommon(cpu)
     }
 }

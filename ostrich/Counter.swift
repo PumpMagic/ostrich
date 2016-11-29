@@ -11,15 +11,15 @@ import Foundation
 
 /// A counter that stores a variable-width integer and automatically decrements when clocked (if nonzero).
 /// Optionally calls a function when triggered.
-class Counter<T: IntegerType> {
-    private var value: T
+class Counter<T: Integer> {
+    fileprivate var value: T
     
     let maxValue: T
     var onFire: (() -> Void)?
     var isFired: Bool { return self.value == 0 }
     
     
-    func load(newValue: T) {
+    func load(_ newValue: T) {
         if newValue > self.maxValue {
             print("FATAL: load of invalid value")
             exit(1)

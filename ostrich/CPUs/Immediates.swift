@@ -17,7 +17,7 @@ struct Immediate8: Readable, OperandType {
     }
     
     var operandType: OperandKind {
-        return OperandKind.Immediate8Like
+        return OperandKind.immediate8Like
     }
 }
 
@@ -29,7 +29,7 @@ struct Immediate8Signed: Readable, OperandType {
     }
     
     var operandType: OperandKind {
-        return OperandKind.Immediate8Like
+        return OperandKind.immediate8Like
     }
 }
 
@@ -41,6 +41,6 @@ struct Immediate16: Readable, OperandType {
     }
     
     var operandType: OperandKind {
-        return OperandKind.Immediate16Like
+        return OperandKind.immediate16Like
     }
 }

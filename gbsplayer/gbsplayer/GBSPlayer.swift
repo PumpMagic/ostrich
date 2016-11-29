@@ -9,14 +9,14 @@
 import Foundation
 
 
-func getByte(data: NSData, addr: Int) -> UInt8 {
+func getByte(_ data: Data, addr: Int) -> UInt8 {
     var readByte: UInt8 = 0
-    data.getBytes(&readByte, range: NSMakeRange(addr, 1))
+    (data as NSData).getBytes(&readByte, range: NSMakeRange(addr, 1))
     return readByte
 }
 
 //@todo duplicated w/ ostrich
-func make16(high high: UInt8, low: UInt8) -> UInt16 {
+func make16(high: UInt8, low: UInt8) -> UInt16 {
     var result = UInt16(high)
     result <<= 8
     result |= UInt16(low)
@@ -26,17 +26,17 @@ func make16(high high: UInt8, low: UInt8) -> UInt16 {
 
 //@todo duplicated w/ ostrich
 /// Reads two bytes of memory and returns them in host endianness
-func getDByte(data: NSData, addr: Int) -> UInt16 {
+func getDByte(_ data: Data, addr: Int) -> UInt16 {
     let low = getByte(data, addr: addr)
     let high = getByte(data, addr: addr+1)
     
     return make16(high: high, low: low)
 }
 
-func getBytes(data: NSData, addr: Int, length: Int) -> [UInt8] {
-    var readBytes: [UInt8] = [UInt8](count: length, repeatedValue: 0)
+func getBytes(_ data: Data, addr: Int, length: Int) -> [UInt8] {
+    var readBytes: [UInt8] = [UInt8](repeating: 0, count: length)
     
-    data.getBytes(&readBytes, range: NSMakeRange(addr, length))
+    (data as NSData).getBytes(&readBytes, range: NSMakeRange(addr, length))
     
     return readBytes
 }
@@ -116,18 +116,18 @@ struct GBSHeader: CustomStringConvertible {
     }
 }
 
-func removeNuls(string: String) -> String {
-    let set = NSCharacterSet(charactersInString: "\0")
-    return string.stringByTrimmingCharactersInSet(set)
+func removeNuls(_ string: String) -> String {
+    let set = CharacterSet(charactersIn: "\0")
+    return string.trimmingCharacters(in: set)
 }
 
-func parseFile(path: String) -> (header: GBSHeader, codeAndData: NSData)? {
-    guard let rawData = NSData(contentsOfFile: path) else {
+func parseFile(_ path: String) -> (header: GBSHeader, codeAndData: Data)? {
+    guard let rawData = try? Data(contentsOf: URL(fileURLWithPath: path)) else {
         print("Unable to find file at \(path)")
         return nil
     }
     
-    guard let id = String(bytes: getBytes(rawData, addr: GBS_ID_OFFSET, length: GBS_ID_LENGTH), encoding: NSUTF8StringEncoding) else
+    guard let id = String(bytes: getBytes(rawData, addr: GBS_ID_OFFSET, length: GBS_ID_LENGTH), encoding: String.Encoding.utf8) else
     {
         return nil
     }
@@ -141,10 +141,10 @@ func parseFile(path: String) -> (header: GBSHeader, codeAndData: NSData)? {
     let timerModulo = getByte(rawData, addr: GBS_TIMER_MODULO_OFFSET)
     let timerControl = getByte(rawData, addr: GBS_TIMER_CONTROL_OFFSET)
     guard let titleRaw = String(bytes: getBytes(rawData, addr: GBS_TITLE_OFFSET, length: GBS_TITLE_LENGTH),
-                       encoding: NSUTF8StringEncoding),
-              authorRaw = String(bytes: getBytes(rawData, addr: GBS_AUTHOR_OFFSET, length: GBS_AUTHOR_LENGTH),
-                       encoding: NSUTF8StringEncoding),
-              copyrightRaw = String(bytes: getBytes(rawData, addr: GBS_COPYRIGHT_OFFSET, length: GBS_COPYRIGHT_LENGTH), encoding: NSUTF8StringEncoding) else
+                       encoding: String.Encoding.utf8),
+              let authorRaw = String(bytes: getBytes(rawData, addr: GBS_AUTHOR_OFFSET, length: GBS_AUTHOR_LENGTH),
+                       encoding: String.Encoding.utf8),
+              let copyrightRaw = String(bytes: getBytes(rawData, addr: GBS_COPYRIGHT_OFFSET, length: GBS_COPYRIGHT_LENGTH), encoding: String.Encoding.utf8) else
     {
                     return nil
     }
@@ -155,13 +155,13 @@ func parseFile(path: String) -> (header: GBSHeader, codeAndData: NSData)? {
     
     let header = GBSHeader(id: id, version: version, numSongs: numSongs, firstSong: firstSong, loadAddress: loadAddress, initAddress: initAddress, playAddress: playAddress, stackPointer: stackPointer, timerModulo: timerModulo, timerControl: timerControl, title: title, author: author, copyright: copyright)
     
-    let codeAndData = rawData.subdataWithRange(NSMakeRange(GBS_CODE_AND_DATA_OFFSET, rawData.length-GBS_CODE_AND_DATA_OFFSET))
+    let codeAndData = rawData.subdata(in: NSMakeRange(GBS_CODE_AND_DATA_OFFSET, rawData.count-GBS_CODE_AND_DATA_OFFSET))
     
     return (header, codeAndData)
 }
 
 
-func playFile(path: String) {
+func playFile(_ path: String) {
     /*
     let myRom = Memory(data: rawData)
     let myZ80 = Z80(memory: myRom)

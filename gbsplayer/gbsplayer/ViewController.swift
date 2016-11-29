@@ -22,20 +22,20 @@ class ViewController: NSViewController {
         
         let apuTest = ApuTest()
         
-        var lastClock256 = NSDate()
-        var lastCPUCall = NSDate()
+        var lastClock256 = Date()
+        var lastCPUCall = Date()
         
         let displayLink = CADisplayLink(target: self, selector: Selector("handleTimer"))
 
         while true {
-            if NSDate().timeIntervalSinceDate(lastClock256) > 0.00391 {
+            if Date().timeIntervalSince(lastClock256) > 0.00391 {
                 apuTest.clock256()
-                lastClock256 = NSDate()
+                lastClock256 = Date()
             }
             
-            if NSDate().timeIntervalSinceDate(lastCPUCall) > /*0.01675*/0.012 {
+            if Date().timeIntervalSince(lastCPUCall) > /*0.01675*/0.012 {
                 apuTest.callAudioRoutine()
-                lastCPUCall = NSDate()
+                lastCPUCall = Date()
             }
         }
     }
@@ -45,7 +45,7 @@ class ApuTest {
     var cpu: LR35902
     var apu: GameBoyAPU
     var header: GBSHeader
-    var codeAndData: NSData
+    var codeAndData: Data
     var bus: DataBus
     var externalRAM: RAM
     var internalRAM: RAM
