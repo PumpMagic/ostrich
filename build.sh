@@ -4,8 +4,8 @@ buildsucceeded=false
 
 while [ "$buildsucceeded" != "true" ]
 do
-    xcodebuild -scheme audiotest clean
-    xcodebuild -scheme audiotest build
+    xcodebuild -scheme ostrich clean
+    xcodebuild -scheme ostrich build
     if [ $? == "0" ]
     then
         buildsucceeded=true

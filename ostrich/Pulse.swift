@@ -28,6 +28,7 @@ NR24 FF19 TL-- -FFF Trigger, Length enable, Frequency MSB
 /** Representation of a Game Boy pulse wave channel */
 class Pulse: HasLengthCounter, HasVolumeEnvelope {
     
+    /** Constants */
     static let MIN_DUTY: UInt8 = 0
     static let MAX_DUTY: UInt8 = 3
     static let MIN_LENGTH_ENABLE: UInt8 = 0
@@ -36,6 +37,7 @@ class Pulse: HasLengthCounter, HasVolumeEnvelope {
     static let MAX_VOLUME: UInt8 = 15
     static let MIN_FREQUENCY: UInt16 = 0
     static let MAX_FREQUENCY: UInt16 = 2047
+    
     
     /* DUTY CYCLE STUFF
         The pulse channel has a variable-width duty cycle */
@@ -47,10 +49,10 @@ class Pulse: HasLengthCounter, HasVolumeEnvelope {
                 exit(1)
             }
             
-            self.oscillator.index = Double(duty)
+            self.updateImplDuty()
         }
     }
-    // Duty 00 is a 12.5% pulse; 01 is a 25% pulse; 10 50%; 11 75%
+    // Duty 0b00 is a 12.5% pulse; 0b01 is a 25% pulse; 0b10 -> 50%; 0b11 -> 75%
     static let wavetables: [[UInt]] = [[0, 0, 0, 0, 0, 0, 0, 1], [1, 0, 0, 0, 0, 0, 0, 1],
                                        [1, 0, 0, 0, 0, 1, 1, 1], [0, 1, 1, 1, 1, 1, 1, 0]]
     
@@ -76,12 +78,11 @@ class Pulse: HasLengthCounter, HasVolumeEnvelope {
     /** lengthEnable is a one-bit value representing whether or not the length counter will actually decrement when clocked */
     var lengthEnable: UInt8 = 0 {
         didSet {
-            if lengthEnable < Pulse.MIN_LENGTH_ENABLE || lengthEnable > Pulse.MIN_LENGTH_ENABLE {
+            // Validate range
+            if lengthEnable < Pulse.MIN_LENGTH_ENABLE || lengthEnable > Pulse.MAX_LENGTH_ENABLE {
                 print("FATAL: invalid length enable loaded: \(lengthEnable)")
                 exit(1)
             }
-            
-            self.lengthCounter.enabled = lengthEnable != 0
         }
     }
     
@@ -89,30 +90,36 @@ class Pulse: HasLengthCounter, HasVolumeEnvelope {
     
     /* VOLUME STUFF */
     
-    /** startingVolume is a 4-bit value that sets the initial volume of the channel */
+    /** startingVolume is a 4-bit value that sets the initial volume of the channel 
+        (initial meaning before any volume sweeping). */
     var startingVolume: UInt8 = Pulse.MIN_VOLUME {
         didSet {
+            // Validate range
             if startingVolume < Pulse.MIN_VOLUME || startingVolume > Pulse.MAX_VOLUME {
                 print("FATAL: invalid starting volume assigned: \(startingVolume)")
                 exit(1)
             }
         }
     }
-    /** volume is an internal 4-bit value that controls the output volume of the channel */
+    /** volume is an internal 4-bit value that controls the output volume of the channel.
+        It is the product of startingVolume plus any volume sweeping effects over time. */
     private var volume: UInt8 = Pulse.MIN_VOLUME {
         didSet {
             updateImplVolume()
         }
     }
     
-    /** Envelope add mode specifies whether the volume goes up or down when the envelope counter fires */
+    /** envelopeAddMode specifies whether the volume goes up or down when the envelope counter fires */
     var envelopeAddMode: UInt8 = 0
     
-    /** Envelope period specifies how many times the envelope clock needs to fire before the envelope triggers */
+    /** envelopePeriod specifies how many times the envelope clock needs to raise before the envelope triggers */
     var envelopePeriod: UInt8 = 0
     
+    /** envelopeCounter is an internal four-bit counter that, when fired, changes the internal channel volume
+        according to envelopeAddMode */
     private var envelopeCounter: Counter<UInt8> = Counter(value: 0, maxValue: 7, onFire: nil)
     
+    /** Registered as the callback of envelopeCounter */
     private func envelopeCounterFired() {
         switch self.envelopeAddMode {
         case 0:
@@ -132,10 +139,10 @@ class Pulse: HasLengthCounter, HasVolumeEnvelope {
     
     
     /* FREQUENCY STUFF */
-    /** Frequency is an 11-bit value representing the frequency timer period: that is, how long the channel
+    /** frequency is an 11-bit value representing the frequency timer period: that is, how long the channel
         stays on each sample of its wavetable, in 1/4194304ths of a second.
         The frequency of the output pulse wave is (4194304 / 8 / frequency), since the wavetable is
-        8 samples wide  */
+        8 samples wide. */
     var frequency: UInt16 = 1192 {
         didSet {
             if frequency < Pulse.MIN_FREQUENCY || frequency > Pulse.MAX_FREQUENCY {
@@ -230,6 +237,9 @@ class Pulse: HasLengthCounter, HasVolumeEnvelope {
         // 2. If length counter is currently zero, set it to max
         self.lengthCounter.resetIfFired()
         
+        // Maybe enable the length counter too?
+        self.lengthEnable = 1
+        
         // 3. Reloads the frequency timer with period
         //@todo we would need model frequency more accurately than AudioKit allows to do anything here
         
@@ -268,20 +278,26 @@ class Pulse: HasLengthCounter, HasVolumeEnvelope {
     private var enabled: Bool = true {
         didSet {
             if !enabled {
-                self.oscillator.amplitude = 0.0
+                muteImplOutput()
             } else {
-                updateImplVolume()
+                unmuteImplOutput()
             }
         }
     }
     
     
     func clock256() {
-        self.lengthCounter.clock()
+        if self.enabled {
+            if self.lengthEnable > 0 {
+                self.lengthCounter.clock()
+            }
+        }
     }
     
     func clock64() {
-        self.envelopeCounter.clock()
+        if self.enabled {
+            self.envelopeCounter.clock()
+        }
     }
     
     
@@ -290,12 +306,27 @@ class Pulse: HasLengthCounter, HasVolumeEnvelope {
     private var oscillator: AKMorphingOscillator
     private var mixer: AKMixer
     
-    /** Update the volume of this channel to whatever audio library we're using */
+    /** Update the duty cycle (bit pattern) of this channel */
+    func updateImplDuty() {
+        self.oscillator.index = Double(self.duty)
+    }
+    
+    /** Mute this channel */
+    func muteImplOutput() {
+        self.oscillator.amplitude = 0.0
+    }
+    
+    /** Unmute this channel */
+    func unmuteImplOutput() {
+        self.updateImplVolume()
+    }
+    
+    /** Update the volume of this channel */
     func updateImplVolume() {
         self.oscillator.amplitude = toImplAmplitude(self.volume)
     }
     
-    /** Update the frequency of this channel to whatever audio library we're using */
+    /** Update the frequency of this channel */
     func updateImplFrequency() {
         let newFrequency = toImplFrequency(self.frequency)
         
@@ -328,6 +359,7 @@ class Pulse: HasLengthCounter, HasVolumeEnvelope {
         }
         self.oscillator.start()
     }
+    
     //@todo this is a hack. how can we pass in our blocks to the counter constructors in our init?
     func initializeCounterCallbacks() {
         self.lengthCounter.onFire = self.lengthCounterFired

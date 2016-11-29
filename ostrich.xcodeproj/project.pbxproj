@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EB089C121D68340100CED5C8 /* AudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB089C111D68340100CED5C8 /* AudioKit.framework */; };
+		EB089C131D68340600CED5C8 /* AudioKit.framework in Resources */ = {isa = PBXBuildFile; fileRef = EB089C111D68340100CED5C8 /* AudioKit.framework */; };
+		EBB7DA9C1D67B87B00C18160 /* Counter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB7DA9B1D67B87B00C18160 /* Counter.swift */; };
 		EBD503441D65731800B60856 /* ostrich.h in Headers */ = {isa = PBXBuildFile; fileRef = EBD503431D65731800B60856 /* ostrich.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EBD5034B1D65731800B60856 /* ostrich.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBD503401D65731800B60856 /* ostrich.framework */; };
 		EBD503501D65731800B60856 /* ostrichTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD5034F1D65731800B60856 /* ostrichTests.swift */; };
@@ -59,8 +62,6 @@
 		EBD9588C1D657D7000963E2F /* GameboyAPU.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD9588A1D657D7000963E2F /* GameboyAPU.swift */; };
 		EBD9588D1D657D7000963E2F /* GameboyAPUUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD9588B1D657D7000963E2F /* GameboyAPUUtil.swift */; };
 		EBD9588F1D657D9600963E2F /* BitUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD9588E1D657D9600963E2F /* BitUtil.swift */; };
-		EBD958911D657E1800963E2F /* AudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBD958901D657E1800963E2F /* AudioKit.framework */; };
-		EBD958921D657E3500963E2F /* AudioKit.framework in Resources */ = {isa = PBXBuildFile; fileRef = EBD958901D657E1800963E2F /* AudioKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		EB089C111D68340100CED5C8 /* AudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AudioKit.framework; sourceTree = "<group>"; };
+		EBB7DA9B1D67B87B00C18160 /* Counter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Counter.swift; sourceTree = "<group>"; };
 		EBD503401D65731800B60856 /* ostrich.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ostrich.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EBD503431D65731800B60856 /* ostrich.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ostrich.h; sourceTree = "<group>"; };
 		EBD503451D65731800B60856 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -129,7 +132,6 @@
 		EBD9588A1D657D7000963E2F /* GameboyAPU.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameboyAPU.swift; path = GameboyAPU/GameboyAPU.swift; sourceTree = "<group>"; };
 		EBD9588B1D657D7000963E2F /* GameboyAPUUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameboyAPUUtil.swift; path = GameboyAPU/GameboyAPUUtil.swift; sourceTree = "<group>"; };
 		EBD9588E1D657D9600963E2F /* BitUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BitUtil.swift; sourceTree = "<group>"; };
-		EBD958901D657E1800963E2F /* AudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AudioKit.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,7 +139,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EBD958911D657E1800963E2F /* AudioKit.framework in Frameworks */,
+				EB089C121D68340100CED5C8 /* AudioKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -155,7 +157,7 @@
 		EBD503361D65731800B60856 = {
 			isa = PBXGroup;
 			children = (
-				EBD958901D657E1800963E2F /* AudioKit.framework */,
+				EB089C111D68340100CED5C8 /* AudioKit.framework */,
 				EBD503421D65731800B60856 /* ostrich */,
 				EBD5034E1D65731800B60856 /* ostrichTests */,
 				EBD503411D65731800B60856 /* Products */,
@@ -174,9 +176,9 @@
 		EBD503421D65731800B60856 /* ostrich */ = {
 			isa = PBXGroup;
 			children = (
+				EBD958281D657C6800963E2F /* Source */,
 				EBD503431D65731800B60856 /* ostrich.h */,
 				EBD503451D65731800B60856 /* Info.plist */,
-				EBD958281D657C6800963E2F /* Source */,
 			);
 			path = ostrich;
 			sourceTree = "<group>";
@@ -193,11 +195,11 @@
 		EBD958281D657C6800963E2F /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				EBD9588E1D657D9600963E2F /* BitUtil.swift */,
-				EBD9587B1D657CFC00963E2F /* Peripherals.swift */,
 				EBD9586B1D657C8300963E2F /* CPUs */,
 				EBD9587D1D657D2400963E2F /* Memories */,
 				EBD958841D657D4D00963E2F /* GameboyAPU */,
+				EBD9588E1D657D9600963E2F /* BitUtil.swift */,
+				EBD9587B1D657CFC00963E2F /* Peripherals.swift */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -270,6 +272,7 @@
 		EBD958841D657D4D00963E2F /* GameboyAPU */ = {
 			isa = PBXGroup;
 			children = (
+				EBB7DA9B1D67B87B00C18160 /* Counter.swift */,
 				EBD958851D657D5500963E2F /* Channels */,
 				EBD9588A1D657D7000963E2F /* GameboyAPU.swift */,
 				EBD9588B1D657D7000963E2F /* GameboyAPUUtil.swift */,
@@ -378,7 +381,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EBD958921D657E3500963E2F /* AudioKit.framework in Resources */,
+				EB089C131D68340600CED5C8 /* AudioKit.framework in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -436,6 +439,7 @@
 				EBD958671D657C8000963E2F /* SRL.swift in Sources */,
 				EBD9587A1D657CE800963E2F /* Z80.swift in Sources */,
 				EBD9585E1D657C8000963E2F /* PUSH.swift in Sources */,
+				EBB7DA9C1D67B87B00C18160 /* Counter.swift in Sources */,
 				EBD9586A1D657C8000963E2F /* XOR.swift in Sources */,
 				EBD958571D657C8000963E2F /* INC.swift in Sources */,
 				EBD9584E1D657C8000963E2F /* CCF.swift in Sources */,

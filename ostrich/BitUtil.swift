@@ -238,6 +238,10 @@ protocol HexStringConvertible {
     var hexString: String { get }
 }
 
+protocol BinaryStringConvertible {
+    var binaryString: String { get }
+}
+
 extension UInt8: HexStringConvertible {
     /// Representation of this number as 0x%02X
     var hexString: String { return String(format: "0x%02X", self) }
@@ -246,4 +250,14 @@ extension UInt8: HexStringConvertible {
 extension UInt16: HexStringConvertible {
     /// Representation of this number as 0x%04X
     var hexString: String { return String(format: "0x%04X", self) }
+}
+
+extension UInt8: BinaryStringConvertible {
+    /// Representation of this number as 0x%02X
+    var binaryString: String { return String(self, radix: 2) }
+}
+
+extension UInt16: BinaryStringConvertible {
+    /// Representation of this number as 0x%04X
+    var binaryString: String { return String(self, radix: 2) }
 }

@@ -47,6 +47,8 @@ class GameBoyAPU: Memory, HandlesWrites {
     init(mixer: AKMixer) {
         self.pulse1 = Pulse(mixer: mixer, hasFrequencySweep: true, connected: true)
         self.pulse2 = Pulse(mixer: mixer, hasFrequencySweep: false, connected: true)
+        self.pulse1.initializeCounterCallbacks()
+        self.pulse2.initializeCounterCallbacks()
         
         //@todo we can't use LAST or FIRST here for calculations. what can we do instead?
         self.ram = RAM(size: 0x30, fillByte: 0x00, firstAddress: 0xFF10)
@@ -57,6 +59,7 @@ class GameBoyAPU: Memory, HandlesWrites {
         return self.ram.read(addr)
     }
     
+    var poop = "."
     func write(val: UInt8, to addr: Address) {
 //        print("APU write! \(val.hexString) to \(addr.hexString)")
         
@@ -87,6 +90,7 @@ class GameBoyAPU: Memory, HandlesWrites {
             let ff14 = self.ram.read(0xFF14)
             let frequencyHigh = getValueOfBits(ff14, bits: 0...2)
             let frequency = make16(high: frequencyHigh, low: frequencyLow)
+            
             pulse1.frequency = frequency
             
         case 0xFF14:
@@ -94,8 +98,6 @@ class GameBoyAPU: Memory, HandlesWrites {
             let ff14 = val
             let frequencyHigh = getValueOfBits(ff14, bits: 0...2)
             let frequency = make16(high: frequencyHigh, low: frequencyLow)
-            
-//            print("high: \(val), low: \(frequencyLow) -> \(frequency)")
             
             pulse1.frequency = frequency
             pulse1.trigger = getValueOfBits(val, bits: 7...7)
@@ -134,6 +136,11 @@ class GameBoyAPU: Memory, HandlesWrites {
             pulse2.trigger = getValueOfBits(val, bits: 7...7)
             pulse2.lengthEnable = getValueOfBits(val, bits: 6...6)
             
+//        case 0xFF24, 0xFF25, 0xFF26:
+            // Power control / status
+//            print("Write to power control! \(addr.hexString) <- \(val.hexString)")
+//            exit(1)
+            
         default:
             //print("Ignoring!")
             //exit(1)
@@ -142,18 +149,17 @@ class GameBoyAPU: Memory, HandlesWrites {
     }
     
     
-    //@todo should we rely on our caller to call this? Or should we have some internal timer?
     var clockIndex = 0 // 0-3
     func clock256() {
         pulse1.clock256()
         pulse2.clock256()
         
-        // 128Hz
+        // 128Hz - every other 256Hz clock
         if clockIndex == 1 || clockIndex == 3 {
             pulse1.sweepTimerFired()
         }
         
-        // 64Hz
+        // 64Hz - every fourth 256Hz clock
         if clockIndex == 3 {
             pulse1.clock64()
             pulse2.clock64()

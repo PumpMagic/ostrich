@@ -8,9 +8,11 @@
 
 import Cocoa
 import AudioKit
+import UIKit
 @testable import ostrich
 
 
+//let GBS_PATH: String = "/Users/owner/Dropbox/emu/tetris.gbs"
 let GBS_PATH: String = "/Users/owner/Dropbox/emu/doubledragon.gbs"
 
 
@@ -18,7 +20,24 @@ class ViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let _ = ApuTest()
+        let apuTest = ApuTest()
+        
+        var lastClock256 = NSDate()
+        var lastCPUCall = NSDate()
+        
+        let displayLink = CADisplayLink(target: self, selector: Selector("handleTimer"))
+
+        while true {
+            if NSDate().timeIntervalSinceDate(lastClock256) > 0.00391 {
+                apuTest.clock256()
+                lastClock256 = NSDate()
+            }
+            
+            if NSDate().timeIntervalSinceDate(lastCPUCall) > /*0.01675*/0.012 {
+                apuTest.callAudioRoutine()
+                lastCPUCall = NSDate()
+            }
+        }
     }
 }
 
@@ -107,10 +126,6 @@ class ApuTest {
         /* PLAY - Begins after INIT process is complete. The play address is constantly
          called at the rate established in the header (see TIMING). The play code must
          end with a RET instruction. */
-        print("Calling and running PLAY...")
-        
-        NSTimer.scheduledTimerWithTimeInterval(0.00391, target: self, selector: #selector(ApuTest.clock256), userInfo: nil, repeats: true)
-        
         var audioRoutineCallRate = 1.0
         
         if bitIsHigh(header.timerControl, bit: 2) { // interrupt type
@@ -136,9 +151,12 @@ class ApuTest {
             audioRoutineCallRate = 0.01675
         }
         
-        print("Audio routine call rate is \(1/audioRoutineCallRate)Hz")
+//        audioRoutineCallRate *= 4
         
-        NSTimer.scheduledTimerWithTimeInterval(audioRoutineCallRate, target: self, selector: #selector(ApuTest.callAudioRoutine), userInfo: nil, repeats: true)
+        print("Calling and running PLAY...")
+        print("Audio routine call rate is \(1/audioRoutineCallRate)Hz")
+//        NSTimer.scheduledTimerWithTimeInterval(0.00391, target: self, selector: #selector(ApuTest.clock256), userInfo: nil, repeats: true)
+//        NSTimer.scheduledTimerWithTimeInterval(audioRoutineCallRate, target: self, selector: #selector(ApuTest.callAudioRoutine), userInfo: nil, repeats: true)
         
         AudioKit.output = mixer
         AudioKit.start()
