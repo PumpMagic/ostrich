@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EB6CB25F1E345A3700010E3E /* GameBoy.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6CB25E1E345A3700010E3E /* GameBoy.swift */; };
 		EBB7DA9C1D67B87B00C18160 /* Counter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB7DA9B1D67B87B00C18160 /* Counter.swift */; };
 		EBD31DD81DED76BF00FFD5DE /* AudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBD31DD71DED76BF00FFD5DE /* AudioKit.framework */; };
 		EBD503441D65731800B60856 /* ostrich.h in Headers */ = {isa = PBXBuildFile; fileRef = EBD503431D65731800B60856 /* ostrich.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -74,6 +75,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		EB6CB25E1E345A3700010E3E /* GameBoy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameBoy.swift; sourceTree = "<group>"; };
 		EBB7DA9B1D67B87B00C18160 /* Counter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Counter.swift; sourceTree = "<group>"; };
 		EBD31DD71DED76BF00FFD5DE /* AudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AudioKit.framework; sourceTree = "<group>"; };
 		EBD503401D65731800B60856 /* ostrich.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ostrich.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -199,6 +201,7 @@
 				EBD958841D657D4D00963E2F /* GameboyAPU */,
 				EBD9588E1D657D9600963E2F /* BitUtil.swift */,
 				EBD9587B1D657CFC00963E2F /* Peripherals.swift */,
+				EB6CB25E1E345A3700010E3E /* GameBoy.swift */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -271,8 +274,8 @@
 		EBD958841D657D4D00963E2F /* GameboyAPU */ = {
 			isa = PBXGroup;
 			children = (
-				EBB7DA9B1D67B87B00C18160 /* Counter.swift */,
 				EBD958851D657D5500963E2F /* Channels */,
+				EBB7DA9B1D67B87B00C18160 /* Counter.swift */,
 				EBD9588A1D657D7000963E2F /* GameboyAPU.swift */,
 				EBD9588B1D657D7000963E2F /* GameboyAPUUtil.swift */,
 			);
@@ -402,6 +405,7 @@
 				EBD958791D657CE800963E2F /* Registers.swift in Sources */,
 				EBD9588F1D657D9600963E2F /* BitUtil.swift in Sources */,
 				EBD9587C1D657CFC00963E2F /* Peripherals.swift in Sources */,
+				EB6CB25F1E345A3700010E3E /* GameBoy.swift in Sources */,
 				EBD9585A1D657C8000963E2F /* LD.swift in Sources */,
 				EBD958681D657C8000963E2F /* SUB.swift in Sources */,
 				EBD958511D657C8000963E2F /* DEC.swift in Sources */,

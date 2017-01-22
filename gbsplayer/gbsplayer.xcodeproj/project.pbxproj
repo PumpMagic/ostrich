@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EB6CB25D1E3455E000010E3E /* GBSParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6CB25C1E3455E000010E3E /* GBSParser.swift */; };
 		EBBC3A131D6580FE00AC529E /* GBSPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC3A121D6580FE00AC529E /* GBSPlayer.swift */; };
 		EBD958DB1D65802400963E2F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD958DA1D65802400963E2F /* AppDelegate.swift */; };
 		EBD958DD1D65802400963E2F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD958DC1D65802400963E2F /* ViewController.swift */; };
@@ -50,6 +51,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		EB6CB25C1E3455E000010E3E /* GBSParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GBSParser.swift; sourceTree = "<group>"; };
 		EBB7DA9F1D67C18800C18160 /* ostrich.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ostrich.framework; path = "../../../Library/Developer/Xcode/DerivedData/ostrich-foboudusbfzudvglxzssqmwvcqrd/Build/Products/Debug/ostrich.framework"; sourceTree = "<group>"; };
 		EBBC3A121D6580FE00AC529E /* GBSPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GBSPlayer.swift; sourceTree = "<group>"; };
 		EBD958D71D65802400963E2F /* gbsplayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gbsplayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -121,6 +123,7 @@
 				EBD958DA1D65802400963E2F /* AppDelegate.swift */,
 				EBD958DC1D65802400963E2F /* ViewController.swift */,
 				EBBC3A121D6580FE00AC529E /* GBSPlayer.swift */,
+				EB6CB25C1E3455E000010E3E /* GBSParser.swift */,
 				EBD958DE1D65802400963E2F /* Assets.xcassets */,
 				EBD958E01D65802400963E2F /* Main.storyboard */,
 				EBD958E31D65802400963E2F /* Info.plist */,
@@ -284,6 +287,7 @@
 				EBD958DD1D65802400963E2F /* ViewController.swift in Sources */,
 				EBD958DB1D65802400963E2F /* AppDelegate.swift in Sources */,
 				EBBC3A131D6580FE00AC529E /* GBSPlayer.swift in Sources */,
+				EB6CB25D1E3455E000010E3E /* GBSParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

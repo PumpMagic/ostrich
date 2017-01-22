@@ -63,7 +63,6 @@ class GameBoyAPU: Memory, HandlesWrites {
         return self.ram.read(addr)
     }
     
-    var poop = "."
     func write(_ val: UInt8, to addr: Address) {
 //        print("APU write! \(val.hexString) to \(addr.hexString)")
         
