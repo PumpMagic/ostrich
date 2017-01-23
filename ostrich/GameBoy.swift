@@ -12,12 +12,13 @@ import AudioKit
 
 /// A Nintendo Game Boy.
 open class GameBoy {
-    open var cpu: LR35902
-    var apu: GameBoyAPU
+    let cpu: LR35902
+    let apu: GameBoyAPU
+    let mixer: AKMixer
     
-    var bus: DataBus
-    var internalRAM: RAM
-    var highRAM: RAM
+    let bus: DataBus
+    let internalRAM: RAM
+    let highRAM: RAM
     var rom: ROM?
     var externalRAM: RAM?
     
@@ -49,8 +50,8 @@ open class GameBoy {
         // 0xFF10 - 0xFF3F is the APU memory
         
         // Instantiate the APU and audio engine mixer
-        let mixer = AKMixer()
-        self.apu = GameBoyAPU(mixer: mixer)
+        self.mixer = AKMixer()
+        self.apu = GameBoyAPU(mixer: self.mixer)
         
         // 0xFF80 - 0xFFFE is high RAM
         self.highRAM = RAM(size: 0xFFFF - 0xFF80, fillByte: 0x00, firstAddress: 0xFF80)
@@ -84,6 +85,10 @@ open class GameBoy {
         self.bus.connectReadable(self.rom!)
         self.bus.connectReadable(self.externalRAM!)
         self.bus.connectWriteable(self.externalRAM!)
+    }
+    
+    func setVolume(level: Double) {
+        mixer.volume = level
     }
     
     

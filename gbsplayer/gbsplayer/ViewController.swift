@@ -11,22 +11,35 @@ import AudioKit
 
 
 let GBS_PATH: String = "/Users/owner/Dropbox/emu/tetris.gbs"
+//let GBS_PATH: String = "/Users/owner/Dropbox/emu/sml.gbs"
 //let GBS_PATH: String = "/Users/owner/Dropbox/emu/doubledragon.gbs"
+//let GBS_PATH: String = "/Users/owner/Dropbox/emu/castlevania.gbs"
+//let GBS_PATH: String = "/Users/owner/Dropbox/emu/batman.gbs"
+//let GBS_PATH: String = "/Users/owner/Dropbox/emu/drmario.gbs"
+//let GBS_PATH: String = "/Users/owner/Dropbox/emu/tmnt.gbs"
+//let GBS_PATH: String = "/Users/owner/Dropbox/emu/ducktales.gbs"
 
 
 class ViewController: NSViewController {
-    let player = GBSPlayer(path: GBS_PATH)
+    let player = GBSPlayer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        sleep(5)
+        player.loadGBSFile(path: GBS_PATH)
         
-        
-        player.stopClocking()
-        player.loadTrack(number: 0)
-        sleep(1)
-        player.startClocking()
+        // Play each track for a few seconds
+        var track: UInt8 = 0
+        while true {
+            print("Loading track \(track)")
+            
+            player.playTrack(track: track)
+            //@todo shouldn't need to adjust volume after starting a track
+            player.setVolume(level: 1.0)
+            sleep(10)
+            player.stopPlaying()
+            track += 1
+        }
     }
 }
 

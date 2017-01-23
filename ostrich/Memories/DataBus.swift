@@ -83,6 +83,8 @@ open class DataBus: DelegatesReads, DelegatesWrites {
         }
         
         print("FATAL: no one listening to read of address \(addr.hexString)")
+        //@todo probably shouldn't return 0
+        return 0
         exit(1)
     }
     

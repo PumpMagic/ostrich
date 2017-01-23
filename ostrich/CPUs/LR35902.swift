@@ -1,6 +1,6 @@
 //
 //  LR35902.swift
-//  ostrichframework
+//  ostrich
 //
 //  Created by Ryan Conway on 4/6/16.
 //  Copyright © 2016 Ryan Conway. All rights reserved.
@@ -61,7 +61,8 @@ open class LR35902: Intel8080Like {
     
     public init(bus: DataBus) {
         func random8() -> UInt8 {
-            return UInt8(truncatingBitPattern: arc4random() % 256)
+            //return UInt8(truncatingBitPattern: arc4random() % 256)
+            return 0
         }
         
         self.A = Register8(val: 0xFF)
@@ -73,12 +74,12 @@ open class LR35902: Intel8080Like {
         self.H = Register8(val: random8())
         self.L = Register8(val: random8())
         
-        self.SP = Register16(val: 0xFFFF)
+        self.SP = Register16(val: 0xFFFE)
         
         self.I = Register8(val: random8())
         self.R = Register8(val: random8())
         
-        self.PC = Register16(val: 0x0000)
+        self.PC = Register16(val: 0x0100)
         
         self.ZF = Flag(reg: F, bitNumber: 7)
         self.NF = Flag(reg: F, bitNumber: 6)
@@ -136,11 +137,14 @@ open class LR35902: Intel8080Like {
     
     /// Fetch an instruction, run it, and return it
     fileprivate func doInstructionCycle() -> LR35902Instruction {
+//        let instructionPC = self.PC.val
         guard let instruction = self.fetchInstruction() else {
             print("FATAL: unable to fetch instruction")
             exit(1)
         }
+//        print("\(instructionPC.hexString) -> \(instruction)")
         self.executeInstruction(instruction)
+        
         
         return instruction
     }
@@ -317,5 +321,20 @@ open class LR35902: Intel8080Like {
         }
         
         return instruction
+    }
+    
+    open func resetRegisters() {
+        self.A.write(0xFF)
+        self.B.write(0)
+        self.C.write(0)
+        self.D.write(0)
+        self.E.write(0)
+        self.F.write(0)
+        self.H.write(0)
+        self.L.write(0)
+        self.SP.write(0xFFFE)
+        self.I.write(0)
+        self.R.write(0)
+        self.PC.write(0x0100)
     }
 }
