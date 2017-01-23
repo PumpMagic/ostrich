@@ -60,26 +60,22 @@ open class LR35902: Intel8080Like {
     let bus: DataBus
     
     public init(bus: DataBus) {
-        func random8() -> UInt8 {
-            //return UInt8(truncatingBitPattern: arc4random() % 256)
-            return 0
-        }
+        // Actual initial values of registers are captured in resetRegisters() 
+        self.A = Register8(val: 0)
+        self.B = Register8(val: 0)
+        self.C = Register8(val: 0)
+        self.D = Register8(val: 0)
+        self.E = Register8(val: 0)
+        self.F = Register8(val: 0)
+        self.H = Register8(val: 0)
+        self.L = Register8(val: 0)
         
-        self.A = Register8(val: 0xFF)
-        self.B = Register8(val: random8())
-        self.C = Register8(val: random8())
-        self.D = Register8(val: random8())
-        self.E = Register8(val: random8())
-        self.F = Register8(val: 0xFF)
-        self.H = Register8(val: random8())
-        self.L = Register8(val: random8())
+        self.SP = Register16(val: 0)
         
-        self.SP = Register16(val: 0xFFFE)
+        self.I = Register8(val: 0)
+        self.R = Register8(val: 0)
         
-        self.I = Register8(val: random8())
-        self.R = Register8(val: random8())
-        
-        self.PC = Register16(val: 0x0100)
+        self.PC = Register16(val: 0)
         
         self.ZF = Flag(reg: F, bitNumber: 7)
         self.NF = Flag(reg: F, bitNumber: 6)
@@ -97,6 +93,8 @@ open class LR35902: Intel8080Like {
         self.instructionContext = Intel8080InstructionContext(lastInstructionWasDI: false, lastInstructionWasEI: false)
         
         self.bus = bus
+        
+        self.resetRegisters()
     }
     
     // Utility methods
@@ -325,16 +323,16 @@ open class LR35902: Intel8080Like {
     
     open func resetRegisters() {
         self.A.write(0xFF)
-        self.B.write(0)
-        self.C.write(0)
-        self.D.write(0)
-        self.E.write(0)
-        self.F.write(0)
-        self.H.write(0)
-        self.L.write(0)
+        self.B.write(0x00)
+        self.C.write(0x00)
+        self.D.write(0x00)
+        self.E.write(0x00)
+        self.F.write(0xFF)
+        self.H.write(0x00)
+        self.L.write(0x00)
         self.SP.write(0xFFFE)
-        self.I.write(0)
-        self.R.write(0)
+        self.I.write(0x00)
+        self.R.write(0x00)
         self.PC.write(0x0100)
     }
 }

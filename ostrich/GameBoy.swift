@@ -10,6 +10,8 @@ import Foundation
 import AudioKit
 
 
+let CARTRIDGE_PERIPHERAL_ID = "cartridge"
+
 /// A Nintendo Game Boy.
 open class GameBoy {
     let cpu: LR35902
@@ -73,18 +75,25 @@ open class GameBoy {
     
     //@todo don't allow inserting multiple cartridges
     func insertCartridge(rom: Data, romStartAddress: Address) {
-        self.rom = ROM(data: rom, firstAddress: romStartAddress)
+        let romPeripheral = ROM(data: rom, firstAddress: romStartAddress)
+        self.rom = romPeripheral
         
         // @todo this exists only on a per-cartridge basis
         // but we make it for everything right now
-        self.externalRAM = RAM(size: 0xC000 - 0xA000, fillByte: 0x00, firstAddress: 0xA000)
+        let externalRAMPeripheral = RAM(size: 0xC000 - 0xA000, fillByte: 0x00, firstAddress: 0xA000)
+        self.externalRAM = externalRAMPeripheral
         
-        
-        
-        //@todo UNWRAP OPTIONALS PROPERLY
-        self.bus.connectReadable(self.rom!)
-        self.bus.connectReadable(self.externalRAM!)
-        self.bus.connectWriteable(self.externalRAM!)
+        self.bus.connectReadable(romPeripheral, id: CARTRIDGE_PERIPHERAL_ID)
+        self.bus.connectReadable(externalRAMPeripheral)
+        self.bus.connectWriteable(externalRAMPeripheral)
+    }
+    
+    func removeCartridge() {
+        self.bus.disconnectReadable(id: CARTRIDGE_PERIPHERAL_ID)
+    }
+    
+    func clearWriteableMemory() {
+        self.bus.clearAllWriteables()
     }
     
     func setVolume(level: Double) {

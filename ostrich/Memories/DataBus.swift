@@ -19,8 +19,9 @@ protocol DelegatesWrites: HandlesWrites {
 open class DataBus: DelegatesReads, DelegatesWrites {
     //@todo consider using Intervals instead of Ranges:
     //http://oleb.net/blog/2015/09/swift-ranges-and-intervals/
-    var readables: [(HandlesReads, CountableClosedRange<Address>)]
-    var writeables: [(HandlesWrites, CountableClosedRange<Address>)]
+    /// (ID, peripheral, address range)
+    var readables: [(HandlesReads, CountableClosedRange<Address>, String?)]
+    var writeables: [(HandlesWrites, CountableClosedRange<Address>, String?)]
     
     enum TransactionDirection {
         case read
@@ -40,23 +41,64 @@ open class DataBus: DelegatesReads, DelegatesWrites {
             }
         }
     }
-    let logTransactions: Bool = true
+    let logTransactions: Bool = false
     var transactions: [Transaction] = []
     
     public init() {
-        self.readables = [(HandlesReads, CountableClosedRange<Address>)]()
-        self.writeables = [(HandlesWrites, CountableClosedRange<Address>)]()
+        self.readables = [(HandlesReads, CountableClosedRange<Address>, String?)]()
+        self.writeables = [(HandlesWrites, CountableClosedRange<Address>, String?)]()
     }
     
     open func connectReadable(_ readable: BusListener & HandlesReads) {
-        self.readables.append((readable, readable.addressRange))
+        self.readables.append((readable, readable.addressRange, nil))
     }
     open func connectWriteable(_ writeable: BusListener & HandlesWrites) {
-        self.writeables.append((writeable, writeable.addressRange))
+        self.writeables.append((writeable, writeable.addressRange, nil))
     }
     
+    open func connectReadable(_ readable: BusListener & HandlesReads, id: String) {
+        self.readables.append((readable, readable.addressRange, id))
+    }
+    
+    open func connectWriteable(_ readable: BusListener & HandlesWrites, id: String) {
+        self.writeables.append((readable, readable.addressRange, id))
+    }
+    
+    open func disconnectReadable(id: String) {
+        var elementFound: Bool
+        
+        repeat {
+            elementFound = false
+            for (index, (_, _, elementID)) in self.readables.enumerated() {
+                if elementID == id {
+                    self.readables.remove(at: index)
+                    elementFound = true
+                    break
+                }
+            }
+        } while elementFound
+    }
+    
+    //@todo duplicated code
+    open func disconnectWriteable(id: String) {
+        var elementFound: Bool
+        
+        repeat {
+            elementFound = false
+            for (index, (_, _, elementID)) in self.writeables.enumerated() {
+                if elementID == id {
+                    self.readables.remove(at: index)
+                    elementFound = true
+                    break
+                }
+            }
+        } while elementFound
+    }
+    
+    
+    
     open func read(_ addr: Address) -> UInt8 {
-        for (readable, range) in self.readables {
+        for (readable, range, _) in self.readables {
             if range ~= addr {
                 let val = readable.read(addr)
                 
@@ -89,7 +131,7 @@ open class DataBus: DelegatesReads, DelegatesWrites {
     }
     
     open func write(_ val: UInt8, to addr: Address) {
-        for (writeable, range) in self.writeables {
+        for (writeable, range, _) in self.writeables {
             if range ~= addr {
                 writeable.write(val, to: addr)
                 
@@ -142,5 +184,13 @@ open class DataBus: DelegatesReads, DelegatesWrites {
     
     open func clearTransactions() {
         self.transactions = []
+    }
+    
+    func clearAllWriteables() {
+        for (writeable, range, _) in self.writeables {
+            for addr in range {
+                writeable.write(0, to: addr)
+            }
+        }
     }
 }
