@@ -68,7 +68,8 @@ public class GameBoy {
         
         self.cpu = LR35902(bus: bus)
 
-        // Start the audio engine
+        // Start the audio engine, muted
+        mixer.volume = 0
         AudioKit.output = mixer
         AudioKit.start()
     }
