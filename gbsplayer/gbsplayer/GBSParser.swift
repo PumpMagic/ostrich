@@ -62,6 +62,7 @@ func getBytes(_ data: Data, addr: Int, length: Int) -> [UInt8] {
  */
 let GBS_ID_OFFSET = 0x00
 let GBS_ID_LENGTH = 0x03
+let EXPECTED_ID_STRING = "GBS"
 let GBS_VERSION_OFFSET = 0x03
 let GBS_NUM_SONGS_OFFSET = 0x04
 let GBS_FIRST_SONG_OFFSET = 0x05
@@ -124,8 +125,8 @@ func removeNuls(_ string: String) -> String {
 }
 
 /// Parse a GBS file to get its header and code+data sections
-func parseGBSFile(_ path: String) -> (header: GBSHeader, codeAndData: Data)? {
-    guard let rawData = try? Data(contentsOf: URL(fileURLWithPath: path)) else {
+func parseGBSFile(at path: URL) -> (header: GBSHeader, codeAndData: Data)? {
+    guard let rawData = try? Data(contentsOf: path) else {
         print("Unable to find file at \(path)")
         return nil
     }
@@ -134,6 +135,10 @@ func parseGBSFile(_ path: String) -> (header: GBSHeader, codeAndData: Data)? {
     {
         return nil
     }
+    if id != EXPECTED_ID_STRING {
+        return nil
+    }
+    
     let version = getByte(rawData, addr: GBS_VERSION_OFFSET)
     let numSongs = getByte(rawData, addr: GBS_NUM_SONGS_OFFSET)
     let firstSong = getByte(rawData, addr: GBS_FIRST_SONG_OFFSET)

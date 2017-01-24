@@ -13,9 +13,9 @@ import AudioKit
 let CARTRIDGE_PERIPHERAL_ID = "cartridge"
 
 /// A Nintendo Game Boy.
-open class GameBoy {
-    let cpu: LR35902
-    let apu: GameBoyAPU
+public class GameBoy {
+    public let cpu: LR35902
+    public let apu: GameBoyAPU
     let mixer: AKMixer
     
     let bus: DataBus
@@ -25,7 +25,7 @@ open class GameBoy {
     var externalRAM: RAM?
     
     
-    init() {
+    public init() {
         // 0x000 - 0x3FFF and 0x4000 - 0x7FFF are generally cartridge ROM
         // To insert a cartridge, call insertCartridge()
         self.rom = nil
@@ -73,8 +73,8 @@ open class GameBoy {
         AudioKit.start()
     }
     
-    //@todo don't allow inserting multiple cartridges
-    func insertCartridge(rom: Data, romStartAddress: Address) {
+    //@todo don't allow inserting multiple cartridges simultaneously
+    public func insertCartridge(rom: Data, romStartAddress: Address) {
         let romPeripheral = ROM(data: rom, firstAddress: romStartAddress)
         self.rom = romPeripheral
         
@@ -88,18 +88,15 @@ open class GameBoy {
         self.bus.connectWriteable(externalRAMPeripheral)
     }
     
-    func removeCartridge() {
+    public func removeCartridge() {
         self.bus.disconnectReadable(id: CARTRIDGE_PERIPHERAL_ID)
     }
     
-    func clearWriteableMemory() {
+    public func clearWriteableMemory() {
         self.bus.clearAllWriteables()
     }
     
-    func setVolume(level: Double) {
+    public func setVolume(level: Double) {
         mixer.volume = level
     }
-    
-    
-    //@todo support removing a cartridge
 }

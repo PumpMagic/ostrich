@@ -13,7 +13,7 @@ import AudioKit
 /// Get the value of a certain range of bits in a number, as though the bits were their own value
 /// whose LSB is the lowest bit in the range and represents 1
 /// For example, getValueOfBits(0b10101010, 2...4) selects bits 2-4 (010) and returns 2
-func getValueOfBits(_ num: UInt8, bits: CountableClosedRange<UInt8>) -> UInt8 {
+public func getValueOfBits(_ num: UInt8, bits: CountableClosedRange<UInt8>) -> UInt8 {
     guard let minIndex = bits.min() else {
         exit(1)
     }
@@ -29,7 +29,7 @@ func getValueOfBits(_ num: UInt8, bits: CountableClosedRange<UInt8>) -> UInt8 {
     return result
 }
 
-class GameBoyAPU: Memory, HandlesWrites {
+public class GameBoyAPU: Memory, HandlesWrites {
     let FIRST_ADDRESS: Address = 0xFF10
     let LAST_ADDRESS: Address = 0xFF3F
     
@@ -38,13 +38,13 @@ class GameBoyAPU: Memory, HandlesWrites {
     
     let ram: RAM
     
-    var firstAddress: Address {
+    public var firstAddress: Address {
         return FIRST_ADDRESS
     }
-    var lastAddress: Address {
+    public var lastAddress: Address {
         return LAST_ADDRESS
     }
-    var addressRange: CountableClosedRange<Address> {
+    public var addressRange: CountableClosedRange<Address> {
         return Address(self.firstAddress) ... Address(self.lastAddress)
     }
     
@@ -58,12 +58,12 @@ class GameBoyAPU: Memory, HandlesWrites {
         self.ram = RAM(size: 0x30, fillByte: 0x00, firstAddress: 0xFF10)
     }
     
-    func read(_ addr: Address) -> UInt8 {
+    public func read(_ addr: Address) -> UInt8 {
         print("APU read! \(addr.hexString)")
         return self.ram.read(addr)
     }
     
-    func write(_ val: UInt8, to addr: Address) {
+    public func write(_ val: UInt8, to addr: Address) {
 //        print("APU write! \(val.hexString) to \(addr.hexString)")
         
         self.ram.write(val, to: addr)
@@ -153,7 +153,7 @@ class GameBoyAPU: Memory, HandlesWrites {
     
     
     var clockIndex = 0 // 0-3
-    func clock256() {
+    public func clock256() {
         pulse1.clock256()
         pulse2.clock256()
         

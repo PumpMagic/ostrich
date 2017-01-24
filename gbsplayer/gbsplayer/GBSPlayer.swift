@@ -8,7 +8,7 @@
 
 import Foundation
 import AudioKit
-@testable import ostrich
+import ostrich
 
 
 /// Number of nanoseconds in one 256th of a second
@@ -23,26 +23,39 @@ let VBLANK_HZ = 59.7
 class GBSPlayer {
     var gameBoy: GameBoy
     var gbsHeader: GBSHeader? // header of most recently loaded GBS file
+    var fileLoaded: Bool // whether or not we've been loaded with a GBS file
+    var firstTrack: Int! {
+        guard let header = gbsHeader else {
+            return nil
+        }
+        
+        return Int(header.firstSong)
+    }
     
     let queue: DispatchQueue
     var apuClocker: DispatchSourceTimer?
     var cpuClocker: DispatchSourceTimer?
-    var isPlaying: Bool // keep tightly coupled with activity of clockers
+    var midSong: Bool // whether or not we've started playing a song (whether or not clockers exist)
+    var paused: Bool // whether or not playback is paused
     
     /// Audio volume. Range: [0.0, 1.0]
     var volume: Double
     
     
     init() {
-        self.gameBoy = GameBoy()
-        self.gbsHeader = nil
+        gameBoy = GameBoy()
+        gbsHeader = nil
+        fileLoaded = false
         
-        self.queue = DispatchQueue(label: "com.rmconway.gbsplayer", qos: DispatchQoS.userInteractive)
-        self.apuClocker = nil
-        self.cpuClocker = nil
-        self.isPlaying = false
+        queue = DispatchQueue(label: "com.rmconway.gbsplayer", qos: DispatchQoS.userInteractive)
+        apuClocker = nil
+        cpuClocker = nil
+        midSong = false
+        paused = false
         
-        self.volume = 1.0
+        volume = 1.0
+        
+        muteInternally()
     }
     
     /// Run the GBS spec's "LOAD" phase
@@ -50,29 +63,55 @@ class GBSPlayer {
     /// After loading, page 0 is in bank 0, and page 1 is in bank 1.
     private func runGBSLoadPhase(codeAndData: Data) {
         guard let header = self.gbsHeader else {
-            print("No GBS header present")
             return
         }
         
-        self.gameBoy.removeCartridge()
-        self.gameBoy.insertCartridge(rom: codeAndData, romStartAddress: header.loadAddress)
+        gameBoy.removeCartridge()
+        gameBoy.insertCartridge(rom: codeAndData, romStartAddress: header.loadAddress)
+    }
+    
+    /// Return the accumulator value required to INIT the Game Boy to play a given track, taking
+    /// the currently-loaded GBS into account.
+    private func accumulatorValueFor(trackNumber: Int) -> UInt8? {
+        guard let header = self.gbsHeader else {
+            return nil
+        }
+        
+        // The GBS ASM expects a zero-based track number in the accumulator
+        let accumulatorValue = trackNumber-1
+        if accumulatorValue < Int(UInt8.min) || accumulatorValue > Int(UInt8.max) {
+            return nil
+        }
+        
+        if trackNumber > Int(header.numSongs) {
+            return nil
+        }
+        
+        return UInt8(trackNumber-1)
     }
     
     /// Run the GBS spec's "INIT" phase
-    /// This initializes all of the Game Boy's registers, clears its RAM, loads the desired song number into its CPU's accumulator,
-    /// and has its CPU run a CALL with the GBS header's init address
-    private func runGBSInitPhase(track: UInt8) {
+    /// This initializes all of the Game Boy's registers, clears its RAM, loads the appropriate song number into its CPU's accumulator,
+    /// and has its CPU run a CALL with the GBS header's init address.
+    /// This function takes in a one-based track number and
+    /// returns whether or not the initialization could complete
+    private func runGBSInitPhase(track: Int) -> Bool {
         guard let header = self.gbsHeader else {
-            print("No GBS header present")
-            return
+            return false
+        }
+        
+        guard let accumulatorValue = accumulatorValueFor(trackNumber: track) else {
+            return false
         }
         
         gameBoy.cpu.resetRegisters()
         gameBoy.clearWriteableMemory()
         gameBoy.cpu.setSP(header.stackPointer)
         gameBoy.cpu.setPC(header.loadAddress)
-        gameBoy.cpu.setA(track)
+        gameBoy.cpu.setA(UInt8(accumulatorValue))
         gameBoy.cpu.call(header.initAddress)
+        
+        return true
     }
     
     /// Calculate the audio routine call rate according to the GBS spec and the current header file
@@ -114,10 +153,10 @@ class GBSPlayer {
     /// Run the GBS spec's "PLAY" phase
     /// This constantly makes the Game Boy's CPU CALL the GBS header's PLAY address at a rate according to its timer control fields
     /// (We also start clocking the Game Boy's APU here, @todo make that internal to the Game Boy class)
-    private func runGBSPlayPhase() {
+    /// This returns whether or not the play phase was started
+    private func runGBSPlayPhase() -> Bool {
         guard let header = self.gbsHeader else {
-            print("No GBS header present")
-            return
+            return false
         }
         
         let audioRoutineCallRate = self.calculateAudioRoutineCallRate()
@@ -125,8 +164,8 @@ class GBSPlayer {
         let newAPUClocker = DispatchSource.makeTimerSource(queue: self.queue)
         let newCPUClocker = DispatchSource.makeTimerSource(queue: self.queue)
         
-        self.apuClocker = newAPUClocker
-        self.cpuClocker = newCPUClocker
+        apuClocker = newAPUClocker
+        cpuClocker = newCPUClocker
         
         // At 256Hz, clock the APU's 256Hz clock
         newAPUClocker.scheduleRepeating(deadline: .now(), interval: .nanoseconds(NS_256HZ), leeway: .nanoseconds(10))
@@ -144,50 +183,98 @@ class GBSPlayer {
         /// Start the timers and turn on the APU volume
         newAPUClocker.resume()
         newCPUClocker.resume()
+        
+        return true
     }
     
     
-    /// Load a GBS file
-    func loadGBSFile(path: String) {
-        guard let (header, codeAndData) = parseGBSFile(path) else {
-            exit(1)
+    /// Load a GBS file; return success or failure
+    func loadGBSFile(at path: URL) -> Bool{
+        guard let (header, codeAndData) = parseGBSFile(at: path) else {
+            return false
         }
         
-        print("\(header)\n")
+        stopPlayback()
+        gbsHeader = header
+        runGBSLoadPhase(codeAndData: codeAndData)
+        fileLoaded = true
         
-        self.stopPlaying()
-        
-        self.gbsHeader = header
-        
-        self.runGBSLoadPhase(codeAndData: codeAndData)
+        return true
     }
     
     /// Play a track, stopping existing playback if any
-    func playTrack(track: UInt8) {
-        self.stopPlaying()
-        self.runGBSInitPhase(track: track)
-        self.runGBSPlayPhase()
-        self.gameBoy.setVolume(level: self.volume)
-        self.isPlaying = true
+    /// This function takes a one-based track value and
+    /// returns whether or not playback was started successfully
+    func startPlayback(of track: Int) -> Bool {
+        stopPlayback()
+        
+        if !runGBSInitPhase(track: track) { return false }
+        if !runGBSPlayPhase() { return false }
+        restoreVolume()
+        midSong = true
+        
+        return true
     }
     
-    /// Stop playing the current track
-    /// (Stop clocking the Game Boy)
-    func stopPlaying() {
-        self.gameBoy.setVolume(level: 0.0)
+    /// Pause playback
+    /// (Stop clocking the Game Boy, but hold on to the clockers)
+    func pausePlayback() {
+        if !paused && midSong {
+            guard let apuClocker = self.apuClocker, let cpuClocker = self.cpuClocker else {
+                return
+            }
+            
+            apuClocker.suspend()
+            cpuClocker.suspend()
+            muteInternally()
+            paused = true
+        }
+    }
+    
+    /// Resume playback
+    /// (Start the clockers again)
+    func resumePlayback() {
+        if paused && midSong {
+            guard let apuClocker = self.apuClocker, let cpuClocker = self.cpuClocker else {
+                return
+            }
+            
+            apuClocker.resume()
+            cpuClocker.resume()
+            restoreVolume()
+            paused = false
+        }
+    }
+    
+    /// Stop playback
+    /// (Stop clocking the Game Boy, destroying the clocker in the process)
+    func stopPlayback() {
+        muteInternally()
         
-        if self.isPlaying {
+        if midSong {
             // Setting the clockers to nil removes all references to the dispatch sources.
             // Doing so causes them to be released (effectively canceled) by Dispatch library magic.
             // (Apple's Swift Dispatch releases the dispatch source on ARC free.)
             // Note that in order for a dispatch source to be released, its suspend count must be zero.
             // That is: you can't release a dispatch source unless it's active!!
-            self.apuClocker = nil
-            self.cpuClocker = nil
+            if paused {
+                resumePlayback()
+                muteInternally()
+            }
+            apuClocker = nil
+            cpuClocker = nil
             
             usleep(300000) // Let the clocker's existing events fire
             
-            self.isPlaying = false
+            midSong = false
         }
+    }
+    
+    func muteInternally() {
+        gameBoy.setVolume(level: 0.0)
+    }
+    
+    func restoreVolume() {
+        gameBoy.setVolume(level: volume)
     }
 }
