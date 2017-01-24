@@ -17,6 +17,8 @@ let NS_256HZ = 3906250
 let NS_PER_S = 1000000000
 /// An approximation of the Game Boy V-blank rate, in Hz
 let VBLANK_HZ = 59.7
+/// Default volume
+let DEFAULT_VOLUME = 0.5
 
 
 /// A GBS player: a Game Boy manager that loads its memory and clocks its CPU and APU according to a GBS file and user interaction
@@ -39,7 +41,13 @@ class GBSPlayer {
     var paused: Bool // whether or not playback is paused
     
     /// Audio volume. Range: [0.0, 1.0]
-    var volume: Double
+    var volume: Double {
+        didSet {
+            if midSong && !paused {
+                restoreVolume()
+            }
+        }
+    }
     
     
     init() {
@@ -53,7 +61,7 @@ class GBSPlayer {
         midSong = false
         paused = false
         
-        volume = 1.0
+        volume = DEFAULT_VOLUME
         
         muteInternally()
     }

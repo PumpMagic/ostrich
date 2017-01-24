@@ -13,6 +13,10 @@ import AudioKit
 // Good GBS files: Castlevania, Double Dragon, Tetris, Dr. Mario.
 // Iffy: Super Mario Land (track 5 barfs)
 
+/// Volume on startup. Be sure to synchronize this with the volume slider's default value in the UI builder
+let STARTUP_VOLUME = 0.25
+
+
 class GBSPlayerViewController: NSViewController {
     let player = GBSPlayer()
     
@@ -95,12 +99,19 @@ class GBSPlayerViewController: NSViewController {
         player.gameBoy.alterPulse2Connection(connected: newConnectedState)
     }
     
+    
+    @IBAction func volumeSliderChanged(_ sender: NSSlider) {
+        player.volume = sender.integerValue/100.0
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //@todo don't do this. Give the app delegate the Game Boy or use some other architecture
-        let appdelegate = NSApplication.shared().delegate as! AppDelegate
-        appdelegate.gbsvc = self
+        player.volume = STARTUP_VOLUME
+        
+        // Tell the app delegate that we exist, so it can pass us events like "file open attempt"
+        let appDelegate = NSApplication.shared().delegate as! AppDelegate
+        appDelegate.gbsvc = self
     }
 }
 

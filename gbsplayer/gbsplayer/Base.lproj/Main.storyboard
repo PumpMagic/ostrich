@@ -749,6 +749,14 @@
                                     <action selector="p2CheckboxChanged:" target="XfG-lQ-9wD" id="f7w-bb-gSa"/>
                                 </connections>
                             </button>
+                            <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QXY-nH-pbf">
+                                <rect key="frame" x="192" y="27" width="97" height="19"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <sliderCell key="cell" state="on" alignment="left" maxValue="100" doubleValue="25" tickMarkPosition="above" sliderType="linear" id="Wdh-F3-Fmp"/>
+                                <connections>
+                                    <action selector="volumeSliderChanged:" target="XfG-lQ-9wD" id="Hag-7G-utJ"/>
+                                </connections>
+                            </slider>
                         </subviews>
                     </view>
                     <connections>
