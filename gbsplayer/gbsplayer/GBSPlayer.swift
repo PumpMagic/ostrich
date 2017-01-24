@@ -35,7 +35,7 @@ class GBSPlayer {
     let queue: DispatchQueue
     var apuClocker: DispatchSourceTimer?
     var cpuClocker: DispatchSourceTimer?
-    var midSong: Bool // whether or not we've started playing a song (whether or not clockers exist)
+    var midSong: Bool // whether or not we've started playing a song
     var paused: Bool // whether or not playback is paused
     
     /// Audio volume. Range: [0.0, 1.0]

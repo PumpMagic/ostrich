@@ -727,6 +727,28 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gq9-2K-SuW">
+                                <rect key="frame" x="58" y="80" width="37" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="P1" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="bhB-Oh-mX2">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="p1CheckboxChanged:" target="XfG-lQ-9wD" id="0RZ-7c-5rQ"/>
+                                </connections>
+                            </button>
+                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4bH-x4-5U8">
+                                <rect key="frame" x="58" y="49" width="38" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="P2" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="eqx-Np-QXD">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="p2CheckboxChanged:" target="XfG-lQ-9wD" id="f7w-bb-gSa"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </view>
                     <connections>

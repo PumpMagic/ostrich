@@ -303,8 +303,8 @@ class Pulse: HasLengthCounter, HasVolumeEnvelope {
     
     
     /* INTERNAL IMPLEMENTATION (AUDIOKIT) STUFF */
-    fileprivate var oscillator: AKMorphingOscillator
-    fileprivate var mixer: AKMixer
+    var oscillator: AKMorphingOscillator
+    var mixer: AKMixer
     
     /** Update the duty cycle (bit pattern) of this channel */
     func updateImplDuty() {
@@ -373,3 +373,16 @@ class Pulse: HasLengthCounter, HasVolumeEnvelope {
         self.init(mixer: mixer, hasFrequencySweep: false, connected: true)
     }
 }
+
+// Utility functions: functions that don't mimic hardware, but are provided for
+// convenience of emulation
+extension Pulse {
+    func alterConnection(connected: Bool) {
+        if connected {
+            oscillator.start()
+        } else {
+            oscillator.stop()
+        }
+    }
+}
+

@@ -100,3 +100,16 @@ public class GameBoy {
         mixer.volume = level
     }
 }
+
+
+// Utility functions: functions that don't mimic hardware, but are provided for
+// convenience of emulation
+public extension GameBoy {
+    func alterPulse1Connection(connected: Bool) {
+        apu.pulse1.alterConnection(connected: connected)
+    }
+    
+    func alterPulse2Connection(connected: Bool) {
+        apu.pulse2.alterConnection(connected: connected)
+    }
+}
