@@ -49,6 +49,7 @@ class GBSPlayerViewController: NSViewController {
     @IBOutlet weak var currentTrackLabel: NSTextField!
     
     @IBOutlet weak var pulse1View: PulseWaveView!
+    @IBOutlet weak var pulse2View: PulseWaveView!
     
     func updateStatusLabel() {
         let newValue: String
@@ -202,10 +203,12 @@ class GBSPlayerViewController: NSViewController {
         newWaveDisplayClocker.scheduleRepeating(deadline: .now(), interval: .milliseconds(33), leeway: .milliseconds(1))
         newWaveDisplayClocker.setEventHandler() {
             self.pulse1View.setNeedsDisplay(self.pulse1View.bounds)
+            self.pulse2View.setNeedsDisplay(self.pulse2View.bounds)
         }
         waveDisplayClocker = newWaveDisplayClocker
         waveDisplayClocker!.resume()
         pulse1View.channel = player.gameBoy.apu.pulse1
+        pulse2View.channel = player.gameBoy.apu.pulse2
     }
 }
 

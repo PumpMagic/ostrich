@@ -13,6 +13,7 @@ import ostrich
 // 1. it shouldn't need to peer so deeply into the pulse channel, or at least shouldn't need to use redundant conversion functions
 // 2. its computations should be performed in another thread, so that only drawing is done in draw()
 // 3. code cleanliness is poor
+// 4. magic numbers
 class PulseWaveView: NSView {
 
     var amplitude = 1.0 // [0.0, 1.0]
@@ -25,23 +26,39 @@ class PulseWaveView: NSView {
     // 10 Hz = vert. every 10 px
     // 20 Hz = vert. every 5 px
     
-    // typ. range is probably 100 - 3000 Hz, let's just try that
-    // let's just try accommodating max of 20,000 Hz
-    // so if one second is 40,000 px, then 20,000 Hz is a 2px / period
-    // And 10,000 Hz is 4px / period
-    // Yeah let's try that
     let PIXELS_PER_SECOND = 40000.0
     
-    override func draw(_ dirtyRect: NSRect) {
-        guard let channel = self.channel else { return }
+    
+    func drawFlatLine() {
+        let startPoint = CGPoint(x: bounds.minX, y: bounds.midY)
+        let endPoint = CGPoint(x: bounds.maxX, y: bounds.midY)
         
+        NSColor.black.setStroke()
+        let path = NSBezierPath()
+        path.move(to: startPoint)
+        path.line(to: endPoint)
+        path.stroke()
+        path.close()
+    }
+    
+    
+    override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
         
-        amplitude = Double(channel.volume) / 15.0 + 0.01
+        guard let channel = self.channel else { return }
         
-        //The frequency of the output pulse wave is (4194304 / 8 / frequency), since the wavetable is
+        amplitude = Double(channel.volume) / 15.0
+        
+        if amplitude == 0.0 {
+            drawFlatLine()
+            return
+        }
+        
+        // The frequency of the output pulse wave is (4194304 / 8 / (2048-frequency)), stolen from Pulse class...
+        //@todo remove redundancy
         frequency = 4194304.0 / 8.0 / Double(2048 - channel.frequency)
         
+        //@todo remove potential redundancy
         switch channel.duty {
         case 0b00:
             duty = 0.125
@@ -54,35 +71,33 @@ class PulseWaveView: NSView {
         default:
             duty = 0.0
         }
-
-        // Drawing code here.
-//        Swift.print("Draw called \(amplitude) \(frequency) \(duty)")
         
-        let minX = bounds.minX + 1
-        let maxX = bounds.maxX - 1
+        let waveMinX = bounds.minX
+        let waveMaxX = bounds.maxX
         
-        let minY = bounds.minY + 1
-        //let maxY = bounds.maxY - 1
-        let maxY = minY + CGFloat(100 * amplitude)
+        let waveBaseY = bounds.midY
+        let waveHeight = CGFloat(50 * amplitude)
+        let waveMinY = waveBaseY - (waveHeight/2)
+        let waveMaxY = waveBaseY + (waveHeight/2)
         
         
         
-        var x = CGFloat(minX)
-        var y = CGFloat(maxY)
+        var x = CGFloat(waveMinX)
+        var y = CGFloat(waveMaxY)
         
         let path = NSBezierPath()
         let startingPoint = CGPoint(x: x, y: y)
         NSColor.black.setStroke()
         path.move(to: startingPoint)
         
-        while x < maxX {
+        while x < waveMaxX {
             var done = false
             
             // Start just before high time
             let xHigh = CGFloat(PIXELS_PER_SECOND / frequency * duty)
             x += xHigh
-            if x > maxX {
-                x = maxX
+            if x > waveMaxX {
+                x = waveMaxX
                 done = true
             }
             let highJump = CGPoint(x: x, y: y)
@@ -93,7 +108,7 @@ class PulseWaveView: NSView {
             // Just ended high time, now go down
             //@todo don't go down if duty if 100%
             
-            y = minY
+            y = waveMinY
             let downJump = CGPoint(x: x, y: y)
             path.line(to: downJump)
             
@@ -101,8 +116,8 @@ class PulseWaveView: NSView {
             
             let xLow = CGFloat(PIXELS_PER_SECOND / frequency * (1-duty))
             x += xLow
-            if x > maxX {
-                x = maxX
+            if x > waveMaxX {
+                x = waveMaxX
                 done = true
             }
             let lowJump = CGPoint(x: x, y: y)
@@ -112,7 +127,7 @@ class PulseWaveView: NSView {
             
             // Just went low, now go up
             
-            y = maxY
+            y = waveMaxY
             let upJump = CGPoint(x: x, y: y)
             path.line(to: upJump)
         }
