@@ -33,8 +33,8 @@ public class GameBoyAPU: Memory, HandlesWrites {
     let FIRST_ADDRESS: Address = 0xFF10
     let LAST_ADDRESS: Address = 0xFF3F
     
-    let pulse1: Pulse
-    let pulse2: Pulse
+    public let pulse1: Pulse
+    public let pulse2: Pulse
     
     let ram: RAM
     

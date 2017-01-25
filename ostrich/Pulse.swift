@@ -26,7 +26,7 @@ NR24 FF19 TL-- -FFF Trigger, Length enable, Frequency MSB
 */
 
 /** Representation of a Game Boy pulse wave channel */
-class Pulse: HasLengthCounter, HasVolumeEnvelope {
+public class Pulse: HasLengthCounter, HasVolumeEnvelope {
     
     /** Constants */
     static let MIN_DUTY: UInt8 = 0
@@ -42,7 +42,7 @@ class Pulse: HasLengthCounter, HasVolumeEnvelope {
     /* DUTY CYCLE STUFF
         The pulse channel has a variable-width duty cycle */
     /** Duty is a two-bit value representing the pulse wave duty cycle to output */
-    var duty: UInt8 = Pulse.MIN_DUTY {
+    public var duty: UInt8 = Pulse.MIN_DUTY {
         didSet {
             if duty < Pulse.MIN_DUTY || duty > Pulse.MAX_DUTY {
                 print("FATAL: invalid duty assigned")
@@ -103,7 +103,7 @@ class Pulse: HasLengthCounter, HasVolumeEnvelope {
     }
     /** volume is an internal 4-bit value that controls the output volume of the channel.
         It is the product of startingVolume plus any volume sweeping effects over time. */
-    fileprivate var volume: UInt8 = Pulse.MIN_VOLUME {
+    public var volume: UInt8 = Pulse.MIN_VOLUME {
         didSet {
             updateImplVolume()
         }
@@ -141,9 +141,9 @@ class Pulse: HasLengthCounter, HasVolumeEnvelope {
     /* FREQUENCY STUFF */
     /** frequency is an 11-bit value representing the frequency timer period: that is, how long the channel
         stays on each sample of its wavetable, in 1/4194304ths of a second.
-        The frequency of the output pulse wave is (4194304 / 8 / frequency), since the wavetable is
+        The frequency of the output pulse wave is (4194304 / 8 / (2048-frequency)), since the wavetable is
         8 samples wide. */
-    var frequency: UInt16 = 1192 {
+    public var frequency: UInt16 = 1192 {
         didSet {
             if frequency < Pulse.MIN_FREQUENCY || frequency > Pulse.MAX_FREQUENCY {
                 print("FATAL: invalid frequency assigned: \(frequency)")

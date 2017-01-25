@@ -202,6 +202,8 @@ class GBSPlayer {
             return false
         }
         
+        print(header)
+        
         stopPlayback()
         gbsHeader = header
         runGBSLoadPhase(codeAndData: codeAndData)
