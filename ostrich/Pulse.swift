@@ -25,6 +25,33 @@ NR23 FF18 FFFF FFFF Frequency LSB
 NR24 FF19 TL-- -FFF Trigger, Length enable, Frequency MSB
 */
 
+
+let GB_CLOCK_HZ = 4194304.0
+let SAMPLES_PER_PULSE_WAVE_PERIOD = 8.0
+
+
+/// (Almost) Everything it takes to hook up a channel to a synthesizer
+protocol SynthPluggable {
+    associatedtype OscillatorType
+    associatedtype MixerType
+    
+    func getSynthOscillator() -> OscillatorType
+    func getSynthMixer() -> MixerType
+    
+    // Update the synth type's duty using the Game Boy native duty
+    func updateSynthChannelDuty()
+    func muteSynthChannelOutput()
+    func unmuteSynthChannelOutput()
+    func updateSynthChannelVolume()
+    func updateSynthChannelFrequency()
+}
+
+protocol HasMusicalProperties {
+    func getMusicalFrequency() -> Double
+    func getMusicalAmplitude() -> Double // [0.0, 1.0]
+}
+
+
 /** Representation of a Game Boy pulse wave channel */
 public class Pulse: HasLengthCounter, HasVolumeEnvelope {
     
@@ -49,7 +76,7 @@ public class Pulse: HasLengthCounter, HasVolumeEnvelope {
                 exit(1)
             }
             
-            self.updateImplDuty()
+            self.updateSynthChannelDuty()
         }
     }
     // Duty 0b00 is a 12.5% pulse; 0b01 is a 25% pulse; 0b10 -> 50%; 0b11 -> 75%
@@ -103,9 +130,9 @@ public class Pulse: HasLengthCounter, HasVolumeEnvelope {
     }
     /** volume is an internal 4-bit value that controls the output volume of the channel.
         It is the product of startingVolume plus any volume sweeping effects over time. */
-    public var volume: UInt8 = Pulse.MIN_VOLUME {
+    var volume: UInt8 = Pulse.MIN_VOLUME {
         didSet {
-            updateImplVolume()
+            updateSynthChannelVolume()
         }
     }
     
@@ -143,14 +170,14 @@ public class Pulse: HasLengthCounter, HasVolumeEnvelope {
         stays on each sample of its wavetable, in 1/4194304ths of a second.
         The frequency of the output pulse wave is (4194304 / 8 / (2048-frequency)), since the wavetable is
         8 samples wide. */
-    public var frequency: UInt16 = 1192 {
+    var frequency: UInt16 = 1192 {
         didSet {
             if frequency < Pulse.MIN_FREQUENCY || frequency > Pulse.MAX_FREQUENCY {
                 print("FATAL: invalid frequency assigned: \(frequency)")
                 exit(1)
             }
             
-            updateImplFrequency()
+            updateSynthChannelFrequency()
         }
     }
     
@@ -202,7 +229,6 @@ public class Pulse: HasLengthCounter, HasVolumeEnvelope {
             self.frequencyOverflowCheck()
             if self.frequencySweepShift != 0 {
                 //@todo this actually writes back to NR1x
-                print("\(self.frequency) -> \(self.nextFrequency)")
                 self.frequency = self.nextFrequency
                 self.frequencyShadow = self.frequency
                 self.frequencyOverflowCheck()
@@ -278,9 +304,9 @@ public class Pulse: HasLengthCounter, HasVolumeEnvelope {
     fileprivate var enabled: Bool = true {
         didSet {
             if !enabled {
-                muteImplOutput()
+                muteSynthChannelOutput()
             } else {
-                unmuteImplOutput()
+                unmuteSynthChannelOutput()
             }
         }
     }
@@ -302,36 +328,11 @@ public class Pulse: HasLengthCounter, HasVolumeEnvelope {
     
     
     
-    /* INTERNAL IMPLEMENTATION (AUDIOKIT) STUFF */
+    /* NON-HARDWARE STUFF */
+    /* Logic for hooking up to our synthesizer of choice (AudioKit) */
+    /* (SynthPluggable support) */
     var oscillator: AKMorphingOscillator
     var mixer: AKMixer
-    
-    /** Update the duty cycle (bit pattern) of this channel */
-    func updateImplDuty() {
-        self.oscillator.index = Double(self.duty)
-    }
-    
-    /** Mute this channel */
-    func muteImplOutput() {
-        self.oscillator.amplitude = 0.0
-    }
-    
-    /** Unmute this channel */
-    func unmuteImplOutput() {
-        self.updateImplVolume()
-    }
-    
-    /** Update the volume of this channel */
-    func updateImplVolume() {
-        self.oscillator.amplitude = toImplAmplitude(self.volume)
-    }
-    
-    /** Update the frequency of this channel */
-    func updateImplFrequency() {
-        let newFrequency = toImplFrequency(self.frequency)
-        
-        self.oscillator.frequency = newFrequency
-    }
     
     // AudioKit represents wavetables as arrays of floats of value [-1.0, 1.0]
     static let wavetablesAsInts: [[Int]] = Pulse.wavetables.map({ arr in arr.map({ val in Int(val) })})
@@ -371,6 +372,62 @@ public class Pulse: HasLengthCounter, HasVolumeEnvelope {
     
     convenience init(mixer: AKMixer) {
         self.init(mixer: mixer, hasFrequencySweep: false, connected: true)
+    }
+}
+
+extension Pulse: HasMusicalProperties {
+    public func getMusicalFrequency() -> Double {
+        if frequency == 0 {
+            return 0
+        }
+        
+        //@todo this is channel type-specific
+        //@todo magic numbers
+        return (GB_CLOCK_HZ / SAMPLES_PER_PULSE_WAVE_PERIOD) / Double((2048-frequency)) / 4
+    }
+    
+    public func getMusicalAmplitude() -> Double {
+        if volume <= Pulse.MAX_VOLUME {
+            return Double(volume) / Double(Pulse.MAX_VOLUME)
+        }
+        
+        return 1.0
+    }
+}
+
+// Functions used to output the pulse channel using AudioKit
+extension Pulse: SynthPluggable {
+    func getSynthOscillator() -> AKMorphingOscillator {
+        return self.oscillator
+    }
+    
+    func getSynthMixer() -> AKMixer {
+        return self.mixer
+    }
+    
+    func updateSynthChannelDuty() {
+        /** Update the duty cycle (bit pattern) of this channel */
+        self.oscillator.index = Double(self.duty)
+    }
+    
+    func muteSynthChannelOutput() {
+        /** Mute this channel */
+        self.oscillator.amplitude = 0.0
+    }
+    
+    func unmuteSynthChannelOutput() {
+        /** Unmute this channel */
+        self.updateSynthChannelVolume()
+    }
+    
+    func updateSynthChannelVolume() {
+        /** Update the volume of this channel */
+        self.oscillator.amplitude = self.getMusicalAmplitude()
+    }
+    
+    func updateSynthChannelFrequency() {
+        /** Update the frequency of this channel */
+        self.oscillator.frequency = self.getMusicalFrequency()
     }
 }
 

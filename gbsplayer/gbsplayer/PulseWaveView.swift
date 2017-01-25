@@ -26,7 +26,7 @@ class PulseWaveView: NSView {
     // 10 Hz = vert. every 10 px
     // 20 Hz = vert. every 5 px
     
-    let PIXELS_PER_SECOND = 40000.0
+    let PIXELS_PER_SECOND = 10000.0
     
     
     func drawFlatLine() {
@@ -47,18 +47,16 @@ class PulseWaveView: NSView {
         
         guard let channel = self.channel else { return }
         
-        amplitude = Double(channel.volume) / 15.0
+        amplitude = channel.getMusicalAmplitude()
         
         if amplitude == 0.0 {
             drawFlatLine()
             return
         }
         
-        // The frequency of the output pulse wave is (4194304 / 8 / (2048-frequency)), stolen from Pulse class...
-        //@todo remove redundancy
-        frequency = 4194304.0 / 8.0 / Double(2048 - channel.frequency)
+        frequency = channel.getMusicalFrequency()
         
-        //@todo remove potential redundancy
+        //@todo remove redundancy by adding OutputsPulseWave protocol in ostrich and renaming Pulse to PulseChannel
         switch channel.duty {
         case 0b00:
             duty = 0.125
