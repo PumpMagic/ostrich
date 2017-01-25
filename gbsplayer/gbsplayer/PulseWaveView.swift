@@ -18,7 +18,7 @@ class PulseWaveView: NSView {
 
     var amplitude = 1.0 // [0.0, 1.0]
     var frequency = 200.0 // Hz
-    var duty = 0.5 // [0.0, 1.0]
+    var duty = 0.5 // (0.0, 1.0)
     
     var channel: Pulse? = nil
     
@@ -75,10 +75,13 @@ class PulseWaveView: NSView {
         let waveMinX = bounds.minX
         let waveMaxX = bounds.maxX
         
-        let waveBaseY = bounds.midY
-        let waveHeight = CGFloat(50 * amplitude)
-        let waveMinY = waveBaseY - (waveHeight/2)
-        let waveMaxY = waveBaseY + (waveHeight/2)
+        let waveHeight = floor(bounds.height * CGFloat(amplitude))
+        let waveMinY = floor(bounds.midY - (waveHeight/2))
+        let waveMaxY = floor(bounds.midY + (waveHeight/2))
+        
+        if waveMinY < bounds.minY {
+            Swift.print("Amplitude: \(amplitude) wave height: \(waveHeight) wave min Y: \(waveMinY) wave max Y: \(waveMaxY) bounds min Y: \(bounds.minY) bounds max Y: \(bounds.maxY) bounds mid Y: \(bounds.midY)")
+        }
         
         
         
@@ -90,46 +93,34 @@ class PulseWaveView: NSView {
         NSColor.black.setStroke()
         path.move(to: startingPoint)
         
+        // Draw half-periods of the pulse wave until we reach the edge of our view
         while x < waveMaxX {
-            var done = false
-            
-            // Start just before high time
-            let xHigh = CGFloat(PIXELS_PER_SECOND / frequency * duty)
-            x += xHigh
-            if x > waveMaxX {
-                x = waveMaxX
-                done = true
+            // Horizontal edge
+            let maxNextX: CGFloat
+            if y == waveMinY {
+                // bottom edge
+                maxNextX = x + CGFloat(PIXELS_PER_SECOND / frequency * (1-duty))
+            } else {
+                // top edge
+                maxNextX = x + CGFloat(PIXELS_PER_SECOND / frequency * (duty))
             }
-            let highJump = CGPoint(x: x, y: y)
-            path.line(to: highJump)
             
-            if done { break }
+            let nextX = min(waveMaxX, maxNextX)
+            path.line(to: CGPoint(x: nextX, y: y))
+            x = nextX
             
-            // Just ended high time, now go down
-            //@todo don't go down if duty if 100%
-            
-            y = waveMinY
-            let downJump = CGPoint(x: x, y: y)
-            path.line(to: downJump)
-            
-            // Just went down, now go low
-            
-            let xLow = CGFloat(PIXELS_PER_SECOND / frequency * (1-duty))
-            x += xLow
-            if x > waveMaxX {
-                x = waveMaxX
-                done = true
+            if x < waveMaxX {
+                // Vertical edge
+                let nextY: CGFloat
+                if y == waveMinY {
+                    nextY = waveMaxY
+                } else {
+                    nextY = waveMinY
+                }
+                
+                path.line(to: CGPoint(x: x, y: nextY))
+                y = nextY
             }
-            let lowJump = CGPoint(x: x, y: y)
-            path.line(to: lowJump)
-            
-            if done { break }
-            
-            // Just went low, now go up
-            
-            y = waveMaxY
-            let upJump = CGPoint(x: x, y: y)
-            path.line(to: upJump)
         }
         
         path.stroke()
