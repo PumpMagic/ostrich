@@ -11,17 +11,15 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    // TODO: Use Autolayout
-    // TODO: don't do this
-    var gbsvc: GBSPlayerViewController? = nil
+    var gbsPlayerViewController: GBSPlayerViewController? = nil
     
     @IBAction func openFile(_ sender: NSMenuItem) {
         let panel = NSOpenPanel()
         panel.begin { result in
             if result == NSFileHandlingPanelOKButton {
-                if let gbsvc = self.gbsvc {
+                if let gbsPlayerViewController = self.gbsPlayerViewController {
                     let url = panel.urls[0]
-                    gbsvc.tryLoadingFile(at: url)
+                    gbsPlayerViewController.tryLoadingFile(at: url)
                 }
             }
         }

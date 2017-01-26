@@ -9,11 +9,10 @@
 import Cocoa
 import ostrich
 
-//@todo this needs serious cleanup:
-// 1. it shouldn't need to peer so deeply into the pulse channel, or at least shouldn't need to use redundant conversion functions
-// 2. its computations should be performed in another thread, so that only drawing is done in draw()
-// 3. code cleanliness is poor
-// 4. magic numbers
+
+let PIXELS_PER_SECOND = 10000.0
+
+//@todo magic numbers
 class PulseWaveView: NSView {
 
     var amplitude = 1.0 // [0.0, 1.0]
@@ -22,16 +21,20 @@ class PulseWaveView: NSView {
     
     var channel: Pulse? = nil
     
-    // if one second is 200 pixels, then...
-    // 10 Hz = vert. every 10 px
-    // 20 Hz = vert. every 5 px
     
-    let PIXELS_PER_SECOND = 10000.0
+    /// Update our local knowledge of the properties of the channel we're displaying
+    func updateProperties() {
+        guard let channel = self.channel else { return }
+        
+        amplitude = channel.getMusicalAmplitude()
+        frequency = channel.getMusicalFrequency()
+        duty = channel.getDutyCycle()
+    }
     
-    
+    /// Draw a flat line as the waveform
     func drawFlatLine() {
-        let startPoint = CGPoint(x: bounds.minX, y: bounds.midY)
-        let endPoint = CGPoint(x: bounds.maxX, y: bounds.midY)
+        let startPoint = CGPoint(x: bounds.minX, y: bounds.minY)
+        let endPoint = CGPoint(x: bounds.maxX, y: bounds.minY)
         
         NSColor.black.setStroke()
         let path = NSBezierPath()
@@ -41,50 +44,28 @@ class PulseWaveView: NSView {
         path.close()
     }
     
-    
-    override func draw(_ dirtyRect: NSRect) {
-        super.draw(dirtyRect)
-        
-        guard let channel = self.channel else { return }
-        
-        amplitude = channel.getMusicalAmplitude()
-        
+    /// Draw the pulse wave
+    func drawWaveform() {
         if amplitude == 0.0 {
             drawFlatLine()
             return
-        }
-        
-        frequency = channel.getMusicalFrequency()
-        
-        //@todo remove redundancy by adding OutputsPulseWave protocol in ostrich and renaming Pulse to PulseChannel
-        switch channel.duty {
-        case 0b00:
-            duty = 0.125
-        case 0b01:
-            duty = 0.25
-        case 0b10:
-            duty = 0.50
-        case 0b11:
-            duty = 0.75
-        default:
-            duty = 0.0
         }
         
         let waveMinX = bounds.minX
         let waveMaxX = bounds.maxX
         
         let waveHeight = floor(bounds.height * CGFloat(amplitude))
-        let waveMinY = floor(bounds.midY - (waveHeight/2))
-        let waveMaxY = floor(bounds.midY + (waveHeight/2))
+//        let waveMinY = floor(bounds.midY - (waveHeight/2))
+//        let waveMaxY = floor(bounds.midY + (waveHeight/2))
+        let waveMinY = bounds.minY
+        let waveMaxY = bounds.minY + (bounds.height * CGFloat(amplitude))
         
         if waveMinY < bounds.minY {
             Swift.print("Amplitude: \(amplitude) wave height: \(waveHeight) wave min Y: \(waveMinY) wave max Y: \(waveMaxY) bounds min Y: \(bounds.minY) bounds max Y: \(bounds.maxY) bounds mid Y: \(bounds.midY)")
         }
         
-        
-        
         var x = CGFloat(waveMinX)
-        var y = CGFloat(waveMaxY)
+        var y = CGFloat(waveMinY)
         
         let path = NSBezierPath()
         let startingPoint = CGPoint(x: x, y: y)
@@ -123,6 +104,14 @@ class PulseWaveView: NSView {
         
         path.stroke()
         path.close()
+    }
+    
+    
+    override func draw(_ dirtyRect: NSRect) {
+        super.draw(dirtyRect)
+        
+        updateProperties()
+        drawWaveform()
     }
     
 }

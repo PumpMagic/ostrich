@@ -51,6 +51,10 @@ protocol HasMusicalProperties {
     func getMusicalAmplitude() -> Double // [0.0, 1.0]
 }
 
+protocol OutputsPulseWave {
+    func getDutyCycle() -> Double // [0.0, 1.0]
+}
+
 
 /** Representation of a Game Boy pulse wave channel */
 public class Pulse: HasLengthCounter, HasVolumeEnvelope {
@@ -392,6 +396,23 @@ extension Pulse: HasMusicalProperties {
         }
         
         return 1.0
+    }
+}
+
+extension Pulse: OutputsPulseWave {
+    public func getDutyCycle() -> Double {
+        switch self.duty {
+        case 0b00:
+            return 0.125
+        case 0b01:
+            return 0.25
+        case 0b10:
+            return 0.50
+        case 0b11:
+            return 0.75
+        default:
+            return 0.0
+        }
     }
 }
 

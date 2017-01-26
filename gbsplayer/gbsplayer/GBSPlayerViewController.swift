@@ -27,6 +27,8 @@ let TRACK_STRING = "Track"
 let NO_GBS_LOADED_STRING = "No GBS file loaded"
 let EMPTY_STRING = ""
 
+let WAVE_DISPLAY_REFRESH_PERIOD_MS = 33
+
 
 class GBSPlayerViewController: NSViewController {
     let player = GBSPlayer()
@@ -51,6 +53,9 @@ class GBSPlayerViewController: NSViewController {
     @IBOutlet weak var pulse1View: PulseWaveView!
     @IBOutlet weak var pulse2View: PulseWaveView!
     
+    @IBOutlet weak var someButton: GBRoundButton!
+    
+    /// Update the playback status label - playing, stopped, etc.
     func updateStatusLabel() {
         let newValue: String
         if player.gbsHeader == nil {
@@ -74,7 +79,8 @@ class GBSPlayerViewController: NSViewController {
     /// Update the GBS metadata labels, using the GBS player's most recently loaded header
     func updateMetadataLabels() {
         if let header = player.gbsHeader {
-            titleLabel.stringValue = header.title
+            //titleLabel.stringValue = header.title
+            titleLabel.stringValue = "butts farts butts farts butts farts butts farts butts farts butts farts"
             authorLabel.stringValue = "\(COMPOSED_BY_STRING) \(header.author)"
             copyrightLabel.stringValue = "\(COPYRIGHT_STRING) \(header.copyright)"
         } else {
@@ -83,11 +89,12 @@ class GBSPlayerViewController: NSViewController {
             copyrightLabel.stringValue = EMPTY_STRING
         }
         
-        titleLabel.sizeToFit()
+        //titleLabel.sizeToFit()
         authorLabel.sizeToFit()
         copyrightLabel.sizeToFit()
     }
     
+    /// Update the current track label - what track we're on, out of how many
     func updateCurrentTrackLabel() {
         if let header = player.gbsHeader {
             currentTrackLabel.stringValue = "\(TRACK_STRING) \(track) / \(header.numSongs)"
@@ -98,6 +105,7 @@ class GBSPlayerViewController: NSViewController {
         currentTrackLabel.sizeToFit()
     }
     
+    /// Update every label in the view
     func updateAllLabels() {
         updateStatusLabel()
         updateMetadataLabels()
@@ -145,7 +153,7 @@ class GBSPlayerViewController: NSViewController {
                 player.pausePlayback()
             }
         } else {
-            tryPlaying(track: track)
+            let _ = tryPlaying(track: track)
         }
         
         updateStatusLabel()
@@ -161,6 +169,7 @@ class GBSPlayerViewController: NSViewController {
         }
     }
     
+    /// Try loading a new file
     func tryLoadingFile(at url: URL) {
         stopPlayback()
         
@@ -188,27 +197,36 @@ class GBSPlayerViewController: NSViewController {
         player.volume = sender.integerValue/100.0
     }
     
+    /// Tell the app delegate that we exist, so it can pass us events like "file open attempt"
+    func reportSelfToAppDelegate() {
+        let appDelegate = NSApplication.shared().delegate as! AppDelegate
+        appDelegate.gbsPlayerViewController = self
+    }
+    
+    /// Initialize the wave displays by telling them which channels to display and starting a refresh timer
+    func initializeWaveDisplays() {
+        pulse1View.channel = player.gameBoy.apu.pulse1
+        pulse2View.channel = player.gameBoy.apu.pulse2
+        
+        let waveDisplayClocker = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
+        waveDisplayClocker.scheduleRepeating(deadline: .now(), interval: .milliseconds(WAVE_DISPLAY_REFRESH_PERIOD_MS), leeway: .milliseconds(1))
+        waveDisplayClocker.setEventHandler() {
+            self.pulse1View.setNeedsDisplay(self.pulse1View.bounds)
+            self.pulse2View.setNeedsDisplay(self.pulse2View.bounds)
+            self.someButton.setNeedsDisplay(self.someButton.bounds)
+        }
+        self.waveDisplayClocker = waveDisplayClocker
+        waveDisplayClocker.resume()
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         player.volume = STARTUP_VOLUME
-        
-        // Tell the app delegate that we exist, so it can pass us events like "file open attempt"
-        let appDelegate = NSApplication.shared().delegate as! AppDelegate
-        appDelegate.gbsvc = self
-        
+        reportSelfToAppDelegate()
         updateAllLabels()
-        
-        let newWaveDisplayClocker = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
-        newWaveDisplayClocker.scheduleRepeating(deadline: .now(), interval: .milliseconds(33), leeway: .milliseconds(1))
-        newWaveDisplayClocker.setEventHandler() {
-            self.pulse1View.setNeedsDisplay(self.pulse1View.bounds)
-            self.pulse2View.setNeedsDisplay(self.pulse2View.bounds)
-        }
-        waveDisplayClocker = newWaveDisplayClocker
-        waveDisplayClocker!.resume()
-        pulse1View.channel = player.gameBoy.apu.pulse1
-        pulse2View.channel = player.gameBoy.apu.pulse2
+        initializeWaveDisplays()
     }
 }
 
