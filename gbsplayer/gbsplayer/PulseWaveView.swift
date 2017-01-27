@@ -55,14 +55,8 @@ class PulseWaveView: NSView {
         let waveMaxX = bounds.maxX
         
         let waveHeight = floor(bounds.height * CGFloat(amplitude))
-//        let waveMinY = floor(bounds.midY - (waveHeight/2))
-//        let waveMaxY = floor(bounds.midY + (waveHeight/2))
         let waveMinY = bounds.minY
-        let waveMaxY = bounds.minY + (bounds.height * CGFloat(amplitude))
-        
-        if waveMinY < bounds.minY {
-            Swift.print("Amplitude: \(amplitude) wave height: \(waveHeight) wave min Y: \(waveMinY) wave max Y: \(waveMaxY) bounds min Y: \(bounds.minY) bounds max Y: \(bounds.maxY) bounds mid Y: \(bounds.midY)")
-        }
+        let waveMaxY = bounds.minY + waveHeight - 1
         
         var x = CGFloat(waveMinX)
         var y = CGFloat(waveMinY)

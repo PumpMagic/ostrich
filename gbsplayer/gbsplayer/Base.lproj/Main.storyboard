@@ -672,13 +672,13 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="GBSPlayerViewController" customModule="gbsplayer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" wantsLayer="YES" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="332" height="374"/>
+                        <rect key="frame" x="0.0" y="0.0" width="338" height="341"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gq9-2K-SuW">
-                                <rect key="frame" x="-2" y="187" width="37" height="18"/>
+                                <rect key="frame" x="1" y="177" width="37" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="check" title="P1" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="bhB-Oh-mX2">
+                                <buttonCell key="cell" type="check" title="P1" bezelStyle="regularSquare" imagePosition="right" state="on" inset="2" id="bhB-Oh-mX2">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -687,9 +687,9 @@
                                 </connections>
                             </button>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4bH-x4-5U8">
-                                <rect key="frame" x="-3" y="143" width="38" height="18"/>
+                                <rect key="frame" x="1" y="135" width="38" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="check" title="P2" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="eqx-Np-QXD">
+                                <buttonCell key="cell" type="check" title="P2" bezelStyle="regularSquare" imagePosition="right" state="on" inset="2" id="eqx-Np-QXD">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -698,22 +698,22 @@
                                 </connections>
                             </button>
                             <box fixedFrame="YES" boxType="custom" borderType="line" title="box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="Kws-wz-QB0">
-                                <rect key="frame" x="43" y="123" width="269" height="238"/>
+                                <rect key="frame" x="43" y="123" width="269" height="205"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <view key="contentView" ambiguous="YES" id="XUK-tl-hxz">
-                                    <rect key="frame" x="1" y="1" width="267" height="236"/>
+                                    <rect key="frame" x="1" y="1" width="267" height="203"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Jx-Aw-4TV" customClass="PulseWaveView" customModule="gbsplayer" customModuleProvider="target">
-                                            <rect key="frame" x="0.0" y="7" width="267" height="37"/>
+                                            <rect key="frame" x="0.0" y="11" width="267" height="37"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         </customView>
                                         <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="orF-oy-QqT" customClass="PulseWaveView" customModule="gbsplayer" customModuleProvider="target">
-                                            <rect key="frame" x="0.0" y="52" width="267" height="37"/>
+                                            <rect key="frame" x="0.0" y="53" width="267" height="37"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         </customView>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vKd-qX-Usp">
-                                            <rect key="frame" x="32" y="156" width="64" height="17"/>
+                                            <rect key="frame" x="4" y="131" width="64" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" placeholderString="Copyright" id="0v4-J5-5ne">
                                                 <font key="font" metaFont="system"/>
@@ -722,7 +722,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="luB-hp-a7U">
-                                            <rect key="frame" x="32" y="175" width="81" height="17"/>
+                                            <rect key="frame" x="4" y="156" width="81" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" placeholderString="Composers" id="wIv-ko-maY">
                                                 <font key="font" metaFont="system"/>
@@ -731,7 +731,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tC8-lB-8KO">
-                                            <rect key="frame" x="32" y="194" width="74" height="17"/>
+                                            <rect key="frame" x="4" y="181" width="74" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" placeholderString="Game" id="HxS-7F-tXr">
                                                 <font key="font" metaFont="system"/>
@@ -740,7 +740,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ea9-PR-XjP">
-                                            <rect key="frame" x="32" y="131" width="88" height="17"/>
+                                            <rect key="frame" x="140" y="97" width="96" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" placeholderString="Track Number" id="kLb-QS-5Vp">
                                                 <font key="font" metaFont="system"/>
@@ -749,7 +749,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sfi-f8-fjD">
-                                            <rect key="frame" x="32" y="106" width="43" height="17"/>
+                                            <rect key="frame" x="25" y="97" width="43" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" placeholderString="Status" id="vfI-mh-XWH">
                                                 <font key="font" metaFont="system"/>
@@ -762,7 +762,7 @@
                                 <color key="fillColor" red="0.60784313725490191" green="0.73725490196078436" blue="0.058823529411764705" alpha="1" colorSpace="calibratedRGB"/>
                             </box>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PzT-cR-paf">
-                                <rect key="frame" x="75" y="48" width="106" height="32"/>
+                                <rect key="frame" x="63" y="54" width="106" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="Next Track" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="27i-sc-4oT">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -773,7 +773,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qCb-g4-0Cg">
-                                <rect key="frame" x="63" y="75" width="130" height="32"/>
+                                <rect key="frame" x="63" y="81" width="130" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="Previous Track" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1yc-Vg-zdh">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -783,56 +783,39 @@
                                     <action selector="previousTrackButtonPressed:" target="XfG-lQ-9wD" id="BpM-4K-alq"/>
                                 </connections>
                             </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="45L-nc-No2">
-                                <rect key="frame" x="193" y="48" width="114" height="32"/>
+                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dJC-om-pFl" customClass="GBRoundButton" customModule="gbsplayer" customModuleProvider="target">
+                                <rect key="frame" x="278" y="59" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="Play / Pause" bezelStyle="rounded" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cko-qp-uva">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="playPauseButtonPressed:" target="XfG-lQ-9wD" id="KUI-fS-4Nk"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oV4-df-e8f">
-                                <rect key="frame" x="216" y="75" width="69" height="32"/>
+                            </customView>
+                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4tP-SL-thj" customClass="GBRoundButton" customModule="gbsplayer" customModuleProvider="target">
+                                <rect key="frame" x="236" y="42" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="Stop" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1QP-NR-wC9">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="stopButtonPressed:" target="XfG-lQ-9wD" id="gma-nV-Ntm"/>
-                                </connections>
-                            </button>
+                            </customView>
                             <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QXY-nH-pbf">
-                                <rect key="frame" x="146" y="18" width="97" height="19"/>
+                                <rect key="frame" x="80" y="24" width="97" height="19"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <sliderCell key="cell" state="on" alignment="left" maxValue="100" doubleValue="25" tickMarkPosition="above" sliderType="linear" id="Wdh-F3-Fmp"/>
                                 <connections>
                                     <action selector="volumeSliderChanged:" target="XfG-lQ-9wD" id="Hag-7G-utJ"/>
                                 </connections>
                             </slider>
-                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pzf-Cf-htb" customClass="GBRoundButton" customModule="gbsplayer" customModuleProvider="target">
-                                <rect key="frame" x="273" y="2" width="39" height="39"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            </customView>
                         </subviews>
                     </view>
                     <connections>
                         <outlet property="authorLabel" destination="luB-hp-a7U" id="8sQ-tb-CK1"/>
                         <outlet property="copyrightLabel" destination="vKd-qX-Usp" id="mkm-bl-S6I"/>
                         <outlet property="currentTrackLabel" destination="ea9-PR-XjP" id="sLP-dn-E9j"/>
+                        <outlet property="playPauseButton" destination="dJC-om-pFl" id="ODZ-vK-33r"/>
                         <outlet property="pulse1View" destination="orF-oy-QqT" id="zvc-s7-GbV"/>
                         <outlet property="pulse2View" destination="4Jx-Aw-4TV" id="y6P-IU-Kc9"/>
-                        <outlet property="someButton" destination="pzf-Cf-htb" id="LQw-Jo-CIW"/>
                         <outlet property="statusLabel" destination="sfi-f8-fjD" id="Ba2-Ob-Zz2"/>
+                        <outlet property="stopButton" destination="4tP-SL-thj" id="nTX-52-7mj"/>
                         <outlet property="titleLabel" destination="tC8-lB-8KO" id="U35-TO-kOB"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1" y="707"/>
+            <point key="canvasLocation" x="4" y="690.5"/>
         </scene>
     </scenes>
 </document>

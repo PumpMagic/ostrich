@@ -30,7 +30,7 @@ let EMPTY_STRING = ""
 let WAVE_DISPLAY_REFRESH_PERIOD_MS = 33
 
 
-class GBSPlayerViewController: NSViewController {
+class GBSPlayerViewController: NSViewController, CustomButtonDelegate {
     let player = GBSPlayer()
     var currentHeader: GBSHeader? = nil
     
@@ -53,7 +53,9 @@ class GBSPlayerViewController: NSViewController {
     @IBOutlet weak var pulse1View: PulseWaveView!
     @IBOutlet weak var pulse2View: PulseWaveView!
     
-    @IBOutlet weak var someButton: GBRoundButton!
+    @IBOutlet weak var playPauseButton: GBRoundButton!
+    @IBOutlet weak var stopButton: GBRoundButton!
+    
     
     /// Update the playback status label - playing, stopped, etc.
     func updateStatusLabel() {
@@ -79,8 +81,7 @@ class GBSPlayerViewController: NSViewController {
     /// Update the GBS metadata labels, using the GBS player's most recently loaded header
     func updateMetadataLabels() {
         if let header = player.gbsHeader {
-            //titleLabel.stringValue = header.title
-            titleLabel.stringValue = "butts farts butts farts butts farts butts farts butts farts butts farts"
+            titleLabel.stringValue = header.title
             authorLabel.stringValue = "\(COMPOSED_BY_STRING) \(header.author)"
             copyrightLabel.stringValue = "\(COPYRIGHT_STRING) \(header.copyright)"
         } else {
@@ -89,7 +90,7 @@ class GBSPlayerViewController: NSViewController {
             copyrightLabel.stringValue = EMPTY_STRING
         }
         
-        //titleLabel.sizeToFit()
+        titleLabel.sizeToFit()
         authorLabel.sizeToFit()
         copyrightLabel.sizeToFit()
     }
@@ -145,7 +146,7 @@ class GBSPlayerViewController: NSViewController {
         }
     }
     
-    @IBAction func playPauseButtonPressed(_ sender: NSButton) {
+    func playPauseButtonPressed() {
         if player.midSong {
             if player.paused {
                 player.resumePlayback()
@@ -159,7 +160,7 @@ class GBSPlayerViewController: NSViewController {
         updateStatusLabel()
     }
     
-    @IBAction func stopButtonPressed(_ sender: NSButton) {
+    func stopButtonPressed() {
         stopPlayback()
     }
     
@@ -211,13 +212,24 @@ class GBSPlayerViewController: NSViewController {
         let waveDisplayClocker = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
         waveDisplayClocker.scheduleRepeating(deadline: .now(), interval: .milliseconds(WAVE_DISPLAY_REFRESH_PERIOD_MS), leeway: .milliseconds(1))
         waveDisplayClocker.setEventHandler() {
-            self.pulse1View.setNeedsDisplay(self.pulse1View.bounds)
-            self.pulse2View.setNeedsDisplay(self.pulse2View.bounds)
-            self.someButton.setNeedsDisplay(self.someButton.bounds)
+            self.pulse1View.needsDisplay = true
+            self.pulse2View.needsDisplay = true
         }
         self.waveDisplayClocker = waveDisplayClocker
         waveDisplayClocker.resume()
-        
+    }
+    
+    func handleCustomButtonPress(sender: NSView) {
+        if sender == playPauseButton {
+            playPauseButtonPressed()
+        } else if sender == stopButton {
+            stopButtonPressed()
+        }
+    }
+    
+    func registerAsCustomButtonDelegate() {
+        playPauseButton.delegate = self
+        stopButton.delegate = self
     }
     
     override func viewDidLoad() {
@@ -227,6 +239,9 @@ class GBSPlayerViewController: NSViewController {
         reportSelfToAppDelegate()
         updateAllLabels()
         initializeWaveDisplays()
+        registerAsCustomButtonDelegate()
+        
+        tryLoadingFile(at: URL(fileURLWithPath: "/Users/owner/Dropbox/emu/tetris.gbs"))
     }
 }
 
