@@ -784,11 +784,11 @@
                                 </connections>
                             </button>
                             <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dJC-om-pFl" customClass="GBRoundButton" customModule="gbsplayer" customModuleProvider="target">
-                                <rect key="frame" x="278" y="59" width="30" height="30"/>
+                                <rect key="frame" x="278" y="59" width="40" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             </customView>
                             <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4tP-SL-thj" customClass="GBRoundButton" customModule="gbsplayer" customModuleProvider="target">
-                                <rect key="frame" x="236" y="42" width="30" height="30"/>
+                                <rect key="frame" x="230" y="41" width="40" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             </customView>
                             <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QXY-nH-pbf">
@@ -799,6 +799,10 @@
                                     <action selector="volumeSliderChanged:" target="XfG-lQ-9wD" id="Hag-7G-utJ"/>
                                 </connections>
                             </slider>
+                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WHS-y3-uFx" customClass="GBPowerLight" customModule="gbsplayer" customModuleProvider="target">
+                                <rect key="frame" x="14" y="284" width="15" height="15"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            </customView>
                         </subviews>
                     </view>
                     <connections>
@@ -806,6 +810,7 @@
                         <outlet property="copyrightLabel" destination="vKd-qX-Usp" id="mkm-bl-S6I"/>
                         <outlet property="currentTrackLabel" destination="ea9-PR-XjP" id="sLP-dn-E9j"/>
                         <outlet property="playPauseButton" destination="dJC-om-pFl" id="ODZ-vK-33r"/>
+                        <outlet property="powerLight" destination="WHS-y3-uFx" id="j1n-Ox-hQY"/>
                         <outlet property="pulse1View" destination="orF-oy-QqT" id="zvc-s7-GbV"/>
                         <outlet property="pulse2View" destination="4Jx-Aw-4TV" id="y6P-IU-Kc9"/>
                         <outlet property="statusLabel" destination="sfi-f8-fjD" id="Ba2-Ob-Zz2"/>

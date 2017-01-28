@@ -13,19 +13,23 @@ protocol CustomButtonDelegate {
     func handleCustomButtonPress(sender: NSView)
 }
 
-let UNSELECTED_COLOR = NSColor(red: 179/255, green: 25/255, blue: 97/255, alpha: 1.0)
-let SELECTED_COLOR = NSColor(red: 127/255, green: 9/255, blue: 69/255, alpha: 1.0)
+
+let UNPRESSED_FILENAME = "gb-button-unpressed.png"
+let PRESSED_FILENAME = "gb-button-pressed.png"
+let UNPRESSED_IMAGE: NSImage! = Bundle.main.image(forResource: UNPRESSED_FILENAME)
+let PRESSED_IMAGE: NSImage! = Bundle.main.image(forResource: PRESSED_FILENAME)
+
 
 class GBRoundButton: NSView {
-    var color: NSColor = UNSELECTED_COLOR
+    var currentImage: NSImage = UNPRESSED_IMAGE
     var delegate: CustomButtonDelegate? = nil
     
-    /// Update our color
-    func updateColor(selected: Bool) {
+    /// Update our image
+    func updateImage(selected: Bool) {
         if selected {
-            self.color = SELECTED_COLOR
+            self.currentImage = PRESSED_IMAGE
         } else {
-            self.color = UNSELECTED_COLOR
+            self.currentImage = UNPRESSED_IMAGE
         }
         
         self.needsDisplay = true
@@ -46,16 +50,16 @@ class GBRoundButton: NSView {
     }
     
     override func mouseDown(with event: NSEvent) {
-        updateColor(selected: true)
+        updateImage(selected: true)
     }
     
     override func mouseDragged(with event: NSEvent) {
         let cursorIsInUs = self.contains(point: event.locationInWindow)
-        updateColor(selected: cursorIsInUs)
+        updateImage(selected: cursorIsInUs)
     }
     
     override func mouseUp(with event: NSEvent) {
-        updateColor(selected: false)
+        updateImage(selected: false)
         
         if let delegate = self.delegate {
             let cursorIsInUs = self.contains(point: event.locationInWindow)
@@ -77,9 +81,7 @@ class GBRoundButton: NSView {
         super.draw(dirtyRect)
 
         // Drawing code here.
-        let path = NSBezierPath(ovalIn: dirtyRect)
-        self.color.setFill()
-        path.fill()
+        currentImage.draw(in: dirtyRect)
     }
     
 }

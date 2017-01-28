@@ -56,21 +56,27 @@ class GBSPlayerViewController: NSViewController, CustomButtonDelegate {
     @IBOutlet weak var playPauseButton: GBRoundButton!
     @IBOutlet weak var stopButton: GBRoundButton!
     
+    @IBOutlet weak var powerLight: GBPowerLight!
+    
     
     /// Update the playback status label - playing, stopped, etc.
     func updateStatusLabel() {
         let newValue: String
         if player.gbsHeader == nil {
             newValue = NO_GBS_LOADED_STRING
+            powerLight.state = .Off
         } else {
             if player.midSong {
                 if player.paused {
                     newValue = PAUSED_STRING
+                    powerLight.state = .Yellow
                 } else {
                     newValue = PLAYING_STRING
+                    powerLight.state = .Green
                 }
             } else {
                 newValue = READY_STRING
+                powerLight.state = .Red
             }
         }
         
@@ -241,7 +247,7 @@ class GBSPlayerViewController: NSViewController, CustomButtonDelegate {
         initializeWaveDisplays()
         registerAsCustomButtonDelegate()
         
-        tryLoadingFile(at: URL(fileURLWithPath: "/Users/owner/Dropbox/emu/tetris.gbs"))
+//        tryLoadingFile(at: URL(fileURLWithPath: "/Users/owner/Dropbox/emu/tetris.gbs"))
     }
 }
 
