@@ -10,35 +10,17 @@ import Cocoa
 
 
 let POWERLIGHT_IMAGE_FILENAME = "gb-powerlight.png"
-let POWERLIGHT_IMAGE: NSImage! = Bundle.main.image(forResource: POWERLIGHT_IMAGE_FILENAME)
+let POWERLIGHT_BASE_IMAGE: NSImage! = Bundle.main.image(forResource: POWERLIGHT_IMAGE_FILENAME)
+let POWERLIGHT_BASE_STATE = GBPowerLight.PowerLightState.Red
+// Map each state to its desired (hue, saturation, brightness, contrast) adjustments
+let COLOR_PARAMS_MAP: [GBPowerLight.PowerLightState : (Float, Float, Float, Float)] =
+    [.Off: (0.0, 0.0, 0.0, 0.8), .Red: (0.0, 1.0, 0.0, 1.0),
+     .Yellow: (1/3*3.14, 1.4, 0.1, 1.3), .Green: (2/3*3.14, 1.0, 0.0, 1.0)]
 
+
+/// A Game Boy power light, with adjustable color
+/// Nonstandard (non-red) color images are created and cached in memory at runtime - just provide the base red image and go 
 class GBPowerLight: NSView {
-
-    private var image: NSImage = POWERLIGHT_IMAGE
-    
-    var state: PowerLightState = .Off {
-        didSet {
-            let newHue: Float
-            switch state {
-            case .Off:
-                newHue = 0.0
-            case .Red:
-                newHue = 0.0
-            case .Yellow:
-                newHue = Float(60/180*3.14)
-            case .Green:
-                newHue = Float(120/180*3.14)
-            }
-            
-            //@todo cache images on startup
-            if let image = adjustImage(img: POWERLIGHT_IMAGE, hue: newHue) {
-                self.image = image
-                self.needsDisplay = true
-            }
-        }
-    }
-    
-    
     enum PowerLightState {
         case Off
         case Red
@@ -46,37 +28,53 @@ class GBPowerLight: NSView {
         case Green
     }
     
-    func adjustImage(img: NSImage, hue: Float) -> NSImage? {
-        // Convert the input image into a Core Image-friendly format
-        guard let tiff = img.tiffRepresentation else {
-            return nil
+    var state = POWERLIGHT_BASE_STATE {
+        didSet {
+            if state != oldValue {
+                self.image = getOrMakeImage(forState: state)
+                self.needsDisplay = true
+            }
         }
-        let inputImage = CIImage(data: tiff)
-        
-        // Create the hue adjust filter
-        guard let hueAdjust = CIFilter(name: "CIHueAdjust") else {
-            return nil
-        }
-        hueAdjust.setValue(inputImage, forKey: kCIInputImageKey)
-        hueAdjust.setValue(NSNumber(value: hue), forKey: kCIInputAngleKey)
-        
-        // Run the hue adjustment
-        guard let outputImage = hueAdjust.value(forKey: kCIOutputImageKey) as? CIImage else {
-            return nil
+    }
+    
+    private var image: NSImage = POWERLIGHT_BASE_IMAGE
+    private var imageCache: [PowerLightState : NSImage] = [:]
+    
+    
+    /// Return the image corresponding with a given state, either from our cache or by making it
+    private func getOrMakeImage(forState state: PowerLightState) -> NSImage {
+        if let cached = imageCache[state] {
+            return cached
         }
         
-        // Convert the Core Image output to an NSImage
-        let resultImage = NSImage(size: outputImage.extent.size)
-        let rep = NSCIImageRep(ciImage: outputImage)
-        resultImage.addRepresentation(rep)
+        let newImage = makeImage(forState: state)
+        imageCache[state] = newImage
         
-        return resultImage
+        return newImage
+    }
+    
+    /// Make the image that corresponds with a given state
+    private func makeImage(forState state: PowerLightState) -> NSImage {
+        if state == POWERLIGHT_BASE_STATE {
+            return POWERLIGHT_BASE_IMAGE
+        }
+        
+        guard let (hueAdjust, saturationAdjust, brightnessAdjust, contrastAdjust) = COLOR_PARAMS_MAP[state] else {
+            return POWERLIGHT_BASE_IMAGE
+        }
+        
+        guard let adjustedImage = adjustImageColors(image: POWERLIGHT_BASE_IMAGE, hue: hueAdjust, saturation: saturationAdjust,
+                                                    brightness: brightnessAdjust, contrast: contrastAdjust) else
+        {
+            return POWERLIGHT_BASE_IMAGE
+        }
+        
+        return adjustedImage
     }
     
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
-
-        // Drawing code here.
+        
         image.draw(in: dirtyRect)
     }
     

@@ -23,6 +23,7 @@
 		EBEA05FE1E3C801F00D3D0F6 /* gb-button-pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = EBEA05FD1E3C801F00D3D0F6 /* gb-button-pressed.png */; };
 		EBEA06001E3C927A00D3D0F6 /* GBPowerLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEA05FF1E3C927A00D3D0F6 /* GBPowerLight.swift */; };
 		EBEA06021E3C98A500D3D0F6 /* gb-powerlight.png in Resources */ = {isa = PBXBuildFile; fileRef = EBEA06011E3C98A500D3D0F6 /* gb-powerlight.png */; };
+		EBEA06041E3E020200D3D0F6 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEA06031E3E020200D3D0F6 /* Util.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +80,7 @@
 		EBEA05FD1E3C801F00D3D0F6 /* gb-button-pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gb-button-pressed.png"; sourceTree = "<group>"; };
 		EBEA05FF1E3C927A00D3D0F6 /* GBPowerLight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GBPowerLight.swift; sourceTree = "<group>"; };
 		EBEA06011E3C98A500D3D0F6 /* gb-powerlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gb-powerlight.png"; sourceTree = "<group>"; };
+		EBEA06031E3E020200D3D0F6 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +145,7 @@
 				EBC617E11E387A6E007434B8 /* PulseWaveView.swift */,
 				EB769CFD1E39EE7100083C60 /* GBRoundButton.swift */,
 				EBEA05FF1E3C927A00D3D0F6 /* GBPowerLight.swift */,
+				EBEA06031E3E020200D3D0F6 /* Util.swift */,
 			);
 			path = gbsplayer;
 			sourceTree = "<group>";
@@ -316,6 +319,7 @@
 				EBD958DD1D65802400963E2F /* GBSPlayerViewController.swift in Sources */,
 				EB769CFE1E39EE7100083C60 /* GBRoundButton.swift in Sources */,
 				EBD958DB1D65802400963E2F /* AppDelegate.swift in Sources */,
+				EBEA06041E3E020200D3D0F6 /* Util.swift in Sources */,
 				EBBC3A131D6580FE00AC529E /* GBSPlayer.swift in Sources */,
 				EBEA06001E3C927A00D3D0F6 /* GBPowerLight.swift in Sources */,
 				EB6CB25D1E3455E000010E3E /* GBSParser.swift in Sources */,

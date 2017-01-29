@@ -748,15 +748,6 @@
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sfi-f8-fjD">
-                                            <rect key="frame" x="25" y="97" width="43" height="17"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" placeholderString="Status" id="vfI-mh-XWH">
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
                                     </subviews>
                                 </view>
                                 <color key="fillColor" red="0.60784313725490191" green="0.73725490196078436" blue="0.058823529411764705" alpha="1" colorSpace="calibratedRGB"/>
@@ -813,7 +804,6 @@
                         <outlet property="powerLight" destination="WHS-y3-uFx" id="j1n-Ox-hQY"/>
                         <outlet property="pulse1View" destination="orF-oy-QqT" id="zvc-s7-GbV"/>
                         <outlet property="pulse2View" destination="4Jx-Aw-4TV" id="y6P-IU-Kc9"/>
-                        <outlet property="statusLabel" destination="sfi-f8-fjD" id="Ba2-Ob-Zz2"/>
                         <outlet property="stopButton" destination="4tP-SL-thj" id="nTX-52-7mj"/>
                         <outlet property="titleLabel" destination="tC8-lB-8KO" id="U35-TO-kOB"/>
                     </connections>

@@ -16,15 +16,9 @@ import AudioKit
 /// Volume on startup. Be sure to synchronize this with the volume slider's default value in the UI builder
 let STARTUP_VOLUME = 0.25
 
-
-let READY_STRING = "Ready"
-let PLAYING_STRING = "Playing"
-let PAUSED_STRING = "Paused"
-let LOAD_FAILURE_STRING = "File parse failure"
 let COMPOSED_BY_STRING = "Composed by"
 let COPYRIGHT_STRING = "Copyright"
 let TRACK_STRING = "Track"
-let NO_GBS_LOADED_STRING = "No GBS file loaded"
 let EMPTY_STRING = ""
 
 let WAVE_DISPLAY_REFRESH_PERIOD_MS = 33
@@ -47,7 +41,6 @@ class GBSPlayerViewController: NSViewController, CustomButtonDelegate {
     @IBOutlet weak var titleLabel: NSTextField!
     @IBOutlet weak var authorLabel: NSTextField!
     @IBOutlet weak var copyrightLabel: NSTextField!
-    @IBOutlet weak var statusLabel: NSTextField!
     @IBOutlet weak var currentTrackLabel: NSTextField!
     
     @IBOutlet weak var pulse1View: PulseWaveView!
@@ -60,28 +53,20 @@ class GBSPlayerViewController: NSViewController, CustomButtonDelegate {
     
     
     /// Update the playback status label - playing, stopped, etc.
-    func updateStatusLabel() {
-        let newValue: String
+    func updatePlaybackStatusDisplay() {
         if player.gbsHeader == nil {
-            newValue = NO_GBS_LOADED_STRING
             powerLight.state = .Off
         } else {
             if player.midSong {
                 if player.paused {
-                    newValue = PAUSED_STRING
                     powerLight.state = .Yellow
                 } else {
-                    newValue = PLAYING_STRING
                     powerLight.state = .Green
                 }
             } else {
-                newValue = READY_STRING
                 powerLight.state = .Red
             }
         }
-        
-        statusLabel.stringValue = newValue
-        statusLabel.sizeToFit()
     }
     
     /// Update the GBS metadata labels, using the GBS player's most recently loaded header
@@ -112,9 +97,9 @@ class GBSPlayerViewController: NSViewController, CustomButtonDelegate {
         currentTrackLabel.sizeToFit()
     }
     
-    /// Update every label in the view
-    func updateAllLabels() {
-        updateStatusLabel()
+    /// Update every status display in the view
+    func updateAllStatusDisplays() {
+        updatePlaybackStatusDisplay()
         updateMetadataLabels()
         updateCurrentTrackLabel()
     }
@@ -136,12 +121,12 @@ class GBSPlayerViewController: NSViewController, CustomButtonDelegate {
     
     func stopPlayback() {
         player.stopPlayback()
-        updateStatusLabel()
+        updatePlaybackStatusDisplay()
     }
     
     func tryPlaying(track: Int) -> Bool {
         let result = player.startPlayback(of: track)
-        updateStatusLabel()
+        updatePlaybackStatusDisplay()
         
         return result
     }
@@ -163,7 +148,7 @@ class GBSPlayerViewController: NSViewController, CustomButtonDelegate {
             let _ = tryPlaying(track: track)
         }
         
-        updateStatusLabel()
+        updatePlaybackStatusDisplay()
     }
     
     func stopButtonPressed() {
@@ -185,7 +170,7 @@ class GBSPlayerViewController: NSViewController, CustomButtonDelegate {
             handleNewMetadata()
         }
         
-        updateStatusLabel()
+        updatePlaybackStatusDisplay()
     }
     
     @IBAction func p1CheckboxChanged(_ sender: NSButton) {
@@ -243,7 +228,7 @@ class GBSPlayerViewController: NSViewController, CustomButtonDelegate {
         
         player.volume = STARTUP_VOLUME
         reportSelfToAppDelegate()
-        updateAllLabels()
+        updateAllStatusDisplays()
         initializeWaveDisplays()
         registerAsCustomButtonDelegate()
         
