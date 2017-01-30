@@ -11,33 +11,23 @@ import ostrich
 
 
 let PIXELS_PER_SECOND = 10000.0
+let LINE_WIDTH: CGFloat = 1.5
 
 //@todo magic numbers
 class PulseWaveView: NSView {
-
-    var amplitude = 1.0 // [0.0, 1.0]
-    var frequency = 200.0 // Hz
-    var duty = 0.5 // (0.0, 1.0)
     
+    /// Channel we're drawing
     var channel: Pulse? = nil
     
     
-    /// Update our local knowledge of the properties of the channel we're displaying
-    func updateProperties() {
-        guard let channel = self.channel else { return }
-        
-        amplitude = channel.getMusicalAmplitude()
-        frequency = channel.getMusicalFrequency()
-        duty = channel.getDutyCycle()
-    }
-    
     /// Draw a flat line as the waveform
-    func drawFlatLine() {
-        let startPoint = CGPoint(x: bounds.minX, y: bounds.minY)
-        let endPoint = CGPoint(x: bounds.maxX, y: bounds.minY)
+    func drawFlatLine(at y: CGFloat) {
+        let startPoint = CGPoint(x: bounds.minX, y: y)
+        let endPoint = CGPoint(x: bounds.maxX, y: y)
         
         NSColor.black.setStroke()
         let path = NSBezierPath()
+        path.lineWidth = LINE_WIDTH
         path.move(to: startPoint)
         path.line(to: endPoint)
         path.stroke()
@@ -45,9 +35,12 @@ class PulseWaveView: NSView {
     }
     
     /// Draw the pulse wave
-    func drawWaveform() {
-        if amplitude == 0.0 {
-            drawFlatLine()
+    /// Amplitude should be [0.0, 1.0]
+    /// Frequency should be in Hz
+    /// Duty should be [0.0, 1.0]
+    func drawWaveform(amplitude: Double, frequency: Double, duty: Double) {
+        if amplitude == 0.0 || duty == 0.0 {
+            drawFlatLine(at: bounds.minY)
             return
         }
         
@@ -62,6 +55,7 @@ class PulseWaveView: NSView {
         var y = CGFloat(waveMinY)
         
         let path = NSBezierPath()
+        path.lineWidth = LINE_WIDTH
         let startingPoint = CGPoint(x: x, y: y)
         NSColor.black.setStroke()
         path.move(to: startingPoint)
@@ -104,8 +98,16 @@ class PulseWaveView: NSView {
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
         
-        updateProperties()
-        drawWaveform()
+        guard let channel = self.channel else {
+            // We haven't been configured with a channel yet
+            drawFlatLine(at: bounds.minY)
+            return
+        }
+        
+        let amplitude = channel.getMusicalAmplitude()
+        let frequency = channel.getMusicalFrequency()
+        let duty = channel.getDutyCycle()
+        drawWaveform(amplitude: amplitude, frequency: frequency, duty: duty)
     }
     
 }

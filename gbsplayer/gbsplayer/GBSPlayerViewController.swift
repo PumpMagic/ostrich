@@ -13,20 +13,27 @@ import AudioKit
 // Good GBS files: Castlevania, Double Dragon, Tetris, Dr. Mario.
 // Iffy: Super Mario Land (track 5 barfs)
 
-/// Volume on startup. Be sure to synchronize this with the volume slider's default value in the UI builder
-let STARTUP_VOLUME = 0.25
+let STARTUP_VOLUME = 3 // out of 10
+let MAX_VOLUME = 10
 
-let COMPOSED_BY_STRING = "Composed by"
-let COPYRIGHT_STRING = "Copyright"
+let COPYRIGHT_STRING = "©"
 let TRACK_STRING = "Track"
+let VOLUME_STRING = "VOL"
 let EMPTY_STRING = ""
 
 let WAVE_DISPLAY_REFRESH_PERIOD_MS = 33
+
+let GB_FONT = NSFont(name: "Early-GameBoy", size: 12)
 
 
 class GBSPlayerViewController: NSViewController, CustomButtonDelegate {
     let player = GBSPlayer()
     var currentHeader: GBSHeader? = nil
+    var volume = STARTUP_VOLUME {
+        didSet {
+            handleUpdatedVolume()
+        }
+    }
     
     //@todo clean this up
     var waveDisplayClocker: DispatchSourceTimer?
@@ -42,6 +49,7 @@ class GBSPlayerViewController: NSViewController, CustomButtonDelegate {
     @IBOutlet weak var authorLabel: NSTextField!
     @IBOutlet weak var copyrightLabel: NSTextField!
     @IBOutlet weak var currentTrackLabel: NSTextField!
+    @IBOutlet weak var volumeLabel: NSTextField!
     
     @IBOutlet weak var pulse1View: PulseWaveView!
     @IBOutlet weak var pulse2View: PulseWaveView!
@@ -51,6 +59,25 @@ class GBSPlayerViewController: NSViewController, CustomButtonDelegate {
     
     @IBOutlet weak var powerLight: GBPowerLight!
     
+    
+    func updateVolumeLabel() {
+        if volume > 0 {
+            volumeLabel.stringValue = "\(VOLUME_STRING) \(String(repeating: "-", count: volume))"
+        } else {
+            volumeLabel.stringValue = VOLUME_STRING
+        }
+        
+        volumeLabel.sizeToFit()
+    }
+    
+    func updatePlayerVolume() {
+        player.volume = self.volume / MAX_VOLUME
+    }
+    
+    func handleUpdatedVolume() {
+        updateVolumeLabel()
+        updatePlayerVolume()
+    }
     
     /// Update the playback status label - playing, stopped, etc.
     func updatePlaybackStatusDisplay() {
@@ -73,7 +100,7 @@ class GBSPlayerViewController: NSViewController, CustomButtonDelegate {
     func updateMetadataLabels() {
         if let header = player.gbsHeader {
             titleLabel.stringValue = header.title
-            authorLabel.stringValue = "\(COMPOSED_BY_STRING) \(header.author)"
+            authorLabel.stringValue = header.author
             copyrightLabel.stringValue = "\(COPYRIGHT_STRING) \(header.copyright)"
         } else {
             titleLabel.stringValue = EMPTY_STRING
@@ -89,12 +116,20 @@ class GBSPlayerViewController: NSViewController, CustomButtonDelegate {
     /// Update the current track label - what track we're on, out of how many
     func updateCurrentTrackLabel() {
         if let header = player.gbsHeader {
-            currentTrackLabel.stringValue = "\(TRACK_STRING) \(track) / \(header.numSongs)"
+            currentTrackLabel.stringValue = "\(TRACK_STRING) \(track) of \(header.numSongs)"
         } else {
             currentTrackLabel.stringValue = EMPTY_STRING
         }
         
         currentTrackLabel.sizeToFit()
+    }
+    
+    func setDisplayFont() {
+        titleLabel.font = GB_FONT
+        authorLabel.font = GB_FONT
+        copyrightLabel.font = GB_FONT
+        currentTrackLabel.font = GB_FONT
+        volumeLabel.font = GB_FONT
     }
     
     /// Update every status display in the view
@@ -161,6 +196,19 @@ class GBSPlayerViewController: NSViewController, CustomButtonDelegate {
         }
     }
     
+    @IBAction func volumeUpButtonPressed(_ sender: NSButton) {
+        if volume < MAX_VOLUME {
+            volume += 1
+        }
+    }
+    
+    @IBAction func volumeDownButtonPressed(_ sender: NSButton) {
+        if volume > 0 {
+            volume -= 1
+        }
+    }
+    
+    
     /// Try loading a new file
     func tryLoadingFile(at url: URL) {
         stopPlayback()
@@ -182,11 +230,6 @@ class GBSPlayerViewController: NSViewController, CustomButtonDelegate {
     @IBAction func p2CheckboxChanged(_ sender: NSButton) {
         let newConnectedState = sender.state != 0
         player.gameBoy.alterPulse2Connection(connected: newConnectedState)
-    }
-    
-    
-    @IBAction func volumeSliderChanged(_ sender: NSSlider) {
-        player.volume = sender.integerValue/100.0
     }
     
     /// Tell the app delegate that we exist, so it can pass us events like "file open attempt"
@@ -226,13 +269,16 @@ class GBSPlayerViewController: NSViewController, CustomButtonDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        player.volume = STARTUP_VOLUME
-        reportSelfToAppDelegate()
+        setDisplayFont()
+        handleUpdatedVolume()
         updateAllStatusDisplays()
         initializeWaveDisplays()
+        
         registerAsCustomButtonDelegate()
+        reportSelfToAppDelegate()
         
 //        tryLoadingFile(at: URL(fileURLWithPath: "/Users/owner/Dropbox/emu/tetris.gbs"))
+        
     }
 }
 

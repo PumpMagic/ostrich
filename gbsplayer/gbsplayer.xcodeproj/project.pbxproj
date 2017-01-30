@@ -24,6 +24,7 @@
 		EBEA06001E3C927A00D3D0F6 /* GBPowerLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEA05FF1E3C927A00D3D0F6 /* GBPowerLight.swift */; };
 		EBEA06021E3C98A500D3D0F6 /* gb-powerlight.png in Resources */ = {isa = PBXBuildFile; fileRef = EBEA06011E3C98A500D3D0F6 /* gb-powerlight.png */; };
 		EBEA06041E3E020200D3D0F6 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEA06031E3E020200D3D0F6 /* Util.swift */; };
+		EBEA06061E3EA94300D3D0F6 /* early_gameboy.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EBEA06051E3EA94300D3D0F6 /* early_gameboy.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +82,7 @@
 		EBEA05FF1E3C927A00D3D0F6 /* GBPowerLight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GBPowerLight.swift; sourceTree = "<group>"; };
 		EBEA06011E3C98A500D3D0F6 /* gb-powerlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gb-powerlight.png"; sourceTree = "<group>"; };
 		EBEA06031E3E020200D3D0F6 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
+		EBEA06051E3EA94300D3D0F6 /* early_gameboy.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = early_gameboy.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,6 +173,7 @@
 		EBEA05FC1E3C77E800D3D0F6 /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				EBEA06051E3EA94300D3D0F6 /* early_gameboy.ttf */,
 				EBEA05FA1E3C77DF00D3D0F6 /* gb-button-unpressed.png */,
 				EBEA05FD1E3C801F00D3D0F6 /* gb-button-pressed.png */,
 				EBEA06011E3C98A500D3D0F6 /* gb-powerlight.png */,
@@ -290,6 +293,7 @@
 				EBD958DF1D65802400963E2F /* Assets.xcassets in Resources */,
 				EBEA05FE1E3C801F00D3D0F6 /* gb-button-pressed.png in Resources */,
 				EBD958E21D65802400963E2F /* Main.storyboard in Resources */,
+				EBEA06061E3EA94300D3D0F6 /* early_gameboy.ttf in Resources */,
 				EBEA05FB1E3C77DF00D3D0F6 /* gb-button-unpressed.png in Resources */,
 				EBEA06021E3C98A500D3D0F6 /* gb-powerlight.png in Resources */,
 			);

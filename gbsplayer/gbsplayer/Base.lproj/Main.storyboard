@@ -676,7 +676,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gq9-2K-SuW">
-                                <rect key="frame" x="1" y="177" width="37" height="18"/>
+                                <rect key="frame" x="1" y="198" width="37" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="P1" bezelStyle="regularSquare" imagePosition="right" state="on" inset="2" id="bhB-Oh-mX2">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -687,7 +687,7 @@
                                 </connections>
                             </button>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4bH-x4-5U8">
-                                <rect key="frame" x="1" y="135" width="38" height="18"/>
+                                <rect key="frame" x="1" y="156" width="38" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="P2" bezelStyle="regularSquare" imagePosition="right" state="on" inset="2" id="eqx-Np-QXD">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -705,15 +705,15 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Jx-Aw-4TV" customClass="PulseWaveView" customModule="gbsplayer" customModuleProvider="target">
-                                            <rect key="frame" x="0.0" y="11" width="267" height="37"/>
+                                            <rect key="frame" x="0.0" y="29" width="267" height="43"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         </customView>
                                         <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="orF-oy-QqT" customClass="PulseWaveView" customModule="gbsplayer" customModuleProvider="target">
-                                            <rect key="frame" x="0.0" y="53" width="267" height="37"/>
+                                            <rect key="frame" x="0.0" y="71" width="267" height="43"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         </customView>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vKd-qX-Usp">
-                                            <rect key="frame" x="4" y="131" width="64" height="17"/>
+                                            <rect key="frame" x="4" y="135" width="64" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" placeholderString="Copyright" id="0v4-J5-5ne">
                                                 <font key="font" metaFont="system"/>
@@ -722,7 +722,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="luB-hp-a7U">
-                                            <rect key="frame" x="4" y="156" width="81" height="17"/>
+                                            <rect key="frame" x="4" y="153" width="81" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" placeholderString="Composers" id="wIv-ko-maY">
                                                 <font key="font" metaFont="system"/>
@@ -731,18 +731,27 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tC8-lB-8KO">
-                                            <rect key="frame" x="4" y="181" width="74" height="17"/>
+                                            <rect key="frame" x="4" y="170" width="74" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" placeholderString="Game" id="HxS-7F-tXr">
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" placeholderString="Game" id="HxS-7F-tXr">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ea9-PR-XjP">
-                                            <rect key="frame" x="140" y="97" width="96" height="17"/>
+                                            <rect key="frame" x="4" y="116" width="96" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" placeholderString="Track Number" id="kLb-QS-5Vp">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pyj-1U-AkV">
+                                            <rect key="frame" x="4" y="-8" width="57" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" placeholderString="Volume" id="EKm-BC-rdW">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -751,6 +760,7 @@
                                     </subviews>
                                 </view>
                                 <color key="fillColor" red="0.60784313725490191" green="0.73725490196078436" blue="0.058823529411764705" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="titleFont" metaFont="message" size="11"/>
                             </box>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PzT-cR-paf">
                                 <rect key="frame" x="63" y="54" width="106" height="32"/>
@@ -782,18 +792,32 @@
                                 <rect key="frame" x="230" y="41" width="40" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             </customView>
-                            <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QXY-nH-pbf">
-                                <rect key="frame" x="80" y="24" width="97" height="19"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <sliderCell key="cell" state="on" alignment="left" maxValue="100" doubleValue="25" tickMarkPosition="above" sliderType="linear" id="Wdh-F3-Fmp"/>
-                                <connections>
-                                    <action selector="volumeSliderChanged:" target="XfG-lQ-9wD" id="Hag-7G-utJ"/>
-                                </connections>
-                            </slider>
                             <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WHS-y3-uFx" customClass="GBPowerLight" customModule="gbsplayer" customModuleProvider="target">
                                 <rect key="frame" x="14" y="284" width="15" height="15"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             </customView>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zxy-4T-XPg">
+                                <rect key="frame" x="63" y="21" width="106" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Volume Up" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="MNK-nt-0hS">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="volumeUpButtonPressed:" target="XfG-lQ-9wD" id="k7p-xG-Jcn"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UZm-3t-3Cr">
+                                <rect key="frame" x="63" y="-4" width="123" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Volume Down" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="NEj-lP-u8E">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="volumeDownButtonPressed:" target="XfG-lQ-9wD" id="VL1-J7-5WW"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </view>
                     <connections>
@@ -806,6 +830,7 @@
                         <outlet property="pulse2View" destination="4Jx-Aw-4TV" id="y6P-IU-Kc9"/>
                         <outlet property="stopButton" destination="4tP-SL-thj" id="nTX-52-7mj"/>
                         <outlet property="titleLabel" destination="tC8-lB-8KO" id="U35-TO-kOB"/>
+                        <outlet property="volumeLabel" destination="Pyj-1U-AkV" id="NAm-oV-ZtA"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
