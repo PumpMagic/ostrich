@@ -155,7 +155,8 @@ open class DataBus: DelegatesReads, DelegatesWrites {
         }
         
         print("FATAL: no one listening to write of \(val.hexString) to address \(addr.hexString)")
-        exit(1)
+        //@todo actually exit
+//        exit(1)
     }
     
     

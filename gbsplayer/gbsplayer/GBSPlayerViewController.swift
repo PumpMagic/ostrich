@@ -10,6 +10,9 @@ import Cocoa
 import AudioKit
 
 
+//@todo general cleanup of this class - need to reuse code and shorten some variable names
+
+
 // Good GBS files: Castlevania, Double Dragon, Tetris, Dr. Mario.
 // Iffy: Super Mario Land (track 5 barfs)
 
@@ -17,39 +20,50 @@ let STARTUP_VOLUME = 3 // out of 10
 let MAX_VOLUME = 10
 
 let COPYRIGHT_STRING = "©"
-let TRACK_STRING = "Track"
 let VOLUME_STRING = "VOL"
 let EMPTY_STRING = ""
+let SCROLL_SUFFIX = "   "
 
 let WAVE_DISPLAY_REFRESH_PERIOD_MS = 33
+let LABEL_SCROLL_PERIOD_MS = 1000
+let LABEL_SCROLL_CHARACTERS_PER_PERIOD = 1
 
-let GB_FONT = NSFont(name: "Early-GameBoy", size: 12)
+let GB_FONT_POINT = 12
+let GB_FONT = NSFont(name: "GameBoy-Super-Mario-Land", size: CGFloat(GB_FONT_POINT))
 
 
+
+/// Controller for the GBS player view
 class GBSPlayerViewController: NSViewController, CustomButtonDelegate {
     let player = GBSPlayer()
-    var currentHeader: GBSHeader? = nil
     var volume = STARTUP_VOLUME {
         didSet {
             handleUpdatedVolume()
         }
     }
     
-    //@todo clean this up
-    var waveDisplayClocker: DispatchSourceTimer?
+    var waveDisplayClocker: DispatchSourceTimer? = nil
+    var labelScrollerClocker: DispatchSourceTimer? = nil
     
     // Currently ready-to-play / playing track
     var track = 0 {
         didSet {
-            updateCurrentTrackLabel()
+            handleUpdatedTrack()
         }
     }
+    private var trackString = ""
+    
+    @IBOutlet weak var screenView: NSBox!
     
     @IBOutlet weak var titleLabel: NSTextField!
     @IBOutlet weak var authorLabel: NSTextField!
     @IBOutlet weak var copyrightLabel: NSTextField!
     @IBOutlet weak var currentTrackLabel: NSTextField!
     @IBOutlet weak var volumeLabel: NSTextField!
+    
+    private var scrollingTitleLabelIndex = 0
+    private var scrollingAuthorLabelIndex = 0
+    private var scrollingCopyrightLabelIndex = 0
     
     @IBOutlet weak var pulse1View: PulseWaveView!
     @IBOutlet weak var pulse2View: PulseWaveView!
@@ -59,6 +73,56 @@ class GBSPlayerViewController: NSViewController, CustomButtonDelegate {
     
     @IBOutlet weak var powerLight: GBPowerLight!
     
+    private var screenWidth: Float {
+        guard let screenView = self.screenView else {
+            return 0
+        }
+        
+        return Float(screenView.bounds.width)
+    }
+
+    
+    func scroll(text: String, across label: NSTextField, by characters: Int, lastIndex: Int) -> Int {
+        // Only scroll if we need to
+        let numDisplayableCharacters = Int(label.bounds.width) / GB_FONT_POINT
+        let numDesiredCharacters = text.characters.count
+        
+        if numDesiredCharacters > numDisplayableCharacters {
+            // The width of the complete string exceeds the width of the view; we need to scroll it
+            let stringToScroll = "\(text)\(SCROLL_SUFFIX)"
+            let stringToScrollNumCharacters = stringToScroll.characters.count
+            
+            // Advance the starting index of the string we'll display
+            let newIndex = (lastIndex + characters) % stringToScrollNumCharacters
+            
+            // Rotated the source string around the start index and clip it to get our output
+            let splitIndex = stringToScroll.index(stringToScroll.startIndex, offsetBy: newIndex)
+            let leftSide = stringToScroll.substring(to: splitIndex)
+            let rightSide = stringToScroll.substring(from: splitIndex)
+            let rotated = "\(rightSide)\(leftSide)"
+            let output = rotated.substring(to: rotated.index(rotated.startIndex, offsetBy: numDisplayableCharacters))
+            
+            label.stringValue = output
+            
+            return newIndex
+        }
+        
+        return 0
+    }
+    
+    /// Scroll all scrollable labels by a given number of characters.
+    /// This function assumes the relevant labels' fonts are monospaced.
+    func scrollLabels(by characters: Int) {
+        guard let currentHeader = self.player.gbsHeader else {
+            return
+        }
+        
+        scrollingTitleLabelIndex = scroll(text: currentHeader.title, across: titleLabel, by: LABEL_SCROLL_CHARACTERS_PER_PERIOD, lastIndex: scrollingTitleLabelIndex)
+        scrollingAuthorLabelIndex = scroll(text: currentHeader.author, across: authorLabel, by: LABEL_SCROLL_CHARACTERS_PER_PERIOD, lastIndex: scrollingAuthorLabelIndex)
+        scrollingCopyrightLabelIndex = scroll(text: "\(COPYRIGHT_STRING) \(currentHeader.copyright)", across: copyrightLabel, by: LABEL_SCROLL_CHARACTERS_PER_PERIOD, lastIndex: scrollingCopyrightLabelIndex)
+
+    }
+    
     
     func updateVolumeLabel() {
         if volume > 0 {
@@ -66,8 +130,6 @@ class GBSPlayerViewController: NSViewController, CustomButtonDelegate {
         } else {
             volumeLabel.stringValue = VOLUME_STRING
         }
-        
-        volumeLabel.sizeToFit()
     }
     
     func updatePlayerVolume() {
@@ -107,21 +169,21 @@ class GBSPlayerViewController: NSViewController, CustomButtonDelegate {
             authorLabel.stringValue = EMPTY_STRING
             copyrightLabel.stringValue = EMPTY_STRING
         }
-        
-        titleLabel.sizeToFit()
-        authorLabel.sizeToFit()
-        copyrightLabel.sizeToFit()
     }
     
     /// Update the current track label - what track we're on, out of how many
     func updateCurrentTrackLabel() {
         if let header = player.gbsHeader {
-            currentTrackLabel.stringValue = "\(TRACK_STRING) \(track) of \(header.numSongs)"
+            trackString = "\(track) of \(header.numSongs)"
         } else {
-            currentTrackLabel.stringValue = EMPTY_STRING
+            trackString = EMPTY_STRING
         }
         
-        currentTrackLabel.sizeToFit()
+        currentTrackLabel.stringValue = trackString
+    }
+    
+    func handleUpdatedTrack() {
+        updateCurrentTrackLabel()
     }
     
     func setDisplayFont() {
@@ -243,6 +305,7 @@ class GBSPlayerViewController: NSViewController, CustomButtonDelegate {
         pulse1View.channel = player.gameBoy.apu.pulse1
         pulse2View.channel = player.gameBoy.apu.pulse2
         
+        //@todo this shouldn't need to go in the main queue, since it doesn't directly draw things?
         let waveDisplayClocker = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
         waveDisplayClocker.scheduleRepeating(deadline: .now(), interval: .milliseconds(WAVE_DISPLAY_REFRESH_PERIOD_MS), leeway: .milliseconds(1))
         waveDisplayClocker.setEventHandler() {
@@ -251,6 +314,17 @@ class GBSPlayerViewController: NSViewController, CustomButtonDelegate {
         }
         self.waveDisplayClocker = waveDisplayClocker
         waveDisplayClocker.resume()
+    }
+    
+    func initializeLabelScrollers() {
+        //@todo this shouldn't need to go in the main queue, since it doesn't directly draw things?
+        let labelScrollerClocker = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
+        labelScrollerClocker.scheduleRepeating(deadline: .now(), interval: .milliseconds(LABEL_SCROLL_PERIOD_MS), leeway: .milliseconds(10))
+        labelScrollerClocker.setEventHandler() {
+            self.scrollLabels(by: LABEL_SCROLL_CHARACTERS_PER_PERIOD)
+        }
+        self.labelScrollerClocker = labelScrollerClocker
+        labelScrollerClocker.resume()
     }
     
     func handleCustomButtonPress(sender: NSView) {
@@ -273,12 +347,12 @@ class GBSPlayerViewController: NSViewController, CustomButtonDelegate {
         handleUpdatedVolume()
         updateAllStatusDisplays()
         initializeWaveDisplays()
+        initializeLabelScrollers()
         
         registerAsCustomButtonDelegate()
         reportSelfToAppDelegate()
         
 //        tryLoadingFile(at: URL(fileURLWithPath: "/Users/owner/Dropbox/emu/tetris.gbs"))
-        
     }
 }
 
