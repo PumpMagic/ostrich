@@ -12,6 +12,8 @@ import ostrich
 // Some configuration constants
 fileprivate let PIXELS_PER_SECOND_SCALE_FACTOR = 50.0
 fileprivate let LINE_WIDTH: CGFloat = 1.5
+//@todo implement some sort of frequency cap that draws a solid box rather than trying to render a wave
+//fileprivate let FREQUENCY_CAP = 20000.0
 
 
 /// A viewable representation of a pulse wave channel. Updates only when needsDisplay is set by someone else.

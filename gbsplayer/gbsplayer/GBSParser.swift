@@ -169,5 +169,8 @@ func parseGBSFile(at path: URL) -> (header: GBSHeader, codeAndData: Data)? {
     
     print(header)
     
+    let countHexString = String(format: "0x%04X", codeAndData.count)
+    print("Code and data length: \(countHexString)")
+    
     return (header, codeAndData)
 }

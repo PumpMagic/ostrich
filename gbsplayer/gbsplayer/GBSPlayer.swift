@@ -11,6 +11,9 @@ import AudioKit
 import ostrich
 
 
+// High on todo list: implement patch RST vectors as indicated in GBS spec 
+
+
 /// Number of nanoseconds in one 256th of a second
 fileprivate let NS_256HZ = 3906250
 /// Number of nanoseconds in one second

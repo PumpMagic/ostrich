@@ -16,7 +16,7 @@ open class ROM: Memory {
     open let firstAddress: Address
     
     open var lastAddress: Address {
-        return self.firstAddress + UInt16(self.data.count - 1 - 1)
+        return self.firstAddress + UInt16(self.data.count - 1)
     }
     open var addressRange: CountableClosedRange<Address> {
         return self.firstAddress ... self.lastAddress

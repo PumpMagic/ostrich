@@ -59,7 +59,7 @@ public class GameBoyAPU: Memory, HandlesWrites {
     }
     
     public func read(_ addr: Address) -> UInt8 {
-        print("APU read! \(addr.hexString)")
+//        print("APU read! \(addr.hexString)")
         return self.ram.read(addr)
     }
     

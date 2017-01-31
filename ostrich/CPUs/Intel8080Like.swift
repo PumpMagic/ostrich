@@ -159,8 +159,6 @@ extension Intel8080Like {
             // RRCA
             instruction = RRCA()
             instructionLength = 1
-             
- 
  
         case 0x11:
             // LD DE, nn
@@ -1037,6 +1035,12 @@ extension Intel8080Like {
             instruction = CALL(condition: nil, dest: Immediate16(val: addr))
             instructionLength = 3
             
+        case 0xCE:
+            // ADC A, n
+            let val = bus.read(PC.read()+1)
+            instruction = ADC8(op1: self.A, op2: Immediate8(val: val))
+            instructionLength = 2
+            
         case 0xD0:
             // RET nc
             instruction = RET(condition: Condition(flag: self.CF, target: false))
@@ -1087,10 +1091,13 @@ extension Intel8080Like {
             instruction = CALL(condition: Condition(flag: self.CF, target: true), dest: Immediate16(val: addr))
             instructionLength = 3
             
+            //@todo: Figure out how to create patch RST vectors as described in GBS spec
+            /*
         case 0xDF:
             // RST 0x18
             instruction = RST(restartAddress: 0x18)
             instructionLength = 1
+             */
             
         case 0xE1:
             // POP HL
@@ -1112,6 +1119,12 @@ extension Intel8080Like {
             // JP (HL)
             instruction = JP(condition: nil, dest: self.HL)
             instructionLength = 1
+            
+        case 0xEF:
+            // XOR n
+            let val = bus.read(PC.read()+1)
+            instruction = XOR(op: Immediate8(val: val))
+            instructionLength = 2
             
         case 0xF1:
             // POP AF
@@ -1150,6 +1163,86 @@ extension Intel8080Like {
             let secondByte = bus.read(PC.read()+1)
             switch secondByte {
 
+            case 0x00:
+                // RLC B
+                instruction = RLC(op: self.B)
+                instructionLength = 2
+                
+            case 0x01:
+                // RLC C
+                instruction = RLC(op: self.C)
+                instructionLength = 2
+                
+            case 0x02:
+                // RLC D
+                instruction = RLC(op: self.D)
+                instructionLength = 2
+                
+            case 0x03:
+                // RLC E
+                instruction = RLC(op: self.E)
+                instructionLength = 2
+                
+            case 0x04:
+                // RLC H
+                instruction = RLC(op: self.H)
+                instructionLength = 2
+                
+            case 0x05:
+                // RLC L
+                instruction = RLC(op: self.L)
+                instructionLength = 2
+                
+            case 0x06:
+                // RLC (HL)
+                instruction = RLC(op: self.HL.asPointerOn(self.bus))
+                instructionLength = 2
+                
+            case 0x07:
+                // RLC A
+                instruction = RLC(op: self.A)
+                instructionLength = 2
+                
+            case 0x08:
+                // RRC B
+                instruction = RRC(op: self.B)
+                instructionLength = 2
+                
+            case 0x09:
+                // RRC C
+                instruction = RRC(op: self.C)
+                instructionLength = 2
+                
+            case 0x0A:
+                // RRC D
+                instruction = RRC(op: self.D)
+                instructionLength = 2
+                
+            case 0x0B:
+                // RRC E
+                instruction = RRC(op: self.E)
+                instructionLength = 2
+                
+            case 0x0C:
+                // RRC H
+                instruction = RRC(op: self.H)
+                instructionLength = 2
+                
+            case 0x0D:
+                // RRC L
+                instruction = RRC(op: self.L)
+                instructionLength = 2
+                
+            case 0x0E:
+                // RRC (HL)
+                instruction = RRC(op: self.HL.asPointerOn(self.bus))
+                instructionLength = 2
+                
+            case 0x0F:
+                // RRC A
+                instruction = RRC(op: self.A)
+                instructionLength = 2
+                
             case 0x10:
                 // RL B
                 instruction = RL(op: self.B)
@@ -1254,6 +1347,47 @@ extension Intel8080Like {
             case 0x27:
                 // SLA A
                 instruction = SLA(op: self.A)
+                instructionLength = 2
+                
+                
+            case 0x28:
+                // SRA B
+                instruction = SRA(op: self.B)
+                instructionLength = 2
+                
+            case 0x29:
+                // SRA C
+                instruction = SRA(op: self.C)
+                instructionLength = 2
+                
+            case 0x2A:
+                // SRA D
+                instruction = SRA(op: self.D)
+                instructionLength = 2
+                
+            case 0x2B:
+                // SRA E
+                instruction = SRA(op: self.E)
+                instructionLength = 2
+                
+            case 0x2C:
+                // SRA H
+                instruction = SRA(op: self.H)
+                instructionLength = 2
+                
+            case 0x2D:
+                // SRA L
+                instruction = SRA(op: self.L)
+                instructionLength = 2
+                
+            case 0x2E:
+                // SRA (HL)
+                instruction = SRA(op: self.HL.asPointerOn(self.bus))
+                instructionLength = 2
+                
+            case 0x2F:
+                // SRA A
+                instruction = SRA(op: self.A)
                 instructionLength = 2
                 
                 

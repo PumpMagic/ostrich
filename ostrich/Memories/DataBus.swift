@@ -124,6 +124,14 @@ open class DataBus: DelegatesReads, DelegatesWrites {
             return UInt8(truncatingBitPattern: (Int((us/61).truncatingRemainder(dividingBy: 255))))
         }
         
+        // Hack: implement echo RAM here
+        // 0xE000 - 0xFDFF is an echo of 0xC000 - 0xDDFF.
+        // Nintendo said not to use it, but apparently some games did anyway
+        if Address(0xE000) ... Address(0xFDFF) ~= addr {
+            print("WARNING: attempt to use echo RAM. Parsing failure?")
+            return self.read(addr - 0x2000)
+        }
+        
         print("FATAL: no one listening to read of address \(addr.hexString)")
         //@todo probably shouldn't return 0
         return 0
@@ -147,9 +155,9 @@ open class DataBus: DelegatesReads, DelegatesWrites {
         // Hack: memory bank controller is unimplemented for now; ignore communication with it
         //@todo implement the memory bank controller
         if Address(0x0000) ... Address(0x7FFF) ~= addr {
-//            print("WARNING! Ignoring memory bank controller communication in the form of writing \(val.hexString) to \(addr.hexString)")
+            print("WARNING! Ignoring memory bank controller communication in the form of writing \(val.hexString) to \(addr.hexString)")
             if Address(0x0000) ... Address(0x1FFF) ~= addr {
-//                print("(external RAM control)")
+                print("(external RAM control)")
             }
             return
         }

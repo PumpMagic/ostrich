@@ -133,6 +133,14 @@ func logicalShiftRight(_ num: UInt8) -> UInt8 {
     return num >> 1
 }
 
+/// Perform an arithmetic right shift (MSB maintained)
+func arithmeticShiftRight(_ num: UInt8) -> UInt8 {
+    let asSigned = Int8(bitPattern: num)
+    let shifted = asSigned >> 1
+    
+    return UInt8(bitPattern: shifted)
+}
+
 // ADD STUFF
 func addOverflowOccurred(_ op1: UInt8, _ op2: UInt8, result: UInt8) -> Bool {
     if numberIsNegative(op1) && numberIsNegative(op2) && !numberIsNegative(result) {

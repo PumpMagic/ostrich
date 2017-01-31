@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EB54FADB1E40A3480019A98F /* SRA.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB54FADA1E40A3480019A98F /* SRA.swift */; };
 		EB6CB25F1E345A3700010E3E /* GameBoy.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6CB25E1E345A3700010E3E /* GameBoy.swift */; };
 		EBB7DA9C1D67B87B00C18160 /* Counter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB7DA9B1D67B87B00C18160 /* Counter.swift */; };
 		EBD31DD81DED76BF00FFD5DE /* AudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBD31DD71DED76BF00FFD5DE /* AudioKit.framework */; };
@@ -75,6 +76,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		EB54FADA1E40A3480019A98F /* SRA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SRA.swift; sourceTree = "<group>"; };
 		EB6CB25E1E345A3700010E3E /* GameBoy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameBoy.swift; sourceTree = "<group>"; };
 		EBB7DA9B1D67B87B00C18160 /* Counter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Counter.swift; sourceTree = "<group>"; };
 		EBD31DD71DED76BF00FFD5DE /* AudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AudioKit.framework; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 				EBD958431D657C8000963E2F /* SCF.swift */,
 				EBD958441D657C8000963E2F /* SET.swift */,
 				EBD958451D657C8000963E2F /* SLA.swift */,
+				EB54FADA1E40A3480019A98F /* SRA.swift */,
 				EBD958461D657C8000963E2F /* SRL.swift */,
 				EBD958471D657C8000963E2F /* SUB.swift */,
 				EBD958481D657C8000963E2F /* SWAP.swift */,
@@ -451,6 +454,7 @@
 				EBD9585C1D657C8000963E2F /* OR.swift in Sources */,
 				EBD958501D657C8000963E2F /* CPL.swift in Sources */,
 				EBD958601D657C8000963E2F /* RET.swift in Sources */,
+				EB54FADB1E40A3480019A98F /* SRA.swift in Sources */,
 				EBD958891D657D6700963E2F /* Pulse.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
