@@ -34,7 +34,7 @@ let GB_FONT = NSFont(name: "GameBoy-Super-Mario-Land", size: CGFloat(GB_FONT_POI
 
 
 /// Controller for the GBS player view
-class GBSPlayerViewController: NSViewController, CustomButtonDelegate {
+class GBSPlayerViewController: NSViewController {
     let player = GBSPlayer()
     var volume = STARTUP_VOLUME {
         didSet {
@@ -336,8 +336,8 @@ class GBSPlayerViewController: NSViewController, CustomButtonDelegate {
     }
     
     func registerAsCustomButtonDelegate() {
-        playPauseButton.delegate = self
-        stopButton.delegate = self
+        playPauseButton.setEventHandler(callback: self.handleCustomButtonPress)
+        stopButton.setEventHandler(callback: self.handleCustomButtonPress)
     }
     
     override func viewDidLoad() {

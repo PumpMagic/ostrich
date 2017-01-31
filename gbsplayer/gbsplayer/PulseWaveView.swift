@@ -9,19 +9,18 @@
 import Cocoa
 import ostrich
 
+// Some configuration constants
+fileprivate let PIXELS_PER_SECOND = 10000.0
+fileprivate let LINE_WIDTH: CGFloat = 1.5
 
-let PIXELS_PER_SECOND = 10000.0
-let LINE_WIDTH: CGFloat = 1.5
 
-//@todo magic numbers
+/// A viewable representation of a pulse wave channel. Updates only when needsDisplay is set by someone else.
 class PulseWaveView: NSView {
-    
     /// Channel we're drawing
     var channel: Pulse? = nil
     
-    
     /// Draw a flat line as the waveform
-    func drawFlatLine(at y: CGFloat) {
+    private func drawFlatLine(at y: CGFloat) {
         let startPoint = CGPoint(x: bounds.minX, y: y)
         let endPoint = CGPoint(x: bounds.maxX, y: y)
         
@@ -34,11 +33,9 @@ class PulseWaveView: NSView {
         path.close()
     }
     
-    /// Draw the pulse wave
-    /// Amplitude should be [0.0, 1.0]
-    /// Frequency should be in Hz
-    /// Duty should be [0.0, 1.0]
-    func drawWaveform(amplitude: Double, frequency: Double, duty: Double) {
+    /// Draw the pulse wave.
+    /// Amplitude should be [0.0, 1.0]; frequency should be in Hz; duty should be [0.0, 1.0].
+    private func drawWaveform(amplitude: Double, frequency: Double, duty: Double) {
         if amplitude == 0.0 || duty == 0.0 {
             drawFlatLine(at: bounds.minY)
             return
@@ -62,7 +59,7 @@ class PulseWaveView: NSView {
         
         // Draw half-periods of the pulse wave until we reach the edge of our view
         while x < waveMaxX {
-            // Horizontal edge
+            // Draw a horizontal edge
             let maxNextX: CGFloat
             if y == waveMinY {
                 // bottom edge
@@ -77,11 +74,13 @@ class PulseWaveView: NSView {
             x = nextX
             
             if x < waveMaxX {
-                // Vertical edge
+                // Draw a vertical edge
                 let nextY: CGFloat
                 if y == waveMinY {
+                    // bottom-top transition
                     nextY = waveMaxY
                 } else {
+                    // top-bottom transition
                     nextY = waveMinY
                 }
                 
@@ -90,10 +89,10 @@ class PulseWaveView: NSView {
             }
         }
         
+        // Fill our curve in
         path.stroke()
         path.close()
     }
-    
     
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)

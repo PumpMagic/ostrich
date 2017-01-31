@@ -9,23 +9,33 @@
 import Cocoa
 
 
-protocol CustomButtonDelegate {
-    func handleCustomButtonPress(sender: NSView)
+/// Something that can capture user events for processing by a delegate.
+protocol GeneratesUIEvents {
+    func setEventHandler(callback: @escaping (NSView) -> Void)
 }
 
 
-let UNPRESSED_FILENAME = "gb-button-unpressed.png"
-let PRESSED_FILENAME = "gb-button-pressed.png"
-let UNPRESSED_IMAGE: NSImage! = Bundle.main.image(forResource: UNPRESSED_FILENAME)
-let PRESSED_IMAGE: NSImage! = Bundle.main.image(forResource: PRESSED_FILENAME)
+// Some configuration constants
+fileprivate let UNPRESSED_FILENAME = "gb-button-unpressed.png"
+fileprivate let PRESSED_FILENAME = "gb-button-pressed.png"
+fileprivate let UNPRESSED_IMAGE: NSImage! = Bundle.main.image(forResource: UNPRESSED_FILENAME)
+fileprivate let PRESSED_IMAGE: NSImage! = Bundle.main.image(forResource: PRESSED_FILENAME)
 
 
-class GBRoundButton: NSView {
-    var currentImage: NSImage = UNPRESSED_IMAGE
-    var delegate: CustomButtonDelegate? = nil
+/// A pressable button whose appearance mimics that of a Game Boy Classic's.
+/// Dispatches button press events to delegate registered through GeneratesUIEvents's function, if any.
+class GBRoundButton: NSView, GeneratesUIEvents {
+    private var currentImage: NSImage = UNPRESSED_IMAGE
+    private var pushHandler: ((NSView) -> Void)? = nil
     
-    /// Update our image
-    func updateImage(selected: Bool) {
+    
+    /// Set the event handler: what does the button call when it's been pressed?
+    func setEventHandler(callback: @escaping (NSView) -> Void) {
+        self.pushHandler = callback
+    }
+    
+    /// Update our image.
+    private func updateImage(selected: Bool) {
         if selected {
             self.currentImage = PRESSED_IMAGE
         } else {
@@ -36,8 +46,8 @@ class GBRoundButton: NSView {
     }
     
     /// Take in a point inside the window we're in, and return whether or not that point
-    /// is part of us
-    func contains(point: NSPoint) -> Bool {
+    /// is part of us.
+    private func contains(point: NSPoint) -> Bool {
         let relativeToSelf = self.convert(point, from: nil)
         
         if relativeToSelf.x >= 0 && relativeToSelf.x < self.bounds.width &&
@@ -61,11 +71,9 @@ class GBRoundButton: NSView {
     override func mouseUp(with event: NSEvent) {
         updateImage(selected: false)
         
-        if let delegate = self.delegate {
-            let cursorIsInUs = self.contains(point: event.locationInWindow)
-            if cursorIsInUs {
-                delegate.handleCustomButtonPress(sender: self)
-            }
+        /// If the mouse was released while in our view, treat the event as a press of us
+        if self.contains(point: event.locationInWindow) {
+            pushHandler?(self)
         }
     }
     

@@ -9,40 +9,45 @@
 import Cocoa
 
 
-let POWERLIGHT_IMAGE_FILENAME = "gb-powerlight.png"
-let POWERLIGHT_BASE_IMAGE: NSImage! = Bundle.main.image(forResource: POWERLIGHT_IMAGE_FILENAME)
-let POWERLIGHT_BASE_STATE = GBPowerLight.PowerLightState.Red
-// Map each state to its desired (hue, saturation, brightness, contrast) adjustments
-let COLOR_PARAMS_MAP: [GBPowerLight.PowerLightState : (Float, Float, Float, Float)] =
+// Some configuration constants.
+fileprivate let BASE_IMAGE_FILENAME = "gb-powerlight.png"
+fileprivate let BASE_IMAGE: NSImage! = Bundle.main.image(forResource: BASE_IMAGE_FILENAME)
+fileprivate let BASE_STATE = GBPowerLight.State.Red
+// Map each state to its desired (hue, saturation, brightness, contrast) adjustments from the base image
+fileprivate let COLOR_PARAMS_MAP: [GBPowerLight.State : (Float, Float, Float, Float)] =
     [.Off: (0.0, 0.0, 0.0, 0.8), .Red: (0.0, 1.0, 0.0, 1.0),
      .Yellow: (1/3*3.14, 1.4, 0.1, 1.3), .Green: (2/3*3.14, 1.0, 0.0, 1.0)]
 
 
-/// A Game Boy power light, with adjustable color
-/// Nonstandard (non-red) color images are created and cached in memory at runtime - just provide the base red image and go 
+/// An LED-looking view whose appearance mimics that of a Game Boy's power light. With adjustable color.
+/// Generates and caches non-red-colored images at runtime.
 class GBPowerLight: NSView {
-    enum PowerLightState {
+    enum State {
         case Off
         case Red
         case Yellow
         case Green
     }
     
-    var state = POWERLIGHT_BASE_STATE {
+    var state = BASE_STATE {
         didSet {
             if state != oldValue {
-                self.image = getOrMakeImage(forState: state)
-                self.needsDisplay = true
+                handleNewState()
             }
         }
     }
     
-    private var image: NSImage = POWERLIGHT_BASE_IMAGE
-    private var imageCache: [PowerLightState : NSImage] = [:]
+    private var image: NSImage = BASE_IMAGE
+    private var imageCache: [State : NSImage] = [:]
+    
+    private func handleNewState() {
+        image = getOrMakeImage(forState: state)
+        needsDisplay = true
+    }
     
     
-    /// Return the image corresponding with a given state, either from our cache or by making it
-    private func getOrMakeImage(forState state: PowerLightState) -> NSImage {
+    /// Return the image corresponding with a given state, either from our cache or by making it.
+    private func getOrMakeImage(forState state: State) -> NSImage {
         if let cached = imageCache[state] {
             return cached
         }
@@ -53,20 +58,20 @@ class GBPowerLight: NSView {
         return newImage
     }
     
-    /// Make the image that corresponds with a given state
-    private func makeImage(forState state: PowerLightState) -> NSImage {
-        if state == POWERLIGHT_BASE_STATE {
-            return POWERLIGHT_BASE_IMAGE
+    /// Make the image that correlates with a given state.
+    private func makeImage(forState state: State) -> NSImage {
+        if state == BASE_STATE {
+            return BASE_IMAGE
         }
         
         guard let (hueAdjust, saturationAdjust, brightnessAdjust, contrastAdjust) = COLOR_PARAMS_MAP[state] else {
-            return POWERLIGHT_BASE_IMAGE
+            return BASE_IMAGE
         }
         
-        guard let adjustedImage = adjustImageColors(image: POWERLIGHT_BASE_IMAGE, hue: hueAdjust, saturation: saturationAdjust,
+        guard let adjustedImage = adjustImageColors(image: BASE_IMAGE, hue: hueAdjust, saturation: saturationAdjust,
                                                     brightness: brightnessAdjust, contrast: contrastAdjust) else
         {
-            return POWERLIGHT_BASE_IMAGE
+            return BASE_IMAGE
         }
         
         return adjustedImage

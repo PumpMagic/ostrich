@@ -9,7 +9,7 @@
 import Cocoa
 
 
-/// Adjust some color parameters of an image
+/// Adjust some color parameters of an image.
 func adjustImageColors(image: NSImage, hue: Float, saturation: Float,
                        brightness: Float, contrast: Float) -> NSImage?
 {
