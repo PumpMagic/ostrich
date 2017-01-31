@@ -10,7 +10,7 @@ import Cocoa
 import ostrich
 
 // Some configuration constants
-fileprivate let PIXELS_PER_SECOND = 10000.0
+fileprivate let PIXELS_PER_SECOND_SCALE_FACTOR = 50.0
 fileprivate let LINE_WIDTH: CGFloat = 1.5
 
 
@@ -57,16 +57,18 @@ class PulseWaveView: NSView {
         NSColor.black.setStroke()
         path.move(to: startingPoint)
         
+        let pixelsPerSecond = Double(bounds.width) * PIXELS_PER_SECOND_SCALE_FACTOR
+        
         // Draw half-periods of the pulse wave until we reach the edge of our view
         while x < waveMaxX {
             // Draw a horizontal edge
             let maxNextX: CGFloat
             if y == waveMinY {
                 // bottom edge
-                maxNextX = x + CGFloat(PIXELS_PER_SECOND / frequency * (1-duty))
+                maxNextX = x + CGFloat(pixelsPerSecond / frequency * (1-duty))
             } else {
                 // top edge
-                maxNextX = x + CGFloat(PIXELS_PER_SECOND / frequency * (duty))
+                maxNextX = x + CGFloat(pixelsPerSecond / frequency * (duty))
             }
             
             let nextX = min(waveMaxX, maxNextX)

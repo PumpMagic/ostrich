@@ -16,15 +16,15 @@ import AudioKit
 // Good GBS files: Castlevania, Double Dragon, Tetris, Dr. Mario.
 // Iffy: Super Mario Land (track 5 barfs)
 
-let STARTUP_VOLUME = 3 // out of 10
-let MAX_VOLUME = 10
+let STARTUP_VOLUME = 2 // out of MAX_VOLUME
+let MAX_VOLUME = 5
 
 let COPYRIGHT_STRING = "©"
 let VOLUME_STRING = "VOL"
 let EMPTY_STRING = ""
 let SCROLL_SUFFIX = "   "
 
-let WAVE_DISPLAY_REFRESH_PERIOD_MS = 33
+let WAVE_DISPLAY_REFRESH_PERIOD_MS = 16
 let LABEL_SCROLL_PERIOD_MS = 1000
 let LABEL_SCROLL_CHARACTERS_PER_PERIOD = 1
 
@@ -33,7 +33,7 @@ let GB_FONT = NSFont(name: "GameBoy-Super-Mario-Land", size: CGFloat(GB_FONT_POI
 
 
 
-/// Controller for the GBS player view
+/// Controller for the interface to our GBS player.
 class GBSPlayerViewController: NSViewController {
     let player = GBSPlayer()
     var volume = STARTUP_VOLUME {
@@ -82,47 +82,8 @@ class GBSPlayerViewController: NSViewController {
     }
 
     
-    func scroll(text: String, across label: NSTextField, by characters: Int, lastIndex: Int) -> Int {
-        // Only scroll if we need to
-        let numDisplayableCharacters = Int(label.bounds.width) / GB_FONT_POINT
-        let numDesiredCharacters = text.characters.count
-        
-        if numDesiredCharacters > numDisplayableCharacters {
-            // The width of the complete string exceeds the width of the view; we need to scroll it
-            let stringToScroll = "\(text)\(SCROLL_SUFFIX)"
-            let stringToScrollNumCharacters = stringToScroll.characters.count
-            
-            // Advance the starting index of the string we'll display
-            let newIndex = (lastIndex + characters) % stringToScrollNumCharacters
-            
-            // Rotated the source string around the start index and clip it to get our output
-            let splitIndex = stringToScroll.index(stringToScroll.startIndex, offsetBy: newIndex)
-            let leftSide = stringToScroll.substring(to: splitIndex)
-            let rightSide = stringToScroll.substring(from: splitIndex)
-            let rotated = "\(rightSide)\(leftSide)"
-            let output = rotated.substring(to: rotated.index(rotated.startIndex, offsetBy: numDisplayableCharacters))
-            
-            label.stringValue = output
-            
-            return newIndex
-        }
-        
-        return 0
-    }
     
-    /// Scroll all scrollable labels by a given number of characters.
-    /// This function assumes the relevant labels' fonts are monospaced.
-    func scrollLabels(by characters: Int) {
-        guard let currentHeader = self.player.gbsHeader else {
-            return
-        }
-        
-        scrollingTitleLabelIndex = scroll(text: currentHeader.title, across: titleLabel, by: LABEL_SCROLL_CHARACTERS_PER_PERIOD, lastIndex: scrollingTitleLabelIndex)
-        scrollingAuthorLabelIndex = scroll(text: currentHeader.author, across: authorLabel, by: LABEL_SCROLL_CHARACTERS_PER_PERIOD, lastIndex: scrollingAuthorLabelIndex)
-        scrollingCopyrightLabelIndex = scroll(text: "\(COPYRIGHT_STRING) \(currentHeader.copyright)", across: copyrightLabel, by: LABEL_SCROLL_CHARACTERS_PER_PERIOD, lastIndex: scrollingCopyrightLabelIndex)
-
-    }
-    
+    /** USER INTERACTION HANDLERS */
     
     func updateVolumeLabel() {
         if volume > 0 {
@@ -158,7 +119,7 @@ class GBSPlayerViewController: NSViewController {
         }
     }
     
-    /// Update the GBS metadata labels, using the GBS player's most recently loaded header
+    /// Update the GBS metadata labels, using the GBS player's most recently loaded header.
     func updateMetadataLabels() {
         if let header = player.gbsHeader {
             titleLabel.stringValue = header.title
@@ -171,7 +132,7 @@ class GBSPlayerViewController: NSViewController {
         }
     }
     
-    /// Update the current track label - what track we're on, out of how many
+    /// Update the current track label - what track we're on, out of how many.
     func updateCurrentTrackLabel() {
         if let header = player.gbsHeader {
             trackString = "\(track) of \(header.numSongs)"
@@ -184,14 +145,6 @@ class GBSPlayerViewController: NSViewController {
     
     func handleUpdatedTrack() {
         updateCurrentTrackLabel()
-    }
-    
-    func setDisplayFont() {
-        titleLabel.font = GB_FONT
-        authorLabel.font = GB_FONT
-        copyrightLabel.font = GB_FONT
-        currentTrackLabel.font = GB_FONT
-        volumeLabel.font = GB_FONT
     }
     
     /// Update every status display in the view
@@ -252,6 +205,14 @@ class GBSPlayerViewController: NSViewController {
         stopPlayback()
     }
     
+    func handlePlaybackButtonPress(sender: NSView) {
+        if sender == playPauseButton {
+            playPauseButtonPressed()
+        } else if sender == stopButton {
+            stopButtonPressed()
+        }
+    }
+    
     @IBAction func nextTrackButtonPressed(_ sender: NSButton) {
         if tryPlaying(track: track+1) {
             track += 1
@@ -270,8 +231,7 @@ class GBSPlayerViewController: NSViewController {
         }
     }
     
-    
-    /// Try loading a new file
+    /// Try loading a new file.
     func tryLoadingFile(at url: URL) {
         stopPlayback()
         
@@ -294,20 +254,79 @@ class GBSPlayerViewController: NSViewController {
         player.gameBoy.alterPulse2Connection(connected: newConnectedState)
     }
     
-    /// Tell the app delegate that we exist, so it can pass us events like "file open attempt"
+    
+    
+    /** PERIODIC DISPLAY UPDATE ROUTINES */
+    
+    func scroll(text: String, across label: NSTextField, by characters: Int, lastIndex: Int) -> Int {
+        // Only scroll if we need to
+        let numDisplayableCharacters = Int(label.bounds.width) / GB_FONT_POINT
+        let numDesiredCharacters = text.characters.count
+        
+        if numDesiredCharacters > numDisplayableCharacters {
+            // The width of the complete string exceeds the width of the view; we need to scroll it
+            let stringToScroll = "\(text)\(SCROLL_SUFFIX)"
+            let stringToScrollNumCharacters = stringToScroll.characters.count
+            
+            // Advance the starting index of the string we'll display
+            let newIndex = (lastIndex + characters) % stringToScrollNumCharacters
+            
+            // Rotated the source string around the start index and clip it to get our output
+            let splitIndex = stringToScroll.index(stringToScroll.startIndex, offsetBy: newIndex)
+            let leftSide = stringToScroll.substring(to: splitIndex)
+            let rightSide = stringToScroll.substring(from: splitIndex)
+            let rotated = "\(rightSide)\(leftSide)"
+            let output = rotated.substring(to: rotated.index(rotated.startIndex, offsetBy: numDisplayableCharacters))
+            
+            label.stringValue = output
+            
+            return newIndex
+        } else {
+            label.stringValue = text
+            return 0
+        }
+    }
+    
+    /// Scroll all scrollable labels by a given number of characters.
+    /// This function assumes the relevant labels' fonts are monospaced.
+    func scrollLabels(by characters: Int) {
+        guard let currentHeader = self.player.gbsHeader else {
+            return
+        }
+        
+        scrollingTitleLabelIndex = scroll(text: currentHeader.title, across: titleLabel, by: LABEL_SCROLL_CHARACTERS_PER_PERIOD, lastIndex: scrollingTitleLabelIndex)
+        scrollingAuthorLabelIndex = scroll(text: currentHeader.author, across: authorLabel, by: LABEL_SCROLL_CHARACTERS_PER_PERIOD, lastIndex: scrollingAuthorLabelIndex)
+        scrollingCopyrightLabelIndex = scroll(text: "\(COPYRIGHT_STRING) \(currentHeader.copyright)", across: copyrightLabel, by: LABEL_SCROLL_CHARACTERS_PER_PERIOD, lastIndex: scrollingCopyrightLabelIndex)
+    }
+    
+    
+    
+    /** INITIALIZATION ROUTINES */
+    
+    /// Tell the app delegate that we exist, so it can pass us events like "file open attempt".
     func reportSelfToAppDelegate() {
         let appDelegate = NSApplication.shared().delegate as! AppDelegate
         appDelegate.gbsPlayerViewController = self
     }
     
-    /// Initialize the wave displays by telling them which channels to display and starting a refresh timer
+    func setDisplayFont() {
+        titleLabel.font = GB_FONT
+        authorLabel.font = GB_FONT
+        copyrightLabel.font = GB_FONT
+        currentTrackLabel.font = GB_FONT
+        volumeLabel.font = GB_FONT
+    }
+    
+    /// Initialize the wave displays by telling them which channels to display and starting a refresh timer.
     func initializeWaveDisplays() {
         pulse1View.channel = player.gameBoy.apu.pulse1
         pulse2View.channel = player.gameBoy.apu.pulse2
         
         //@todo this shouldn't need to go in the main queue, since it doesn't directly draw things?
         let waveDisplayClocker = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
-        waveDisplayClocker.scheduleRepeating(deadline: .now(), interval: .milliseconds(WAVE_DISPLAY_REFRESH_PERIOD_MS), leeway: .milliseconds(1))
+        waveDisplayClocker.scheduleRepeating(deadline: .now(),
+                                             interval: .milliseconds(WAVE_DISPLAY_REFRESH_PERIOD_MS),
+                                             leeway: .milliseconds(1))
         waveDisplayClocker.setEventHandler() {
             self.pulse1View.needsDisplay = true
             self.pulse2View.needsDisplay = true
@@ -319,7 +338,9 @@ class GBSPlayerViewController: NSViewController {
     func initializeLabelScrollers() {
         //@todo this shouldn't need to go in the main queue, since it doesn't directly draw things?
         let labelScrollerClocker = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
-        labelScrollerClocker.scheduleRepeating(deadline: .now(), interval: .milliseconds(LABEL_SCROLL_PERIOD_MS), leeway: .milliseconds(10))
+        labelScrollerClocker.scheduleRepeating(deadline: .now(),
+                                               interval: .milliseconds(LABEL_SCROLL_PERIOD_MS),
+                                               leeway: .milliseconds(10))
         labelScrollerClocker.setEventHandler() {
             self.scrollLabels(by: LABEL_SCROLL_CHARACTERS_PER_PERIOD)
         }
@@ -327,17 +348,9 @@ class GBSPlayerViewController: NSViewController {
         labelScrollerClocker.resume()
     }
     
-    func handleCustomButtonPress(sender: NSView) {
-        if sender == playPauseButton {
-            playPauseButtonPressed()
-        } else if sender == stopButton {
-            stopButtonPressed()
-        }
-    }
-    
     func registerAsCustomButtonDelegate() {
-        playPauseButton.setEventHandler(callback: self.handleCustomButtonPress)
-        stopButton.setEventHandler(callback: self.handleCustomButtonPress)
+        playPauseButton.setEventHandler(callback: self.handlePlaybackButtonPress)
+        stopButton.setEventHandler(callback: self.handlePlaybackButtonPress)
     }
     
     override func viewDidLoad() {

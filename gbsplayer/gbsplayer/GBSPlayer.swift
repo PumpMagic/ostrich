@@ -12,16 +12,18 @@ import ostrich
 
 
 /// Number of nanoseconds in one 256th of a second
-let NS_256HZ = 3906250
+fileprivate let NS_256HZ = 3906250
 /// Number of nanoseconds in one second
-let NS_PER_S = 1000000000
+fileprivate let NS_PER_S = 1000000000
 /// An approximation of the Game Boy V-blank rate, in Hz
-let VBLANK_HZ = 59.7
+fileprivate let VBLANK_HZ = 59.7
 /// Default volume
-let DEFAULT_VOLUME = 0.5
+fileprivate let DEFAULT_VOLUME = 0.5
+/// The minimum length of time to wait for a clocker's queued events to fire before creating a new one
+fileprivate let DESTROYED_CLOCKER_WAIT_TIME_US: useconds_t = 300000
 
 
-/// A GBS player: a Game Boy manager that loads its memory and clocks its CPU and APU according to a GBS file and user interaction
+/// A GBS player: a Game Boy manager that loads its memory and clocks its CPU and APU according to a GBS file and user interaction.
 class GBSPlayer {
     var gameBoy: GameBoy
     var gbsHeader: GBSHeader? // header of most recently loaded GBS file
@@ -40,7 +42,7 @@ class GBSPlayer {
     var midSong: Bool // whether or not we've started playing a song
     var paused: Bool // whether or not playback is paused
     
-    /// Audio volume. Range: [0.0, 1.0]
+    /// Audio volume. Range: [0.0, 1.0].
     var volume: Double {
         didSet {
             if midSong && !paused {
@@ -66,8 +68,8 @@ class GBSPlayer {
         muteInternally()
     }
     
-    /// Run the GBS spec's "LOAD" phase
-    /// This loads the GBS file's "code and data" section into the Game Boy's ROM (loads its cart)
+    /// Run the GBS spec's "LOAD" phase.
+    /// This loads the GBS file's "code and data" section into the Game Boy's ROM (loads its cart).
     /// After loading, page 0 is in bank 0, and page 1 is in bank 1.
     private func runGBSLoadPhase(codeAndData: Data) {
         guard let header = self.gbsHeader else {
@@ -98,7 +100,7 @@ class GBSPlayer {
         return UInt8(trackNumber-1)
     }
     
-    /// Run the GBS spec's "INIT" phase
+    /// Run the GBS spec's "INIT" phase.
     /// This initializes all of the Game Boy's registers, clears its RAM, loads the appropriate song number into its CPU's accumulator,
     /// and has its CPU run a CALL with the GBS header's init address.
     /// This function takes in a one-based track number and
@@ -122,11 +124,10 @@ class GBSPlayer {
         return true
     }
     
-    /// Calculate the audio routine call rate according to the GBS spec and the current header file
-    private func calculateAudioRoutineCallRate() -> Double {
+    /// Calculate the audio routine call rate according to the GBS spec and the current header file.
+    private func calculateAudioRoutineCallRate() -> Double? {
         guard let header = self.gbsHeader else {
-            print("No GBS header present")
-            return 0.0
+            return nil
         }
         
         var audioRoutineCallRate = 1.0
@@ -145,7 +146,7 @@ class GBSPlayer {
             case 0b11:
                 clockRate = 16384
             default:
-                print("FATAL: invalid timer control!")
+                print("FATAL INTERNAL ERROR: invalid timer control!")
                 exit(1)
             }
             audioRoutineCallRate = Double(256 - Int(header.timerModulo)) / Double(clockRate)
@@ -158,7 +159,7 @@ class GBSPlayer {
     }
     
     
-    /// Run the GBS spec's "PLAY" phase
+    /// Run the GBS spec's "PLAY" phase.
     /// This constantly makes the Game Boy's CPU CALL the GBS header's PLAY address at a rate according to its timer control fields
     /// (We also start clocking the Game Boy's APU here, @todo make that internal to the Game Boy class)
     /// This returns whether or not the play phase was started
@@ -167,7 +168,9 @@ class GBSPlayer {
             return false
         }
         
-        let audioRoutineCallRate = self.calculateAudioRoutineCallRate()
+        guard let audioRoutineCallRate = self.calculateAudioRoutineCallRate() else {
+            return false
+        }
         
         let newAPUClocker = DispatchSource.makeTimerSource(queue: self.queue)
         let newCPUClocker = DispatchSource.makeTimerSource(queue: self.queue)
@@ -196,13 +199,11 @@ class GBSPlayer {
     }
     
     
-    /// Load a GBS file; return success or failure
+    /// Load a GBS file; return success or failure.
     func loadGBSFile(at path: URL) -> Bool{
         guard let (header, codeAndData) = parseGBSFile(at: path) else {
             return false
         }
-        
-        print(header)
         
         stopPlayback()
         gbsHeader = header
@@ -212,9 +213,8 @@ class GBSPlayer {
         return true
     }
     
-    /// Play a track, stopping existing playback if any
-    /// This function takes a one-based track value and
-    /// returns whether or not playback was started successfully
+    /// Play a track, stopping existing playback if any.
+    /// This function takes a one-based track value and returns whether or not playback was started successfully.
     func startPlayback(of track: Int) -> Bool {
         stopPlayback()
         
@@ -226,8 +226,7 @@ class GBSPlayer {
         return true
     }
     
-    /// Pause playback
-    /// (Stop clocking the Game Boy, but hold on to the clockers)
+    /// Pause playback.
     func pausePlayback() {
         if !paused && midSong {
             guard let apuClocker = self.apuClocker, let cpuClocker = self.cpuClocker else {
@@ -241,8 +240,7 @@ class GBSPlayer {
         }
     }
     
-    /// Resume playback
-    /// (Start the clockers again)
+    /// Resume playback.
     func resumePlayback() {
         if paused && midSong {
             guard let apuClocker = self.apuClocker, let cpuClocker = self.cpuClocker else {
@@ -256,8 +254,7 @@ class GBSPlayer {
         }
     }
     
-    /// Stop playback
-    /// (Stop clocking the Game Boy, destroying the clocker in the process)
+    /// Stop playback.
     func stopPlayback() {
         muteInternally()
         
@@ -274,16 +271,18 @@ class GBSPlayer {
             apuClocker = nil
             cpuClocker = nil
             
-            usleep(300000) // Let the clocker's existing events fire
+            usleep(DESTROYED_CLOCKER_WAIT_TIME_US) // Let the clocker's existing events fire
             
             midSong = false
         }
     }
     
+    /// Mute the Game Boy without changing our own volume. Useful for preventing noise when paused.
     func muteInternally() {
         gameBoy.setVolume(level: 0.0)
     }
     
+    /// Restore our volume to the Game Boy.
     func restoreVolume() {
         gameBoy.setVolume(level: volume)
     }
