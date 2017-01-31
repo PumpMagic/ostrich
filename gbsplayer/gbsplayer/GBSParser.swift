@@ -167,5 +167,7 @@ func parseGBSFile(at path: URL) -> (header: GBSHeader, codeAndData: Data)? {
     let foo = Range(uncheckedBounds: (GBS_CODE_AND_DATA_OFFSET, (rawData.count-GBS_CODE_AND_DATA_OFFSET+1)))
     let codeAndData = rawData.subdata(in: foo)
     
+    print(header)
+    
     return (header, codeAndData)
 }

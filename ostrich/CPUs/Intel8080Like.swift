@@ -1961,14 +1961,338 @@ extension Intel8080Like {
                 instruction = RES(op: self.A, bit: 7)
                 instructionLength = 2
                 
+                
+                
+            case 0xC0:
+                // SET 0, B
+                instruction = SET(op: self.B, bit: 0)
+                instructionLength = 2
+                
+            case 0xC1:
+                // SET 0, C
+                instruction = SET(op: self.C, bit: 0)
+                instructionLength = 2
+                
+            case 0xC2:
+                // SET 0, D
+                instruction = SET(op: self.D, bit: 0)
+                instructionLength = 2
+                
+            case 0xC3:
+                // SET 0, E
+                instruction = SET(op: self.E, bit: 0)
+                instructionLength = 2
+                
+            case 0xC4:
+                // SET 0, H
+                instruction = SET(op: self.H, bit: 0)
+                instructionLength = 2
+                
+            case 0xC5:
+                // SET 0, L
+                instruction = SET(op: self.L, bit: 0)
+                instructionLength = 2
+                
             case 0xC6:
                 // SET 0, (HL)
                 instruction = SET(op: self.HL.asPointerOn(self.bus), bit: 0)
                 instructionLength = 2
                 
+            case 0xC7:
+                // SET 0, A
+                instruction = SET(op: self.A, bit: 0)
+                instructionLength = 2
+                
+                
+            case 0xC8:
+                // SET 1, B
+                instruction = SET(op: self.B, bit: 1)
+                instructionLength = 2
+                
+            case 0xC9:
+                // SET 1, C
+                instruction = SET(op: self.C, bit: 1)
+                instructionLength = 2
+                
+            case 0xCA:
+                // SET 1, D
+                instruction = SET(op: self.D, bit: 1)
+                instructionLength = 2
+                
+            case 0xCB:
+                // SET 1, E
+                instruction = SET(op: self.E, bit: 1)
+                instructionLength = 2
+                
+            case 0xCC:
+                // SET 1, H
+                instruction = SET(op: self.H, bit: 1)
+                instructionLength = 2
+                
+            case 0xCD:
+                // SET 1, L
+                instruction = SET(op: self.L, bit: 1)
+                instructionLength = 2
+                
+            case 0xCE:
+                // SET 1, (HL)
+                instruction = SET(op: self.HL.asPointerOn(self.bus), bit: 1)
+                instructionLength = 2
+                
+            case 0xCF:
+                // SET 1, A
+                instruction = SET(op: self.A, bit: 1)
+                instructionLength = 2
+
+                
+                
+            case 0xD0:
+                // SET 2, B
+                instruction = SET(op: self.B, bit: 2)
+                instructionLength = 2
+                
+            case 0xD1:
+                // SET 2, C
+                instruction = SET(op: self.C, bit: 2)
+                instructionLength = 2
+                
+            case 0xD2:
+                // SET 2, D
+                instruction = SET(op: self.D, bit: 2)
+                instructionLength = 2
+                
+            case 0xD3:
+                // SET 2, E
+                instruction = SET(op: self.E, bit: 2)
+                instructionLength = 2
+                
+            case 0xD4:
+                // SET 2, H
+                instruction = SET(op: self.H, bit: 2)
+                instructionLength = 2
+                
+            case 0xD5:
+                // SET 2, L
+                instruction = SET(op: self.L, bit: 2)
+                instructionLength = 2
+                
+            case 0xD6:
+                // SET 2, (HL)
+                instruction = SET(op: self.HL.asPointerOn(self.bus), bit: 2)
+                instructionLength = 2
+                
+            case 0xD7:
+                // SET 2, A
+                instruction = SET(op: self.A, bit: 2)
+                instructionLength = 2
+                
+                
+            case 0xD8:
+                // SET 3, B
+                instruction = SET(op: self.B, bit: 3)
+                instructionLength = 2
+                
+            case 0xD9:
+                // SET 3, C
+                instruction = SET(op: self.C, bit: 3)
+                instructionLength = 2
+                
+            case 0xDA:
+                // SET 3, D
+                instruction = SET(op: self.D, bit: 3)
+                instructionLength = 2
+                
+            case 0xDB:
+                // SET 3, E
+                instruction = SET(op: self.E, bit: 3)
+                instructionLength = 2
+                
+            case 0xDC:
+                // SET 3, H
+                instruction = SET(op: self.H, bit: 3)
+                instructionLength = 2
+                
+            case 0xDD:
+                // SET 3, L
+                instruction = SET(op: self.L, bit: 3)
+                instructionLength = 2
+                
+            case 0xDE:
+                // SET 3, (HL)
+                instruction = SET(op: self.HL.asPointerOn(self.bus), bit: 3)
+                instructionLength = 2
+                
+            case 0xDF:
+                // SET 3, A
+                instruction = SET(op: self.A, bit: 3)
+                instructionLength = 2
+                
+                
+                
+            case 0xE0:
+                // SET 4, B
+                instruction = SET(op: self.B, bit: 4)
+                instructionLength = 2
+                
+            case 0xE1:
+                // SET 4, C
+                instruction = SET(op: self.C, bit: 4)
+                instructionLength = 2
+                
+            case 0xE2:
+                // SET 4, D
+                instruction = SET(op: self.D, bit: 4)
+                instructionLength = 2
+                
+            case 0xE3:
+                // SET 4, E
+                instruction = SET(op: self.E, bit: 4)
+                instructionLength = 2
+                
+            case 0xE4:
+                // SET 4, H
+                instruction = SET(op: self.H, bit: 4)
+                instructionLength = 2
+                
+            case 0xE5:
+                // SET 4, L
+                instruction = SET(op: self.L, bit: 4)
+                instructionLength = 2
+                
+            case 0xE6:
+                // SET 4, (HL)
+                instruction = SET(op: self.HL.asPointerOn(self.bus), bit: 4)
+                instructionLength = 2
+                
+            case 0xE7:
+                // SET 4, A
+                instruction = SET(op: self.A, bit: 4)
+                instructionLength = 2
+                
+                
+                
+            case 0xE8:
+                // SET 5, B
+                instruction = SET(op: self.B, bit: 5)
+                instructionLength = 2
+                
+            case 0xE9:
+                // SET 5, C
+                instruction = SET(op: self.C, bit: 5)
+                instructionLength = 2
+                
+            case 0xEA:
+                // SET 5, D
+                instruction = SET(op: self.D, bit: 5)
+                instructionLength = 2
+                
+            case 0xEB:
+                // SET 5, E
+                instruction = SET(op: self.E, bit: 5)
+                instructionLength = 2
+                
+            case 0xEC:
+                // SET 5, H
+                instruction = SET(op: self.H, bit: 5)
+                instructionLength = 2
+                
+            case 0xED:
+                // SET 5, L
+                instruction = SET(op: self.L, bit: 5)
+                instructionLength = 2
+                
+            case 0xEE:
+                // SET 5, (HL)
+                instruction = SET(op: self.HL.asPointerOn(self.bus), bit: 5)
+                instructionLength = 2
+                
+            case 0xEF:
+                // SET 5, A
+                instruction = SET(op: self.A, bit: 5)
+                instructionLength = 2
+                
+                
+                
+            case 0xF0:
+                // SET 6, B
+                instruction = SET(op: self.B, bit: 6)
+                instructionLength = 2
+                
+            case 0xF1:
+                // SET 6, C
+                instruction = SET(op: self.C, bit: 6)
+                instructionLength = 2
+                
+            case 0xF2:
+                // SET 6, D
+                instruction = SET(op: self.D, bit: 6)
+                instructionLength = 2
+                
+            case 0xF3:
+                // SET 6, E
+                instruction = SET(op: self.E, bit: 6)
+                instructionLength = 2
+                
+            case 0xF4:
+                // SET 6, H
+                instruction = SET(op: self.H, bit: 6)
+                instructionLength = 2
+                
+            case 0xF5:
+                // SET 6, L
+                instruction = SET(op: self.L, bit: 6)
+                instructionLength = 2
+                
+            case 0xF6:
+                // SET 6, (HL)
+                instruction = SET(op: self.HL.asPointerOn(self.bus), bit: 6)
+                instructionLength = 2
+                
+            case 0xF7:
+                // SET 6, A
+                instruction = SET(op: self.A, bit: 6)
+                instructionLength = 2
+                
+                
+                
+            case 0xF8:
+                // SET 7, B
+                instruction = SET(op: self.B, bit: 7)
+                instructionLength = 2
+                
+            case 0xF9:
+                // SET 7, C
+                instruction = SET(op: self.C, bit: 7)
+                instructionLength = 2
+                
+            case 0xFA:
+                // SET 7, D
+                instruction = SET(op: self.D, bit: 7)
+                instructionLength = 2
+                
+            case 0xFB:
+                // SET 7, E
+                instruction = SET(op: self.E, bit: 7)
+                instructionLength = 2
+                
+            case 0xFC:
+                // SET 7, H
+                instruction = SET(op: self.H, bit: 7)
+                instructionLength = 2
+                
+            case 0xFD:
+                // SET 7, L
+                instruction = SET(op: self.L, bit: 7)
+                instructionLength = 2
+                
             case 0xFE:
                 // SET 7, (HL)
                 instruction = SET(op: self.HL.asPointerOn(self.bus), bit: 7)
+                instructionLength = 2
+                
+            case 0xFF:
+                // SET 7, A
+                instruction = SET(op: self.A, bit: 7)
                 instructionLength = 2
                 
             default:
