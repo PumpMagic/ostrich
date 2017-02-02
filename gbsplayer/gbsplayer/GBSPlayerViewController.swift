@@ -246,12 +246,14 @@ class GBSPlayerViewController: NSViewController {
     @IBAction func p1CheckboxChanged(_ sender: NSButton) {
         let newConnectedState = sender.state != 0
         player.gameBoy.alterPulse1Connection(connected: newConnectedState)
+        pulse1View.connected = newConnectedState
     }
     
     
     @IBAction func p2CheckboxChanged(_ sender: NSButton) {
         let newConnectedState = sender.state != 0
         player.gameBoy.alterPulse2Connection(connected: newConnectedState)
+        pulse2View.connected = newConnectedState
     }
     
     

@@ -9,6 +9,12 @@
 import Cocoa
 
 
+let GAMEBOY_PALLETTE_00 = NSColor(red: 155.0/255.0, green: 188.0/255.0, blue: 15.0/255.0, alpha: 1.0)
+let GAMEBOY_PALLETTE_01 = NSColor(red: 139.0/255.0, green: 172.0/255.0, blue: 15.0/255.0, alpha: 1.0)
+let GAMEBOY_PALLETTE_10 = NSColor(red: 48.0/255.0, green: 98.0/255.0, blue: 48.0/255.0, alpha: 1.0)
+let GAMEBOY_PALLETTE_11 = NSColor(red: 15.0/255.0, green: 56.0/255.0, blue: 15.0/255.0, alpha: 1.0)
+
+
 /// Adjust some color parameters of an image.
 func adjustImageColors(image: NSImage, hue: Float, saturation: Float,
                        brightness: Float, contrast: Float) -> NSImage?

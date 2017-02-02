@@ -14,12 +14,25 @@ fileprivate let PIXELS_PER_SECOND_SCALE_FACTOR = 50.0
 fileprivate let LINE_WIDTH: CGFloat = 1.5
 //@todo implement some sort of frequency cap that draws a solid box rather than trying to render a wave
 //fileprivate let FREQUENCY_CAP = 20000.0
+fileprivate let CONNECTED_STROKE_COLOR = GAMEBOY_PALLETTE_11
+fileprivate let DISCONNECTED_STROKE_COLOR = GAMEBOY_PALLETTE_01
 
 
 /// A viewable representation of a pulse wave channel. Updates only when needsDisplay is set by someone else.
 class PulseWaveView: NSView {
     /// Channel we're drawing
     var channel: Pulse? = nil
+    /// Whether or not the channel is currently enabled by the user
+    var connected: Bool = true
+    
+    var strokeColor: NSColor {
+        if connected {
+            return CONNECTED_STROKE_COLOR
+        } else {
+            return DISCONNECTED_STROKE_COLOR
+        }
+    }
+    
     
     /// Draw a flat line as the waveform
     private func drawFlatLine(at y: CGFloat) {
@@ -56,7 +69,8 @@ class PulseWaveView: NSView {
         let path = NSBezierPath()
         path.lineWidth = LINE_WIDTH
         let startingPoint = CGPoint(x: x, y: y)
-        NSColor.black.setStroke()
+//        strokeColor.setStroke()
+        strokeColor.set()
         path.move(to: startingPoint)
         
         let pixelsPerSecond = Double(bounds.width) * PIXELS_PER_SECOND_SCALE_FACTOR
