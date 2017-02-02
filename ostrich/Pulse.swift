@@ -454,13 +454,17 @@ extension Pulse: SynthPluggable {
 
 // Utility functions: functions that don't mimic hardware, but are provided for
 // convenience of emulation
-extension Pulse {
+public extension Pulse {
     func alterConnection(connected: Bool) {
         if connected {
             oscillator.start()
         } else {
             oscillator.stop()
         }
+    }
+    
+    func isConnected() -> Bool {
+        return oscillator.isStarted
     }
 }
 

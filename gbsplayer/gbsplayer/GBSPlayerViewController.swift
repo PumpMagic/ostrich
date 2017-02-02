@@ -60,6 +60,8 @@ class GBSPlayerViewController: NSViewController {
     @IBOutlet weak var copyrightLabel: NSTextField!
     @IBOutlet weak var currentTrackLabel: NSTextField!
     @IBOutlet weak var volumeLabel: NSTextField!
+    // A redundant collection of all of our labels, initialized on startup, for easy iteration
+    var labels: [NSTextField] = []
     
     private var scrollingTitleLabelIndex = 0
     private var scrollingAuthorLabelIndex = 0
@@ -105,7 +107,7 @@ class GBSPlayerViewController: NSViewController {
     /// Update the playback status label - playing, stopped, etc.
     func updatePlaybackStatusDisplay() {
         if player.gbsHeader == nil {
-            powerLight.state = .Off
+            powerLight.state = .Red
         } else {
             if player.midSong {
                 if player.paused {
@@ -246,14 +248,12 @@ class GBSPlayerViewController: NSViewController {
     @IBAction func p1CheckboxChanged(_ sender: NSButton) {
         let newConnectedState = sender.state != 0
         player.gameBoy.alterPulse1Connection(connected: newConnectedState)
-        pulse1View.connected = newConnectedState
     }
     
     
     @IBAction func p2CheckboxChanged(_ sender: NSButton) {
         let newConnectedState = sender.state != 0
         player.gameBoy.alterPulse2Connection(connected: newConnectedState)
-        pulse2View.connected = newConnectedState
     }
     
     
@@ -305,18 +305,35 @@ class GBSPlayerViewController: NSViewController {
     
     /** INITIALIZATION ROUTINES */
     
-    /// Tell the app delegate that we exist, so it can pass us events like "file open attempt".
-    func reportSelfToAppDelegate() {
-        let appDelegate = NSApplication.shared().delegate as! AppDelegate
-        appDelegate.gbsPlayerViewController = self
+    func collectLabels() {
+        self.labels = [titleLabel, authorLabel, copyrightLabel, currentTrackLabel, volumeLabel]
     }
     
-    func setDisplayFont() {
-        titleLabel.font = GB_FONT
-        authorLabel.font = GB_FONT
-        copyrightLabel.font = GB_FONT
-        currentTrackLabel.font = GB_FONT
-        volumeLabel.font = GB_FONT
+    func setLabelFonts() {
+        labels.forEach {
+            $0.font = GB_FONT
+        }
+    }
+    
+    func setLabelPlaceholderColors() {
+        let attributes: [String : AnyObject] = [NSForegroundColorAttributeName: GAMEBOY_PALLETTE_01]
+        
+        labels.forEach {
+            if let placeholderString = $0.placeholderString {
+                if $0 != currentTrackLabel {
+                    // Default behavior
+                    $0.placeholderAttributedString = NSAttributedString(string: placeholderString, attributes: attributes)
+                } else {
+                    // Workaround for NSTextField / NSAttributedString missing a setAttribute()-like method to
+                    // preserve the right-justifcation of the current track label
+                    let rightAlignedParagraphStyle = NSMutableParagraphStyle()
+                    rightAlignedParagraphStyle.alignment = .right
+                    var rightAlignedAttributes = attributes
+                    rightAlignedAttributes[NSParagraphStyleAttributeName] = rightAlignedParagraphStyle
+                    $0.placeholderAttributedString = NSAttributedString(string: placeholderString, attributes: rightAlignedAttributes)
+                }
+            }
+        }
     }
     
     /// Initialize the wave displays by telling them which channels to display and starting a refresh timer.
@@ -355,14 +372,23 @@ class GBSPlayerViewController: NSViewController {
         stopButton.setEventHandler(callback: self.handlePlaybackButtonPress)
     }
     
+    /// Tell the app delegate that we exist, so it can pass us events like "file open attempt".
+    func reportSelfToAppDelegate() {
+        let appDelegate = NSApplication.shared().delegate as! AppDelegate
+        appDelegate.gbsPlayerViewController = self
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setDisplayFont()
+        collectLabels()
+        setLabelFonts()
+        setLabelPlaceholderColors()
         handleUpdatedVolume()
         updateAllStatusDisplays()
         initializeWaveDisplays()
         initializeLabelScrollers()
+        
         
         registerAsCustomButtonDelegate()
         reportSelfToAppDelegate()

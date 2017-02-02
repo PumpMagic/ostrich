@@ -22,11 +22,13 @@ fileprivate let DISCONNECTED_STROKE_COLOR = GAMEBOY_PALLETTE_01
 class PulseWaveView: NSView {
     /// Channel we're drawing
     var channel: Pulse? = nil
-    /// Whether or not the channel is currently enabled by the user
-    var connected: Bool = true
     
     var strokeColor: NSColor {
-        if connected {
+        guard let channel = self.channel else {
+            return DISCONNECTED_STROKE_COLOR
+        }
+        
+        if channel.isConnected() {
             return CONNECTED_STROKE_COLOR
         } else {
             return DISCONNECTED_STROKE_COLOR
@@ -39,7 +41,7 @@ class PulseWaveView: NSView {
         let startPoint = CGPoint(x: bounds.minX, y: y)
         let endPoint = CGPoint(x: bounds.maxX, y: y)
         
-        NSColor.black.setStroke()
+        strokeColor.set()
         let path = NSBezierPath()
         path.lineWidth = LINE_WIDTH
         path.move(to: startPoint)
@@ -69,7 +71,6 @@ class PulseWaveView: NSView {
         let path = NSBezierPath()
         path.lineWidth = LINE_WIDTH
         let startingPoint = CGPoint(x: x, y: y)
-//        strokeColor.setStroke()
         strokeColor.set()
         path.move(to: startingPoint)
         
