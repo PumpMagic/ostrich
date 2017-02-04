@@ -12,8 +12,6 @@ import ostrich
 // Some configuration constants
 fileprivate let PIXELS_PER_SECOND_SCALE_FACTOR = 50.0
 fileprivate let LINE_WIDTH: CGFloat = 1.5
-//@todo implement some sort of frequency cap that draws a solid box rather than trying to render a wave
-//fileprivate let FREQUENCY_CAP = 20000.0
 fileprivate let CONNECTED_STROKE_COLOR = GAMEBOY_PALLETTE_11
 fileprivate let DISCONNECTED_STROKE_COLOR = GAMEBOY_PALLETTE_01
 
@@ -50,6 +48,12 @@ class PulseWaveView: NSView {
         path.close()
     }
     
+    private func drawRectangle(x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat) {
+        let path = NSBezierPath(rect: NSRect(x: x, y: y, width: width, height: height))
+        strokeColor.set()
+        path.fill()
+    }
+    
     /// Draw the pulse wave.
     /// Amplitude should be [0.0, 1.0]; frequency should be in Hz; duty should be [0.0, 1.0].
     private func drawWaveform(amplitude: Double, frequency: Double, duty: Double) {
@@ -65,6 +69,15 @@ class PulseWaveView: NSView {
         let waveMinY = bounds.minY
         let waveMaxY = bounds.minY + waveHeight - 1
         
+        let pixelsPerSecond = Double(bounds.width) * PIXELS_PER_SECOND_SCALE_FACTOR
+        
+        if frequency > (pixelsPerSecond/2) {
+            // The waveform is so dense that our output, rendered carefully, would just be a solid block.
+            // Rather than spending the resources, just output a solid block directly
+            drawRectangle(x: waveMinX, y: waveMinY, width: (waveMaxX-waveMinX), height: (waveMaxY-waveMinY))
+            return
+        }
+        
         var x = CGFloat(waveMinX)
         var y = CGFloat(waveMinY)
         
@@ -73,8 +86,6 @@ class PulseWaveView: NSView {
         let startingPoint = CGPoint(x: x, y: y)
         strokeColor.set()
         path.move(to: startingPoint)
-        
-        let pixelsPerSecond = Double(bounds.width) * PIXELS_PER_SECOND_SCALE_FACTOR
         
         // Draw half-periods of the pulse wave until we reach the edge of our view
         while x < waveMaxX {
@@ -108,9 +119,8 @@ class PulseWaveView: NSView {
             }
         }
         
-        // Fill our curve in
+        // Stroke our curve
         path.stroke()
-        path.close()
     }
     
     override func draw(_ dirtyRect: NSRect) {

@@ -302,7 +302,7 @@ class GBSPlayerViewController: NSViewController {
             // Advance the starting index of the string we'll display
             let newIndex = (lastIndex + characters) % stringToScrollNumCharacters
             
-            // Rotated the source string around the start index and clip it to get our output
+            // Rotate the source string around the start index and clip it to get our output
             let splitIndex = stringToScroll.index(stringToScroll.startIndex, offsetBy: newIndex)
             let leftSide = stringToScroll.substring(to: splitIndex)
             let rightSide = stringToScroll.substring(from: splitIndex)
