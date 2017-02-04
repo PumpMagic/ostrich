@@ -1,45 +1,46 @@
 //
-//  GBRoundButton.swift
+//  CustomButton.swift
 //  gbsplayer
 //
-//  Created by Owner on 1/26/17.
+//  Created by Owner on 2/3/17.
 //  Copyright © 2017 conwarez. All rights reserved.
 //
 
 import Cocoa
-
 
 /// Something that can capture user events for processing by a delegate.
 protocol GeneratesUIEvents {
     func setEventHandler(callback: @escaping (NSView) -> Void)
 }
 
-
-// Some configuration constants
-fileprivate let UNPRESSED_FILENAME = "gb-button-unpressed.png"
-fileprivate let PRESSED_FILENAME = "gb-button-pressed.png"
-fileprivate let UNPRESSED_IMAGE: NSImage! = Bundle.main.image(forResource: UNPRESSED_FILENAME)
-fileprivate let PRESSED_IMAGE: NSImage! = Bundle.main.image(forResource: PRESSED_FILENAME)
+protocol Pushable {
+    func getPushedImage() -> NSImage
+    func getUnpushedImage() -> NSImage
+    
+    func onMouseDown()
+}
 
 
 /// A pressable button whose appearance mimics that of a Game Boy Classic's.
 /// Dispatches button press events to delegate registered through GeneratesUIEvents's function, if any.
-class GBRoundButton: NSView, GeneratesUIEvents {
-    private var currentImage: NSImage = UNPRESSED_IMAGE
-    private var pushHandler: ((NSView) -> Void)? = nil
+class CustomButton: NSView, GeneratesUIEvents {
+    @IBInspectable var unpushedImage: NSImage? = nil
+    @IBInspectable var pushedImage: NSImage? = nil
+    private var currentImage: NSImage? = nil
     
+    private var eventHandler: ((NSView) -> Void)? = nil
     
-    /// Set the event handler: what does the button call when it's been pressed?
+    /// What does the button call when it's been pressed?
     func setEventHandler(callback: @escaping (NSView) -> Void) {
-        self.pushHandler = callback
+        self.eventHandler = callback
     }
     
     /// Update our image.
     private func updateImage(selected: Bool) {
         if selected {
-            self.currentImage = PRESSED_IMAGE
+            currentImage = pushedImage
         } else {
-            self.currentImage = UNPRESSED_IMAGE
+            currentImage = unpushedImage
         }
         
         self.needsDisplay = true
@@ -73,7 +74,7 @@ class GBRoundButton: NSView, GeneratesUIEvents {
         
         /// If the mouse was released while in our view, treat the event as a press of us
         if self.contains(point: event.locationInWindow) {
-            pushHandler?(self)
+            eventHandler?(self)
         }
     }
     
@@ -87,9 +88,13 @@ class GBRoundButton: NSView, GeneratesUIEvents {
     
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
-
+        
         // Drawing code here.
-        currentImage.draw(in: dirtyRect)
+        currentImage?.draw(in: dirtyRect)
     }
     
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+        updateImage(selected: false)
+    }
 }

@@ -69,9 +69,13 @@ class GBSPlayerViewController: NSViewController {
     
     @IBOutlet weak var pulse1View: PulseWaveView!
     @IBOutlet weak var pulse2View: PulseWaveView!
+    private var pulse1Connected = true
+    private var pulse2Connected = true
     
-    @IBOutlet weak var playPauseButton: GBRoundButton!
-    @IBOutlet weak var stopButton: GBRoundButton!
+    @IBOutlet weak var playPauseButton: CustomButton!
+    @IBOutlet weak var stopButton: CustomButton!
+    @IBOutlet weak var pulse1EnableButton: CustomButton!
+    @IBOutlet weak var pulse2EnableButton: CustomButton!
     
     @IBOutlet weak var powerLight: GBPowerLight!
     
@@ -215,6 +219,18 @@ class GBSPlayerViewController: NSViewController {
         }
     }
     
+    func p1EnableButtonPressed(sender: NSView) {
+        let newState = !pulse1Connected
+        player.gameBoy.alterPulse1Connection(connected: newState)
+        pulse1Connected = newState
+    }
+    
+    func p2EnableButtonPressed(sender: NSView) {
+        let newState = !pulse2Connected
+        player.gameBoy.alterPulse2Connection(connected: newState)
+        pulse2Connected = newState
+    }
+    
     @IBAction func nextTrackButtonPressed(_ sender: NSButton) {
         if tryPlaying(track: track+1) {
             track += 1
@@ -243,17 +259,6 @@ class GBSPlayerViewController: NSViewController {
         }
         
         updatePlaybackStatusDisplay()
-    }
-    
-    @IBAction func p1CheckboxChanged(_ sender: NSButton) {
-        let newConnectedState = sender.state != 0
-        player.gameBoy.alterPulse1Connection(connected: newConnectedState)
-    }
-    
-    
-    @IBAction func p2CheckboxChanged(_ sender: NSButton) {
-        let newConnectedState = sender.state != 0
-        player.gameBoy.alterPulse2Connection(connected: newConnectedState)
     }
     
     
@@ -367,9 +372,12 @@ class GBSPlayerViewController: NSViewController {
         labelScrollerClocker.resume()
     }
     
+    
     func registerAsCustomButtonDelegate() {
         playPauseButton.setEventHandler(callback: self.handlePlaybackButtonPress)
         stopButton.setEventHandler(callback: self.handlePlaybackButtonPress)
+        pulse1EnableButton.setEventHandler(callback: self.p1EnableButtonPressed)
+        pulse2EnableButton.setEventHandler(callback: self.p2EnableButtonPressed)
     }
     
     /// Tell the app delegate that we exist, so it can pass us events like "file open attempt".
@@ -386,8 +394,9 @@ class GBSPlayerViewController: NSViewController {
         setLabelPlaceholderColors()
         handleUpdatedVolume()
         updateAllStatusDisplays()
-        initializeWaveDisplays()
         initializeLabelScrollers()
+        initializeWaveDisplays()
+//        initializeButtons()
         
         
         registerAsCustomButtonDelegate()

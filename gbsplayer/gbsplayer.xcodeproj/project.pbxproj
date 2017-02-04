@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EB31BB351E4554790037FCC5 /* start-select-pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = EB31BB331E4554790037FCC5 /* start-select-pressed.png */; };
+		EB31BB361E4554790037FCC5 /* start-select-unpressed.png in Resources */ = {isa = PBXBuildFile; fileRef = EB31BB341E4554790037FCC5 /* start-select-unpressed.png */; };
+		EB506F4F1E4548DB00645AC1 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB506F4E1E4548DB00645AC1 /* CustomButton.swift */; };
 		EB6CB25D1E3455E000010E3E /* GBSParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6CB25C1E3455E000010E3E /* GBSParser.swift */; };
-		EB769CFE1E39EE7100083C60 /* GBRoundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB769CFD1E39EE7100083C60 /* GBRoundButton.swift */; };
 		EBBC3A131D6580FE00AC529E /* GBSPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC3A121D6580FE00AC529E /* GBSPlayer.swift */; };
 		EBC617E21E387A6E007434B8 /* PulseWaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC617E11E387A6E007434B8 /* PulseWaveView.swift */; };
 		EBD145661E3FF44A00597EF6 /* GBSML.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EBD145651E3FF43F00597EF6 /* GBSML.ttf */; };
@@ -59,8 +61,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		EB31BB331E4554790037FCC5 /* start-select-pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "start-select-pressed.png"; sourceTree = "<group>"; };
+		EB31BB341E4554790037FCC5 /* start-select-unpressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "start-select-unpressed.png"; sourceTree = "<group>"; };
+		EB506F4E1E4548DB00645AC1 /* CustomButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		EB6CB25C1E3455E000010E3E /* GBSParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GBSParser.swift; sourceTree = "<group>"; };
-		EB769CFD1E39EE7100083C60 /* GBRoundButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GBRoundButton.swift; sourceTree = "<group>"; };
 		EBB7DA9F1D67C18800C18160 /* ostrich.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ostrich.framework; path = "../../../Library/Developer/Xcode/DerivedData/ostrich-foboudusbfzudvglxzssqmwvcqrd/Build/Products/Debug/ostrich.framework"; sourceTree = "<group>"; };
 		EBBC3A121D6580FE00AC529E /* GBSPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GBSPlayer.swift; sourceTree = "<group>"; };
 		EBC617E11E387A6E007434B8 /* PulseWaveView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PulseWaveView.swift; sourceTree = "<group>"; };
@@ -145,7 +149,7 @@
 				EBD958E01D65802400963E2F /* Main.storyboard */,
 				EBD958E31D65802400963E2F /* Info.plist */,
 				EBC617E11E387A6E007434B8 /* PulseWaveView.swift */,
-				EB769CFD1E39EE7100083C60 /* GBRoundButton.swift */,
+				EB506F4E1E4548DB00645AC1 /* CustomButton.swift */,
 				EBEA05FF1E3C927A00D3D0F6 /* GBPowerLight.swift */,
 				EBEA06031E3E020200D3D0F6 /* Util.swift */,
 			);
@@ -177,6 +181,8 @@
 				EBEA05FA1E3C77DF00D3D0F6 /* gb-button-unpressed.png */,
 				EBEA05FD1E3C801F00D3D0F6 /* gb-button-pressed.png */,
 				EBEA06011E3C98A500D3D0F6 /* gb-powerlight.png */,
+				EB31BB331E4554790037FCC5 /* start-select-pressed.png */,
+				EB31BB341E4554790037FCC5 /* start-select-unpressed.png */,
 			);
 			name = resources;
 			sourceTree = "<group>";
@@ -292,9 +298,11 @@
 			files = (
 				EBD958DF1D65802400963E2F /* Assets.xcassets in Resources */,
 				EBEA05FE1E3C801F00D3D0F6 /* gb-button-pressed.png in Resources */,
+				EB31BB351E4554790037FCC5 /* start-select-pressed.png in Resources */,
 				EBD958E21D65802400963E2F /* Main.storyboard in Resources */,
 				EBEA05FB1E3C77DF00D3D0F6 /* gb-button-unpressed.png in Resources */,
 				EBD145661E3FF44A00597EF6 /* GBSML.ttf in Resources */,
+				EB31BB361E4554790037FCC5 /* start-select-unpressed.png in Resources */,
 				EBEA06021E3C98A500D3D0F6 /* gb-powerlight.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -321,7 +329,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EBD958DD1D65802400963E2F /* GBSPlayerViewController.swift in Sources */,
-				EB769CFE1E39EE7100083C60 /* GBRoundButton.swift in Sources */,
+				EB506F4F1E4548DB00645AC1 /* CustomButton.swift in Sources */,
 				EBD958DB1D65802400963E2F /* AppDelegate.swift in Sources */,
 				EBEA06041E3E020200D3D0F6 /* Util.swift in Sources */,
 				EBBC3A131D6580FE00AC529E /* GBSPlayer.swift in Sources */,
