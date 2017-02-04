@@ -94,7 +94,6 @@ class CustomButton: NSView, GeneratesUIEvents {
     }
     
     override func viewDidMoveToWindow() {
-        super.viewDidMoveToWindow()
         updateImage(selected: false)
     }
 }

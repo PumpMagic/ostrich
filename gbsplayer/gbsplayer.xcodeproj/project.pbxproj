@@ -12,6 +12,12 @@
 		EB506F4F1E4548DB00645AC1 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB506F4E1E4548DB00645AC1 /* CustomButton.swift */; };
 		EB6CB25D1E3455E000010E3E /* GBSParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6CB25C1E3455E000010E3E /* GBSParser.swift */; };
 		EBBC3A131D6580FE00AC529E /* GBSPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC3A121D6580FE00AC529E /* GBSPlayer.swift */; };
+		EBC361E31E4581AD00DCDC36 /* GBDPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC361E21E4581AD00DCDC36 /* GBDPad.swift */; };
+		EBC361E91E458BDB00DCDC36 /* dpad-down.png in Resources */ = {isa = PBXBuildFile; fileRef = EBC361E41E458BDB00DCDC36 /* dpad-down.png */; };
+		EBC361EA1E458BDB00DCDC36 /* dpad-left.png in Resources */ = {isa = PBXBuildFile; fileRef = EBC361E51E458BDB00DCDC36 /* dpad-left.png */; };
+		EBC361EB1E458BDB00DCDC36 /* dpad-neutral.png in Resources */ = {isa = PBXBuildFile; fileRef = EBC361E61E458BDB00DCDC36 /* dpad-neutral.png */; };
+		EBC361EC1E458BDB00DCDC36 /* dpad-right.png in Resources */ = {isa = PBXBuildFile; fileRef = EBC361E71E458BDB00DCDC36 /* dpad-right.png */; };
+		EBC361ED1E458BDB00DCDC36 /* dpad-up.png in Resources */ = {isa = PBXBuildFile; fileRef = EBC361E81E458BDB00DCDC36 /* dpad-up.png */; };
 		EBC617E21E387A6E007434B8 /* PulseWaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC617E11E387A6E007434B8 /* PulseWaveView.swift */; };
 		EBD145661E3FF44A00597EF6 /* GBSML.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EBD145651E3FF43F00597EF6 /* GBSML.ttf */; };
 		EBD958DB1D65802400963E2F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD958DA1D65802400963E2F /* AppDelegate.swift */; };
@@ -67,6 +73,12 @@
 		EB6CB25C1E3455E000010E3E /* GBSParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GBSParser.swift; sourceTree = "<group>"; };
 		EBB7DA9F1D67C18800C18160 /* ostrich.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ostrich.framework; path = "../../../Library/Developer/Xcode/DerivedData/ostrich-foboudusbfzudvglxzssqmwvcqrd/Build/Products/Debug/ostrich.framework"; sourceTree = "<group>"; };
 		EBBC3A121D6580FE00AC529E /* GBSPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GBSPlayer.swift; sourceTree = "<group>"; };
+		EBC361E21E4581AD00DCDC36 /* GBDPad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GBDPad.swift; sourceTree = "<group>"; };
+		EBC361E41E458BDB00DCDC36 /* dpad-down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dpad-down.png"; sourceTree = "<group>"; };
+		EBC361E51E458BDB00DCDC36 /* dpad-left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dpad-left.png"; sourceTree = "<group>"; };
+		EBC361E61E458BDB00DCDC36 /* dpad-neutral.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dpad-neutral.png"; sourceTree = "<group>"; };
+		EBC361E71E458BDB00DCDC36 /* dpad-right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dpad-right.png"; sourceTree = "<group>"; };
+		EBC361E81E458BDB00DCDC36 /* dpad-up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dpad-up.png"; sourceTree = "<group>"; };
 		EBC617E11E387A6E007434B8 /* PulseWaveView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PulseWaveView.swift; sourceTree = "<group>"; };
 		EBD145651E3FF43F00597EF6 /* GBSML.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GBSML.ttf; sourceTree = "<group>"; };
 		EBD958D71D65802400963E2F /* gbsplayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gbsplayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -152,6 +164,7 @@
 				EB506F4E1E4548DB00645AC1 /* CustomButton.swift */,
 				EBEA05FF1E3C927A00D3D0F6 /* GBPowerLight.swift */,
 				EBEA06031E3E020200D3D0F6 /* Util.swift */,
+				EBC361E21E4581AD00DCDC36 /* GBDPad.swift */,
 			);
 			path = gbsplayer;
 			sourceTree = "<group>";
@@ -183,6 +196,11 @@
 				EBEA06011E3C98A500D3D0F6 /* gb-powerlight.png */,
 				EB31BB331E4554790037FCC5 /* start-select-pressed.png */,
 				EB31BB341E4554790037FCC5 /* start-select-unpressed.png */,
+				EBC361E41E458BDB00DCDC36 /* dpad-down.png */,
+				EBC361E51E458BDB00DCDC36 /* dpad-left.png */,
+				EBC361E61E458BDB00DCDC36 /* dpad-neutral.png */,
+				EBC361E71E458BDB00DCDC36 /* dpad-right.png */,
+				EBC361E81E458BDB00DCDC36 /* dpad-up.png */,
 			);
 			name = resources;
 			sourceTree = "<group>";
@@ -297,12 +315,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				EBD958DF1D65802400963E2F /* Assets.xcassets in Resources */,
+				EBC361EC1E458BDB00DCDC36 /* dpad-right.png in Resources */,
 				EBEA05FE1E3C801F00D3D0F6 /* gb-button-pressed.png in Resources */,
 				EB31BB351E4554790037FCC5 /* start-select-pressed.png in Resources */,
 				EBD958E21D65802400963E2F /* Main.storyboard in Resources */,
 				EBEA05FB1E3C77DF00D3D0F6 /* gb-button-unpressed.png in Resources */,
+				EBC361EA1E458BDB00DCDC36 /* dpad-left.png in Resources */,
 				EBD145661E3FF44A00597EF6 /* GBSML.ttf in Resources */,
 				EB31BB361E4554790037FCC5 /* start-select-unpressed.png in Resources */,
+				EBC361ED1E458BDB00DCDC36 /* dpad-up.png in Resources */,
+				EBC361EB1E458BDB00DCDC36 /* dpad-neutral.png in Resources */,
+				EBC361E91E458BDB00DCDC36 /* dpad-down.png in Resources */,
 				EBEA06021E3C98A500D3D0F6 /* gb-powerlight.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -333,6 +356,7 @@
 				EBD958DB1D65802400963E2F /* AppDelegate.swift in Sources */,
 				EBEA06041E3E020200D3D0F6 /* Util.swift in Sources */,
 				EBBC3A131D6580FE00AC529E /* GBSPlayer.swift in Sources */,
+				EBC361E31E4581AD00DCDC36 /* GBDPad.swift in Sources */,
 				EBEA06001E3C927A00D3D0F6 /* GBPowerLight.swift in Sources */,
 				EB6CB25D1E3455E000010E3E /* GBSParser.swift in Sources */,
 				EBC617E21E387A6E007434B8 /* PulseWaveView.swift in Sources */,

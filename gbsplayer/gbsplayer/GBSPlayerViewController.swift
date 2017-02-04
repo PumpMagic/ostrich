@@ -72,6 +72,7 @@ class GBSPlayerViewController: NSViewController {
     private var pulse1Connected = true
     private var pulse2Connected = true
     
+    @IBOutlet weak var dPad: GBDPad!
     @IBOutlet weak var playPauseButton: CustomButton!
     @IBOutlet weak var stopButton: CustomButton!
     @IBOutlet weak var pulse1EnableButton: CustomButton!
@@ -187,9 +188,42 @@ class GBSPlayerViewController: NSViewController {
         return result
     }
     
-    @IBAction func previousTrackButtonPressed(_ sender: NSButton) {
+    func volumeUpButtonPressed() {
+        if volume < MAX_VOLUME {
+            volume += 1
+        }
+    }
+    
+    func volumeDownButtonPressed() {
+        if volume > 0 {
+            volume -= 1
+        }
+    }
+    
+    func previousTrackButtonPressed() {
         if tryPlaying(track: track-1) {
             track -= 1
+        }
+    }
+    
+    func nextTrackButtonPressed() {
+        if tryPlaying(track: track+1) {
+            track += 1
+        }
+    }
+    
+    func dpadPressed(direction: GBDPad.Direction) {
+        switch direction {
+        case .Neutral:
+            break
+        case .Up:
+            volumeUpButtonPressed()
+        case .Down:
+            volumeDownButtonPressed()
+        case .Left:
+            previousTrackButtonPressed()
+        case .Right:
+            nextTrackButtonPressed()
         }
     }
     
@@ -211,7 +245,7 @@ class GBSPlayerViewController: NSViewController {
         stopPlayback()
     }
     
-    func handlePlaybackButtonPress(sender: NSView) {
+    func playbackButtonPressed(sender: NSView) {
         if sender == playPauseButton {
             playPauseButtonPressed()
         } else if sender == stopButton {
@@ -219,33 +253,23 @@ class GBSPlayerViewController: NSViewController {
         }
     }
     
-    func p1EnableButtonPressed(sender: NSView) {
+    func p1EnableButtonPressed() {
         let newState = !pulse1Connected
         player.gameBoy.alterPulse1Connection(connected: newState)
         pulse1Connected = newState
     }
     
-    func p2EnableButtonPressed(sender: NSView) {
+    func p2EnableButtonPressed() {
         let newState = !pulse2Connected
         player.gameBoy.alterPulse2Connection(connected: newState)
         pulse2Connected = newState
     }
     
-    @IBAction func nextTrackButtonPressed(_ sender: NSButton) {
-        if tryPlaying(track: track+1) {
-            track += 1
-        }
-    }
-    
-    @IBAction func volumeUpButtonPressed(_ sender: NSButton) {
-        if volume < MAX_VOLUME {
-            volume += 1
-        }
-    }
-    
-    @IBAction func volumeDownButtonPressed(_ sender: NSButton) {
-        if volume > 0 {
-            volume -= 1
+    func waveformDisplayButtonPressed(sender: NSView) {
+        if sender == pulse1EnableButton {
+            p1EnableButtonPressed()
+        } else if sender == pulse2EnableButton {
+            p2EnableButtonPressed()
         }
     }
     
@@ -373,11 +397,12 @@ class GBSPlayerViewController: NSViewController {
     }
     
     
-    func registerAsCustomButtonDelegate() {
-        playPauseButton.setEventHandler(callback: self.handlePlaybackButtonPress)
-        stopButton.setEventHandler(callback: self.handlePlaybackButtonPress)
-        pulse1EnableButton.setEventHandler(callback: self.p1EnableButtonPressed)
-        pulse2EnableButton.setEventHandler(callback: self.p2EnableButtonPressed)
+    func registerAsButtonDelegate() {
+        playPauseButton.setEventHandler(callback: self.playbackButtonPressed)
+        stopButton.setEventHandler(callback: self.playbackButtonPressed)
+        pulse1EnableButton.setEventHandler(callback: self.waveformDisplayButtonPressed)
+        pulse2EnableButton.setEventHandler(callback: self.waveformDisplayButtonPressed)
+        dPad.setEventHandler(callback: self.dpadPressed)
     }
     
     /// Tell the app delegate that we exist, so it can pass us events like "file open attempt".
@@ -396,13 +421,9 @@ class GBSPlayerViewController: NSViewController {
         updateAllStatusDisplays()
         initializeLabelScrollers()
         initializeWaveDisplays()
-//        initializeButtons()
         
-        
-        registerAsCustomButtonDelegate()
+        registerAsButtonDelegate()
         reportSelfToAppDelegate()
-        
-//        tryLoadingFile(at: URL(fileURLWithPath: "/Users/owner/Dropbox/emu/tetris.gbs"))
     }
 }
 
