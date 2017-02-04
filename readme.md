@@ -28,11 +28,11 @@ Ostrich implements elements of the Game Boy necessary to reproduce its audio out
 
 ## Author ##
 
-Ostrich is written entirely by myself, [Ryan Conway](http://www.rmconway.com/). It would not have been possible without the help of [Austin Zheng](http://austinzheng.com/) and the documentation of Game Boy hardware written by many and available online. Some of this documentation is captured in this repository's resources.txt.
+Ostrich is written entirely by myself, [Ryan Conway](http://www.rmconway.com/). It would not have been possible without the help of [Austin Zheng](http://austinzheng.com/) and the documentation of Game Boy hardware written by many and available online. Some of this documentation is captured in [resources.txt](resources.txt).
 
 ## License ##
 
-Ostrich is copyright 2016-2017 Ryan Conway. Its source code is released under the MIT license; see [license.txt](license.txt).
+Ostrich is copyright 2016-2017 Ryan Conway. Its source code is released under the MIT license; see [LICENSE.txt](LICENSE.txt).
 
 Ostrich uses resources, produced by others and made available under the terms of other licenses:
 * Game Boy input images adapted from photograph by William Warby (https://www.flickr.com/photos/wwarby/), licensed under a Creative Commons Attribution Generic license (https://creativecommons.org/licenses/by/2.0/). 
