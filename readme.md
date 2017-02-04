@@ -2,7 +2,7 @@
 
 Ostrich is a Game Boy Sound System player written in Swift. Under the covers, it is a Nintendo Game Boy emulator.
 
-![A wild Ostrich appeared](/screenshots/1.png)
+![A wild Ostrich appeared](screenshots/1.png)
 
 ## Usage ##
 
@@ -18,7 +18,7 @@ To toggle the muting of either pulse wave channel, press either grey button - th
 
 Note that Ostrich may be resized for your viewing pleasure.
 
-![A newborn Ostrich](/screenshots/2.png)
+![A newborn Ostrich](screenshots/2.png)
 
 ## Technical Details ##
 
@@ -32,7 +32,7 @@ Ostrich is written entirely by myself, [Ryan Conway](http://www.rmconway.com/). 
 
 ## License ##
 
-Ostrich is copyright 2016-2017 Ryan Conway. Its source code is released under the MIT license; see [license.txt](https://raw.githubusercontent.com/PumpMagic/ostrich/master/resources.txt).
+Ostrich is copyright 2016-2017 Ryan Conway. Its source code is released under the MIT license; see [license.txt](license.txt).
 
 Ostrich uses resources, produced by others and made available under the terms of other licenses:
 * Game Boy input images adapted from photograph by William Warby (https://www.flickr.com/photos/wwarby/), licensed under a Creative Commons Attribution Generic license (https://creativecommons.org/licenses/by/2.0/). 
