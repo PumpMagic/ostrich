@@ -22,7 +22,7 @@ open class RAM: Memory, HandlesWrites {
         return self.firstAddress ... self.lastAddress
     }
     var addressRangeString: String {
-        return "\(self.firstAddress.hexString) - \(self.lastAddress.hexString)"
+        return "[\(self.firstAddress.hexString), \(self.lastAddress.hexString)]"
     }
     
     public init(size: UInt16, fillByte: UInt8, firstAddress: Address) {
