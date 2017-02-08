@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import ostrich
+@testable import gameboy
 
 class ostrichTests: XCTestCase {
     

@@ -71,7 +71,7 @@
 		EB31BB341E4554790037FCC5 /* start-select-unpressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "start-select-unpressed.png"; sourceTree = "<group>"; };
 		EB506F4E1E4548DB00645AC1 /* CustomButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		EB6CB25C1E3455E000010E3E /* GBSParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GBSParser.swift; sourceTree = "<group>"; };
-		EBB7DA9F1D67C18800C18160 /* ostrich.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ostrich.framework; path = "../../../Library/Developer/Xcode/DerivedData/ostrich-foboudusbfzudvglxzssqmwvcqrd/Build/Products/Debug/ostrich.framework"; sourceTree = "<group>"; };
+		EBB7DA9F1D67C18800C18160 /* gameboy.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = gameboy.framework; path = "../../../Library/Developer/Xcode/DerivedData/ostrich-foboudusbfzudvglxzssqmwvcqrd/Build/Products/Debug/gameboy.framework"; sourceTree = SOURCE_ROOT; };
 		EBBC3A121D6580FE00AC529E /* GBSPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GBSPlayer.swift; sourceTree = "<group>"; };
 		EBC361E21E4581AD00DCDC36 /* GBDPad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GBDPad.swift; sourceTree = "<group>"; };
 		EBC361E41E458BDB00DCDC36 /* dpad-down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dpad-down.png"; sourceTree = "<group>"; };
@@ -131,7 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				EBDE43741DED814B0019ABF3 /* AudioKit.framework */,
-				EBB7DA9F1D67C18800C18160 /* ostrich.framework */,
+				EBB7DA9F1D67C18800C18160 /* gameboy.framework */,
 				EBD958D91D65802400963E2F /* gbsplayer */,
 				EBD958EB1D65802500963E2F /* gbsplayerTests */,
 				EBD958F61D65802500963E2F /* gbsplayerUITests */,

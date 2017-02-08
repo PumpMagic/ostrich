@@ -12,7 +12,7 @@
 		EBB7DA9C1D67B87B00C18160 /* Counter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB7DA9B1D67B87B00C18160 /* Counter.swift */; };
 		EBD31DD81DED76BF00FFD5DE /* AudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBD31DD71DED76BF00FFD5DE /* AudioKit.framework */; };
 		EBD503441D65731800B60856 /* ostrich.h in Headers */ = {isa = PBXBuildFile; fileRef = EBD503431D65731800B60856 /* ostrich.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EBD5034B1D65731800B60856 /* ostrich.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBD503401D65731800B60856 /* ostrich.framework */; };
+		EBD5034B1D65731800B60856 /* gameboy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBD503401D65731800B60856 /* gameboy.framework */; };
 		EBD503501D65731800B60856 /* ostrichTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD5034F1D65731800B60856 /* ostrichTests.swift */; };
 		EBD9584A1D657C8000963E2F /* ADD.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD958291D657C8000963E2F /* ADD.swift */; };
 		EBD9584B1D657C8000963E2F /* AND.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD9582A1D657C8000963E2F /* AND.swift */; };
@@ -80,10 +80,10 @@
 		EB6CB25E1E345A3700010E3E /* GameBoy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameBoy.swift; sourceTree = "<group>"; };
 		EBB7DA9B1D67B87B00C18160 /* Counter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Counter.swift; sourceTree = "<group>"; };
 		EBD31DD71DED76BF00FFD5DE /* AudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AudioKit.framework; sourceTree = "<group>"; };
-		EBD503401D65731800B60856 /* ostrich.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ostrich.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EBD503401D65731800B60856 /* gameboy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = gameboy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EBD503431D65731800B60856 /* ostrich.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ostrich.h; sourceTree = "<group>"; };
 		EBD503451D65731800B60856 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		EBD5034A1D65731800B60856 /* ostrichTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ostrichTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		EBD5034A1D65731800B60856 /* gameboyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = gameboyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EBD5034F1D65731800B60856 /* ostrichTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ostrichTests.swift; sourceTree = "<group>"; };
 		EBD503511D65731800B60856 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EBD958291D657C8000963E2F /* ADD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ADD.swift; path = CPUs/Instructions/ADD.swift; sourceTree = "<group>"; };
@@ -150,7 +150,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EBD5034B1D65731800B60856 /* ostrich.framework in Frameworks */,
+				EBD5034B1D65731800B60856 /* gameboy.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -170,8 +170,8 @@
 		EBD503411D65731800B60856 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				EBD503401D65731800B60856 /* ostrich.framework */,
-				EBD5034A1D65731800B60856 /* ostrichTests.xctest */,
+				EBD503401D65731800B60856 /* gameboy.framework */,
+				EBD5034A1D65731800B60856 /* gameboyTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -308,9 +308,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		EBD5033F1D65731800B60856 /* ostrich */ = {
+		EBD5033F1D65731800B60856 /* gameboy */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EBD503541D65731800B60856 /* Build configuration list for PBXNativeTarget "ostrich" */;
+			buildConfigurationList = EBD503541D65731800B60856 /* Build configuration list for PBXNativeTarget "gameboy" */;
 			buildPhases = (
 				EBD5033B1D65731800B60856 /* Sources */,
 				EBD5033C1D65731800B60856 /* Frameworks */,
@@ -321,14 +321,14 @@
 			);
 			dependencies = (
 			);
-			name = ostrich;
+			name = gameboy;
 			productName = ostrich;
-			productReference = EBD503401D65731800B60856 /* ostrich.framework */;
+			productReference = EBD503401D65731800B60856 /* gameboy.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		EBD503491D65731800B60856 /* ostrichTests */ = {
+		EBD503491D65731800B60856 /* gameboyTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EBD503571D65731800B60856 /* Build configuration list for PBXNativeTarget "ostrichTests" */;
+			buildConfigurationList = EBD503571D65731800B60856 /* Build configuration list for PBXNativeTarget "gameboyTests" */;
 			buildPhases = (
 				EBD503461D65731800B60856 /* Sources */,
 				EBD503471D65731800B60856 /* Frameworks */,
@@ -339,9 +339,9 @@
 			dependencies = (
 				EBD5034D1D65731800B60856 /* PBXTargetDependency */,
 			);
-			name = ostrichTests;
+			name = gameboyTests;
 			productName = ostrichTests;
-			productReference = EBD5034A1D65731800B60856 /* ostrichTests.xctest */;
+			productReference = EBD5034A1D65731800B60856 /* gameboyTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -364,7 +364,7 @@
 					};
 				};
 			};
-			buildConfigurationList = EBD5033A1D65731800B60856 /* Build configuration list for PBXProject "ostrich" */;
+			buildConfigurationList = EBD5033A1D65731800B60856 /* Build configuration list for PBXProject "gameboy" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -376,8 +376,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				EBD5033F1D65731800B60856 /* ostrich */,
-				EBD503491D65731800B60856 /* ostrichTests */,
+				EBD5033F1D65731800B60856 /* gameboy */,
+				EBD503491D65731800B60856 /* gameboyTests */,
 			);
 		};
 /* End PBXProject section */
@@ -472,7 +472,7 @@
 /* Begin PBXTargetDependency section */
 		EBD5034D1D65731800B60856 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = EBD5033F1D65731800B60856 /* ostrich */;
+			target = EBD5033F1D65731800B60856 /* gameboy */;
 			targetProxy = EBD5034C1D65731800B60856 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -645,7 +645,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		EBD5033A1D65731800B60856 /* Build configuration list for PBXProject "ostrich" */ = {
+		EBD5033A1D65731800B60856 /* Build configuration list for PBXProject "gameboy" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EBD503521D65731800B60856 /* Debug */,
@@ -654,7 +654,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EBD503541D65731800B60856 /* Build configuration list for PBXNativeTarget "ostrich" */ = {
+		EBD503541D65731800B60856 /* Build configuration list for PBXNativeTarget "gameboy" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EBD503551D65731800B60856 /* Debug */,
@@ -663,7 +663,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EBD503571D65731800B60856 /* Build configuration list for PBXNativeTarget "ostrichTests" */ = {
+		EBD503571D65731800B60856 /* Build configuration list for PBXNativeTarget "gameboyTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EBD503581D65731800B60856 /* Debug */,

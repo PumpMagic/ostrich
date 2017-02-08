@@ -8,7 +8,7 @@
 
 import Foundation
 import AudioKit
-import ostrich
+import gameboy
 
 
 // High on todo list: implement patch RST vectors as indicated in GBS spec 

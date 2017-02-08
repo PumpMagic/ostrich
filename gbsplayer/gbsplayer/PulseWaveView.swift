@@ -7,7 +7,7 @@
 //
 
 import Cocoa
-import ostrich
+import gameboy
 
 // Some configuration constants
 fileprivate let PIXELS_PER_SECOND_SCALE_FACTOR = 50.0

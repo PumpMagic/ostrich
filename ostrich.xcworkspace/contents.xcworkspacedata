@@ -5,6 +5,6 @@
       location = "group:gbsplayer/gbsplayer.xcodeproj">
    </FileRef>
    <FileRef
-      location = "container:ostrich.xcodeproj">
+      location = "container:/Users/owner/repos/ostrich/gameboy.xcodeproj">
    </FileRef>
 </Workspace>

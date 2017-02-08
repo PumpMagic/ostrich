@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "EBD5033F1D65731800B60856"
-               BuildableName = "ostrich.framework"
-               BlueprintName = "ostrich"
-               ReferencedContainer = "container:ostrich.xcodeproj">
+               BuildableName = "gameboy.framework"
+               BlueprintName = "gameboy"
+               ReferencedContainer = "container:gameboy.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "EBD503491D65731800B60856"
-               BuildableName = "ostrichTests.xctest"
-               BlueprintName = "ostrichTests"
-               ReferencedContainer = "container:ostrich.xcodeproj">
+               BuildableName = "gameboyTests.xctest"
+               BlueprintName = "gameboyTests"
+               ReferencedContainer = "container:gameboy.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -43,9 +43,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EBD5033F1D65731800B60856"
-            BuildableName = "ostrich.framework"
-            BlueprintName = "ostrich"
-            ReferencedContainer = "container:ostrich.xcodeproj">
+            BuildableName = "gameboy.framework"
+            BlueprintName = "gameboy"
+            ReferencedContainer = "container:gameboy.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -65,9 +65,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EBD5033F1D65731800B60856"
-            BuildableName = "ostrich.framework"
-            BlueprintName = "ostrich"
-            ReferencedContainer = "container:ostrich.xcodeproj">
+            BuildableName = "gameboy.framework"
+            BlueprintName = "gameboy"
+            ReferencedContainer = "container:gameboy.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -83,9 +83,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EBD5033F1D65731800B60856"
-            BuildableName = "ostrich.framework"
-            BlueprintName = "ostrich"
-            ReferencedContainer = "container:ostrich.xcodeproj">
+            BuildableName = "gameboy.framework"
+            BlueprintName = "gameboy"
+            ReferencedContainer = "container:gameboy.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>
