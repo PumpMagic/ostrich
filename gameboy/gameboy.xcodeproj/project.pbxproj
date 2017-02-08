@@ -10,6 +10,7 @@
 		EB54FADB1E40A3480019A98F /* SRA.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB54FADA1E40A3480019A98F /* SRA.swift */; };
 		EB6CB25F1E345A3700010E3E /* GameBoy.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6CB25E1E345A3700010E3E /* GameBoy.swift */; };
 		EBB7DA9C1D67B87B00C18160 /* Counter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB7DA9B1D67B87B00C18160 /* Counter.swift */; };
+		EBCD54881E4B079000BD2776 /* AudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBD31DD71DED76BF00FFD5DE /* AudioKit.framework */; };
 		EBD31DD81DED76BF00FFD5DE /* AudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBD31DD71DED76BF00FFD5DE /* AudioKit.framework */; };
 		EBD503441D65731800B60856 /* ostrich.h in Headers */ = {isa = PBXBuildFile; fileRef = EBD503431D65731800B60856 /* ostrich.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EBD5034B1D65731800B60856 /* gameboy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBD503401D65731800B60856 /* gameboy.framework */; };
@@ -150,6 +151,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EBCD54881E4B079000BD2776 /* AudioKit.framework in Frameworks */,
 				EBD5034B1D65731800B60856 /* gameboy.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -183,8 +185,7 @@
 				EBD503431D65731800B60856 /* ostrich.h */,
 				EBD503451D65731800B60856 /* Info.plist */,
 			);
-			name = gameboy;
-			path = gameboy/gameboy;
+			path = gameboy;
 			sourceTree = "<group>";
 		};
 		EBD5034E1D65731800B60856 /* gameboyTests */ = {
@@ -193,8 +194,7 @@
 				EBD5034F1D65731800B60856 /* gameboyTests.swift */,
 				EBD503511D65731800B60856 /* Info.plist */,
 			);
-			name = gameboyTests;
-			path = gameboy/gameboyTests;
+			path = gameboyTests;
 			sourceTree = "<group>";
 		};
 		EBD958281D657C6800963E2F /* Source */ = {
@@ -363,6 +363,7 @@
 					};
 					EBD503491D65731800B60856 = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0820;
 					};
 				};
 			};
@@ -587,10 +588,10 @@
 					"$(PROJECT_DIR)",
 				);
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = "$(SRCROOT)/gameboy/gameboy/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/gameboy/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.conwarez.ostrich;
+				PRODUCT_BUNDLE_IDENTIFIER = com.conwarez.gameboy;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -612,10 +613,10 @@
 					"$(PROJECT_DIR)",
 				);
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = "$(SRCROOT)/gameboy/gameboy/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/gameboy/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.conwarez.ostrich;
+				PRODUCT_BUNDLE_IDENTIFIER = com.conwarez.gameboy;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
@@ -626,10 +627,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = ostrichTests/Info.plist;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = gameboyTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.conwarez.ostrichTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.conwarez.gameboyTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -637,10 +643,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = ostrichTests/Info.plist;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = gameboyTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.conwarez.ostrichTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.conwarez.gameboyTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
