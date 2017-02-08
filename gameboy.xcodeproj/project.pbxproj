@@ -13,7 +13,7 @@
 		EBD31DD81DED76BF00FFD5DE /* AudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBD31DD71DED76BF00FFD5DE /* AudioKit.framework */; };
 		EBD503441D65731800B60856 /* ostrich.h in Headers */ = {isa = PBXBuildFile; fileRef = EBD503431D65731800B60856 /* ostrich.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EBD5034B1D65731800B60856 /* gameboy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBD503401D65731800B60856 /* gameboy.framework */; };
-		EBD503501D65731800B60856 /* ostrichTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD5034F1D65731800B60856 /* ostrichTests.swift */; };
+		EBD503501D65731800B60856 /* gameboyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD5034F1D65731800B60856 /* gameboyTests.swift */; };
 		EBD9584A1D657C8000963E2F /* ADD.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD958291D657C8000963E2F /* ADD.swift */; };
 		EBD9584B1D657C8000963E2F /* AND.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD9582A1D657C8000963E2F /* AND.swift */; };
 		EBD9584C1D657C8000963E2F /* BIT.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD9582B1D657C8000963E2F /* BIT.swift */; };
@@ -84,7 +84,7 @@
 		EBD503431D65731800B60856 /* ostrich.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ostrich.h; sourceTree = "<group>"; };
 		EBD503451D65731800B60856 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EBD5034A1D65731800B60856 /* gameboyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = gameboyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		EBD5034F1D65731800B60856 /* ostrichTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ostrichTests.swift; sourceTree = "<group>"; };
+		EBD5034F1D65731800B60856 /* gameboyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gameboyTests.swift; sourceTree = "<group>"; };
 		EBD503511D65731800B60856 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EBD958291D657C8000963E2F /* ADD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ADD.swift; sourceTree = "<group>"; };
 		EBD9582A1D657C8000963E2F /* AND.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AND.swift; sourceTree = "<group>"; };
@@ -162,7 +162,7 @@
 			children = (
 				EBD31DD71DED76BF00FFD5DE /* AudioKit.framework */,
 				EBD503421D65731800B60856 /* gameboy */,
-				EBD5034E1D65731800B60856 /* ostrichTests */,
+				EBD5034E1D65731800B60856 /* gameboyTests */,
 				EBD503411D65731800B60856 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -183,16 +183,18 @@
 				EBD503431D65731800B60856 /* ostrich.h */,
 				EBD503451D65731800B60856 /* Info.plist */,
 			);
-			path = gameboy;
+			name = gameboy;
+			path = gameboy/gameboy;
 			sourceTree = "<group>";
 		};
-		EBD5034E1D65731800B60856 /* ostrichTests */ = {
+		EBD5034E1D65731800B60856 /* gameboyTests */ = {
 			isa = PBXGroup;
 			children = (
-				EBD5034F1D65731800B60856 /* ostrichTests.swift */,
+				EBD5034F1D65731800B60856 /* gameboyTests.swift */,
 				EBD503511D65731800B60856 /* Info.plist */,
 			);
-			path = ostrichTests;
+			name = gameboyTests;
+			path = gameboy/gameboyTests;
 			sourceTree = "<group>";
 		};
 		EBD958281D657C6800963E2F /* Source */ = {
@@ -463,7 +465,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EBD503501D65731800B60856 /* ostrichTests.swift in Sources */,
+				EBD503501D65731800B60856 /* gameboyTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -585,7 +587,7 @@
 					"$(PROJECT_DIR)",
 				);
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = "$(SRCROOT)/gameboy/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/gameboy/gameboy/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.conwarez.ostrich;
@@ -610,7 +612,7 @@
 					"$(PROJECT_DIR)",
 				);
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = "$(SRCROOT)/gameboy/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/gameboy/gameboy/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.conwarez.ostrich;

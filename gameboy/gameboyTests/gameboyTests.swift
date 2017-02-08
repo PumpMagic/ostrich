@@ -1,6 +1,6 @@
 //
-//  ostrichTests.swift
-//  ostrichTests
+//  gameboyTests.swift
+//  gameboyTests
 //
 //  Created by Owner on 8/17/16.
 //  Copyright © 2016 conwarez. All rights reserved.
@@ -9,7 +9,7 @@
 import XCTest
 @testable import gameboy
 
-class ostrichTests: XCTestCase {
+class gameboyTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
