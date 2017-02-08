@@ -15,7 +15,7 @@ func getByte(_ data: Data, addr: Int) -> UInt8 {
     return readByte
 }
 
-//@todo duplicated w/ ostrich
+//@todo duplicated w/ gameboy
 func make16(high: UInt8, low: UInt8) -> UInt16 {
     var result = UInt16(high)
     result <<= 8
@@ -24,7 +24,7 @@ func make16(high: UInt8, low: UInt8) -> UInt16 {
     return result
 }
 
-//@todo duplicated w/ ostrich
+//@todo duplicated w/ gameboy
 /// Reads two bytes of memory and returns them in host endianness
 func getDByte(_ data: Data, addr: Int) -> UInt16 {
     let low = getByte(data, addr: addr)

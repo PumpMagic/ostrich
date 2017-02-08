@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		EB31BB351E4554790037FCC5 /* start-select-pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = EB31BB331E4554790037FCC5 /* start-select-pressed.png */; };
-		EB31BB361E4554790037FCC5 /* start-select-unpressed.png in Resources */ = {isa = PBXBuildFile; fileRef = EB31BB341E4554790037FCC5 /* start-select-unpressed.png */; };
+		EB31BB351E4554790037FCC5 /* startselect-pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = EB31BB331E4554790037FCC5 /* startselect-pressed.png */; };
+		EB31BB361E4554790037FCC5 /* startselect-unpressed.png in Resources */ = {isa = PBXBuildFile; fileRef = EB31BB341E4554790037FCC5 /* startselect-unpressed.png */; };
 		EB506F4F1E4548DB00645AC1 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB506F4E1E4548DB00645AC1 /* CustomButton.swift */; };
 		EB6CB25D1E3455E000010E3E /* GBSParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6CB25C1E3455E000010E3E /* GBSParser.swift */; };
 		EBBC3A131D6580FE00AC529E /* GBSPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC3A121D6580FE00AC529E /* GBSPlayer.swift */; };
@@ -28,10 +28,10 @@
 		EBD958F81D65802500963E2F /* gbsplayerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD958F71D65802500963E2F /* gbsplayerUITests.swift */; };
 		EBDE43751DED814B0019ABF3 /* AudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDE43741DED814B0019ABF3 /* AudioKit.framework */; };
 		EBDE43761DED849F0019ABF3 /* AudioKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EBDE43741DED814B0019ABF3 /* AudioKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		EBEA05FB1E3C77DF00D3D0F6 /* gb-button-unpressed.png in Resources */ = {isa = PBXBuildFile; fileRef = EBEA05FA1E3C77DF00D3D0F6 /* gb-button-unpressed.png */; };
-		EBEA05FE1E3C801F00D3D0F6 /* gb-button-pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = EBEA05FD1E3C801F00D3D0F6 /* gb-button-pressed.png */; };
+		EBEA05FB1E3C77DF00D3D0F6 /* ab-unpressed.png in Resources */ = {isa = PBXBuildFile; fileRef = EBEA05FA1E3C77DF00D3D0F6 /* ab-unpressed.png */; };
+		EBEA05FE1E3C801F00D3D0F6 /* ab-pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = EBEA05FD1E3C801F00D3D0F6 /* ab-pressed.png */; };
 		EBEA06001E3C927A00D3D0F6 /* GBPowerLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEA05FF1E3C927A00D3D0F6 /* GBPowerLight.swift */; };
-		EBEA06021E3C98A500D3D0F6 /* gb-powerlight.png in Resources */ = {isa = PBXBuildFile; fileRef = EBEA06011E3C98A500D3D0F6 /* gb-powerlight.png */; };
+		EBEA06021E3C98A500D3D0F6 /* powerlight.png in Resources */ = {isa = PBXBuildFile; fileRef = EBEA06011E3C98A500D3D0F6 /* powerlight.png */; };
 		EBEA06041E3E020200D3D0F6 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEA06031E3E020200D3D0F6 /* Util.swift */; };
 /* End PBXBuildFile section */
 
@@ -67,8 +67,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		EB31BB331E4554790037FCC5 /* start-select-pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "start-select-pressed.png"; sourceTree = "<group>"; };
-		EB31BB341E4554790037FCC5 /* start-select-unpressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "start-select-unpressed.png"; sourceTree = "<group>"; };
+		EB31BB331E4554790037FCC5 /* startselect-pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "startselect-pressed.png"; sourceTree = "<group>"; };
+		EB31BB341E4554790037FCC5 /* startselect-unpressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "startselect-unpressed.png"; sourceTree = "<group>"; };
 		EB506F4E1E4548DB00645AC1 /* CustomButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		EB6CB25C1E3455E000010E3E /* GBSParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GBSParser.swift; sourceTree = "<group>"; };
 		EBB7DA9F1D67C18800C18160 /* gameboy.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = gameboy.framework; path = "../../../Library/Developer/Xcode/DerivedData/ostrich-foboudusbfzudvglxzssqmwvcqrd/Build/Products/Debug/gameboy.framework"; sourceTree = SOURCE_ROOT; };
@@ -94,10 +94,10 @@
 		EBD958F71D65802500963E2F /* gbsplayerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gbsplayerUITests.swift; sourceTree = "<group>"; };
 		EBD958F91D65802500963E2F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EBDE43741DED814B0019ABF3 /* AudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AudioKit.framework; sourceTree = "<group>"; };
-		EBEA05FA1E3C77DF00D3D0F6 /* gb-button-unpressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gb-button-unpressed.png"; sourceTree = "<group>"; };
-		EBEA05FD1E3C801F00D3D0F6 /* gb-button-pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gb-button-pressed.png"; sourceTree = "<group>"; };
+		EBEA05FA1E3C77DF00D3D0F6 /* ab-unpressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ab-unpressed.png"; sourceTree = "<group>"; };
+		EBEA05FD1E3C801F00D3D0F6 /* ab-pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ab-pressed.png"; sourceTree = "<group>"; };
 		EBEA05FF1E3C927A00D3D0F6 /* GBPowerLight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GBPowerLight.swift; sourceTree = "<group>"; };
-		EBEA06011E3C98A500D3D0F6 /* gb-powerlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gb-powerlight.png"; sourceTree = "<group>"; };
+		EBEA06011E3C98A500D3D0F6 /* powerlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = powerlight.png; sourceTree = "<group>"; };
 		EBEA06031E3E020200D3D0F6 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -127,6 +127,46 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		EBCD548A1E4B099500BD2776 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				EBCD548C1E4B0B1C00BD2776 /* Model */,
+				EBCD548B1E4B0A8200BD2776 /* Views */,
+				EBCD548D1E4B0B3F00BD2776 /* Controller */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		EBCD548B1E4B0A8200BD2776 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				EB506F4E1E4548DB00645AC1 /* CustomButton.swift */,
+				EBC361E21E4581AD00DCDC36 /* GBDPad.swift */,
+				EBEA05FF1E3C927A00D3D0F6 /* GBPowerLight.swift */,
+				EBC617E11E387A6E007434B8 /* PulseWaveView.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		EBCD548C1E4B0B1C00BD2776 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				EB6CB25C1E3455E000010E3E /* GBSParser.swift */,
+				EBBC3A121D6580FE00AC529E /* GBSPlayer.swift */,
+				EBEA06031E3E020200D3D0F6 /* Util.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		EBCD548D1E4B0B3F00BD2776 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				EBD958DC1D65802400963E2F /* GBSPlayerViewController.swift */,
+				EBD958DA1D65802400963E2F /* AppDelegate.swift */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
 		EBD958CE1D65802400963E2F = {
 			isa = PBXGroup;
 			children = (
@@ -152,19 +192,11 @@
 		EBD958D91D65802400963E2F /* gbsplayer */ = {
 			isa = PBXGroup;
 			children = (
-				EBEA05FC1E3C77E800D3D0F6 /* resources */,
-				EBD958DA1D65802400963E2F /* AppDelegate.swift */,
-				EBD958DC1D65802400963E2F /* GBSPlayerViewController.swift */,
-				EBBC3A121D6580FE00AC529E /* GBSPlayer.swift */,
-				EB6CB25C1E3455E000010E3E /* GBSParser.swift */,
+				EBEA05FC1E3C77E800D3D0F6 /* Resources */,
+				EBCD548A1E4B099500BD2776 /* Source */,
 				EBD958DE1D65802400963E2F /* Assets.xcassets */,
 				EBD958E01D65802400963E2F /* Main.storyboard */,
 				EBD958E31D65802400963E2F /* Info.plist */,
-				EBC617E11E387A6E007434B8 /* PulseWaveView.swift */,
-				EB506F4E1E4548DB00645AC1 /* CustomButton.swift */,
-				EBEA05FF1E3C927A00D3D0F6 /* GBPowerLight.swift */,
-				EBEA06031E3E020200D3D0F6 /* Util.swift */,
-				EBC361E21E4581AD00DCDC36 /* GBDPad.swift */,
 			);
 			path = gbsplayer;
 			sourceTree = "<group>";
@@ -187,22 +219,22 @@
 			path = gbsplayerUITests;
 			sourceTree = "<group>";
 		};
-		EBEA05FC1E3C77E800D3D0F6 /* resources */ = {
+		EBEA05FC1E3C77E800D3D0F6 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				EBD145651E3FF43F00597EF6 /* GBSML.ttf */,
-				EBEA05FA1E3C77DF00D3D0F6 /* gb-button-unpressed.png */,
-				EBEA05FD1E3C801F00D3D0F6 /* gb-button-pressed.png */,
-				EBEA06011E3C98A500D3D0F6 /* gb-powerlight.png */,
-				EB31BB331E4554790037FCC5 /* start-select-pressed.png */,
-				EB31BB341E4554790037FCC5 /* start-select-unpressed.png */,
+				EBEA05FA1E3C77DF00D3D0F6 /* ab-unpressed.png */,
+				EBEA05FD1E3C801F00D3D0F6 /* ab-pressed.png */,
+				EBEA06011E3C98A500D3D0F6 /* powerlight.png */,
+				EB31BB331E4554790037FCC5 /* startselect-pressed.png */,
+				EB31BB341E4554790037FCC5 /* startselect-unpressed.png */,
 				EBC361E41E458BDB00DCDC36 /* dpad-down.png */,
 				EBC361E51E458BDB00DCDC36 /* dpad-left.png */,
 				EBC361E61E458BDB00DCDC36 /* dpad-neutral.png */,
 				EBC361E71E458BDB00DCDC36 /* dpad-right.png */,
 				EBC361E81E458BDB00DCDC36 /* dpad-up.png */,
 			);
-			name = resources;
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -316,17 +348,17 @@
 			files = (
 				EBD958DF1D65802400963E2F /* Assets.xcassets in Resources */,
 				EBC361EC1E458BDB00DCDC36 /* dpad-right.png in Resources */,
-				EBEA05FE1E3C801F00D3D0F6 /* gb-button-pressed.png in Resources */,
-				EB31BB351E4554790037FCC5 /* start-select-pressed.png in Resources */,
+				EBEA05FE1E3C801F00D3D0F6 /* ab-pressed.png in Resources */,
+				EB31BB351E4554790037FCC5 /* startselect-pressed.png in Resources */,
 				EBD958E21D65802400963E2F /* Main.storyboard in Resources */,
-				EBEA05FB1E3C77DF00D3D0F6 /* gb-button-unpressed.png in Resources */,
+				EBEA05FB1E3C77DF00D3D0F6 /* ab-unpressed.png in Resources */,
 				EBC361EA1E458BDB00DCDC36 /* dpad-left.png in Resources */,
 				EBD145661E3FF44A00597EF6 /* GBSML.ttf in Resources */,
-				EB31BB361E4554790037FCC5 /* start-select-unpressed.png in Resources */,
+				EB31BB361E4554790037FCC5 /* startselect-unpressed.png in Resources */,
 				EBC361ED1E458BDB00DCDC36 /* dpad-up.png in Resources */,
 				EBC361EB1E458BDB00DCDC36 /* dpad-neutral.png in Resources */,
 				EBC361E91E458BDB00DCDC36 /* dpad-down.png in Resources */,
-				EBEA06021E3C98A500D3D0F6 /* gb-powerlight.png in Resources */,
+				EBEA06021E3C98A500D3D0F6 /* powerlight.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

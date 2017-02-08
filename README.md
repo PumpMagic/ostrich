@@ -28,7 +28,7 @@ To build Ostrich:
 
 1. Grab the latest AudioKit macOS release (most recently tested: 3.5)
 1. Open the Ostrich workspace, ostrich.xcworkspace, in Xcode
-1. Install the AudioKit framework to both the gameboy and gbsplayer Xcode projects as described in [the AudioKit guide](https://github.com/audiokit/AudioKit/blob/master/Frameworks/INSTALL.md)
+1. Install the AudioKit framework to both the gameboy and gbsplayer Xcode projects as described in [the AudioKit installation guide](https://github.com/audiokit/AudioKit/blob/master/Frameworks/INSTALL.md)
 1. Build the gameboy project
 1. Build the gbsplayer project
 1. Run the gbsplayer project

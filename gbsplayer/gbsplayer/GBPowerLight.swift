@@ -10,7 +10,7 @@ import Cocoa
 
 
 // Some configuration constants.
-fileprivate let BASE_IMAGE_FILENAME = "gb-powerlight.png"
+fileprivate let BASE_IMAGE_FILENAME = "powerlight.png"
 fileprivate let BASE_IMAGE: NSImage! = Bundle.main.image(forResource: BASE_IMAGE_FILENAME)
 fileprivate let BASE_STATE = GBPowerLight.State.Red
 // Map each state to its desired (hue, saturation, brightness, contrast) adjustments from the base image
