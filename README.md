@@ -31,8 +31,8 @@ Open Ostrich and load a GBS file (typically with extension .gbs) using File -> O
 Playback controls are at the bottom portion of the interface. From left to right:
 
 * The directional pad controls track selection and volume control:
-    * Left: next track
-    * Right: previous track
+    * Left: previous track
+    * Right: next track
     * Up: volume up
     * Down: volume down
 * The select and start buttons toggle muting of pulse channels 1 and 2, respectively
@@ -50,15 +50,15 @@ Note that Ostrich may be resized for your viewing pleasure.
 
 ## Technical Details ##
 
-Ostrich's core is an emulator of the Dot Matrix Game Boy's Z80-like CPU, the Sharp LR35902. It breaks up the LR35902's computational abilities and audio synthesis capabilities into separate classes.
+Ostrich's core is an emulator of the Game Boy's Z80-like CPU, the Sharp LR35902. It breaks up the LR35902's computational abilities and audio synthesis capabilities into separate types.
 
-The CPU is modeled as a class whose core registers are modeled as wrappers of eight-bit integers. The logical registers and flags are modeled as wrappers of these core registers, as appropriate. Instructions are modeled as generic functions that accept data types of particular width and read/writeability, so that a single function may capture most or all variants of a given instruction family like ADD or LD. Instruction parsing is a really big switch statement.
+The CPU is modeled as a class whose core registers are wrappers of eight-bit integers. The logical registers and flags are wrappers of these core registers, as appropriate. Instructions are modeled as generic functions that accept data types of particular width and read/writeability, so that a single function may capture most or all variants of a given instruction family like ADD or LD. Instruction parsing is a really big switch statement.
 
 The audio unit is modeled as a 48-byte RAM that interprets writes as a normal memory would but also passes the relevant data to independent representations of the audio channels. These audio channels have their own representations of logical concepts like frequency bits, duty bits, etc., and expose a clock function that manipulates these representations and controls an emulator host audio synthesis engine (AudioKit).
 
-The Game Boy itself is modeled as an owner of an LR35902, some RAM chips, a data bus connecting everything, and, optionally, a game cartridge. It exposes functionality for inserting and removing cartridges and passes the LR35902 to anyone who wishes to make it call given addresses and clock it.
+The Game Boy itself is modeled as an owner of an LR35902, some RAM chips, a data bus connecting everything, and, optionally, a game cartridge. It exposes functionality for inserting and removing cartridges and exposes the LR35902 to anyone who wishes to clock it and make it invoke calls of given addresses.
 
-The user interface is modeled after a traditional Game Boy, with some modifications for usability. It uses AppKit (Cocoa) to render the audio channel waveforms and controls adapted from pictures of the Game Boy's hardware. The interface leverages AppKit's Auto Layout and stack views to fit most desired sizes and orientations.
+The user interface is modeled after the original Dot Matrix Game Boy, with some modifications for usability. It uses AppKit (Cocoa) to render playback data, including audio channel waveforms, and presents controls adapted from pictures of the Game Boy's hardware. The interface leverages AppKit's Auto Layout and stack views to fit most desired sizes and orientations.
 
 ## Author ##
 
