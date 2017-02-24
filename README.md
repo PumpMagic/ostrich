@@ -1,12 +1,16 @@
 # Ostrich #
 
-Ostrich is a Game Boy Sound System player written in Swift. Under the covers, it is a Nintendo Game Boy emulator.
+Ostrich is a macOS media player app for playback of Game Boy Sound System files. Under the covers, it is a Nintendo Game Boy emulator written in Swift.
+
+This readme captures how to build and use Ostrich. For more technical details, check out [my blog post on it here](http://rmconway.com/ostrich/).
 
 ![A wild Ostrich appeared](screenshots/1.png)
 
 ## Status ##
 
-Ostrich emulates both of the Game Boy's pulse wave channels and can play them back for about half of the Game Boy's commercial titles. The other half require emulation of the cartridge memory bank controller (MBC), or some of the more obscure LR35902 instructions, which are currently unsupported. The 4-bit wave and noise channels are also currently unsupported.
+Ostrich emulates both of the Game Boy's pulse wave channels and can play them back for about half of the Game Boy's commercial titles. The other half require emulation of cartridge memory banking, or some of the more obscure LR35902 instructions, which are currently unsupported. The 4-bit wave and noise channels are also currently unsupported.
+
+Popular working titles including Tetris, Castlevania, Double Dragon, and Batman.
 
 ## Building ##
 
@@ -50,19 +54,13 @@ Note that Ostrich may be resized for your viewing pleasure.
 
 ## Technical Details ##
 
-Ostrich's core is an emulator of the Game Boy's Z80-like CPU, the Sharp LR35902. It breaks up the LR35902's computational abilities and audio synthesis capabilities into separate types.
-
-The CPU is modeled as a class whose core registers are wrappers of eight-bit integers. The logical registers and flags are wrappers of these core registers, as appropriate. Instructions are modeled as generic functions that accept data types of particular width and read/writeability, so that a single function may capture most or all variants of a given instruction family like ADD or LD. Instruction parsing is a really big switch statement.
-
-The audio unit is modeled as a 48-byte RAM that interprets writes as a normal memory would but also passes the relevant data to independent representations of the audio channels. These audio channels have their own representations of logical concepts like frequency bits, duty bits, etc., and expose a clock function that manipulates these representations and controls an emulator host audio synthesis engine (AudioKit).
-
-The Game Boy itself is modeled as an owner of an LR35902, some RAM chips, a data bus connecting everything, and, optionally, a game cartridge. It exposes functionality for inserting and removing cartridges and exposes the LR35902 to anyone who wishes to clock it and make it invoke calls of given addresses.
-
-The user interface is modeled after the original Dot Matrix Game Boy, with some modifications for usability. It uses AppKit (Cocoa) to render playback data, including audio channel waveforms, and presents controls adapted from pictures of the Game Boy's hardware. The interface leverages AppKit's Auto Layout and stack views to fit most desired sizes and orientations.
+For technical details on Ostrich, check out [my blog post on it here](http://rmconway.com/ostrich/).
 
 ## Author ##
 
 Ostrich is written entirely by myself, [Ryan Conway](http://www.rmconway.com/). It would not have been possible without the help of [Austin Zheng](http://austinzheng.com/) and the documentation of Game Boy hardware written by many and available online. Some of this documentation is captured in [resources.txt](resources.txt).
+
+I set out to create Ostrich with the goals of teaching myself Swift and furthering my knowledge of hardware emulation, system design, and retro game music. To those ends I believe Ostrich has been a success.
 
 ## License ##
 
