@@ -26,8 +26,10 @@
 		EBD958E21D65802400963E2F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBD958E01D65802400963E2F /* Main.storyboard */; };
 		EBD958ED1D65802500963E2F /* gbsplayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD958EC1D65802500963E2F /* gbsplayerTests.swift */; };
 		EBD958F81D65802500963E2F /* gbsplayerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD958F71D65802500963E2F /* gbsplayerUITests.swift */; };
-		EBDE43751DED814B0019ABF3 /* AudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDE43741DED814B0019ABF3 /* AudioKit.framework */; };
-		EBDE43761DED849F0019ABF3 /* AudioKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EBDE43741DED814B0019ABF3 /* AudioKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		EBDB1E4F1EEA546400830852 /* AudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDB1E4D1EEA546400830852 /* AudioKit.framework */; };
+		EBDB1E501EEA546400830852 /* AudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDB1E4D1EEA546400830852 /* AudioKit.framework */; };
+		EBDB1E511EEA552E00830852 /* AudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDB1E4D1EEA546400830852 /* AudioKit.framework */; };
+		EBDB1E521EEA552E00830852 /* AudioKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EBDB1E4D1EEA546400830852 /* AudioKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		EBEA05FB1E3C77DF00D3D0F6 /* ab-unpressed.png in Resources */ = {isa = PBXBuildFile; fileRef = EBEA05FA1E3C77DF00D3D0F6 /* ab-unpressed.png */; };
 		EBEA05FE1E3C801F00D3D0F6 /* ab-pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = EBEA05FD1E3C801F00D3D0F6 /* ab-pressed.png */; };
 		EBEA06001E3C927A00D3D0F6 /* GBPowerLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEA05FF1E3C927A00D3D0F6 /* GBPowerLight.swift */; };
@@ -59,7 +61,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				EBDE43761DED849F0019ABF3 /* AudioKit.framework in Embed Frameworks */,
+				EBDB1E521EEA552E00830852 /* AudioKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -93,7 +95,7 @@
 		EBD958F31D65802500963E2F /* gbsplayerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = gbsplayerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EBD958F71D65802500963E2F /* gbsplayerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gbsplayerUITests.swift; sourceTree = "<group>"; };
 		EBD958F91D65802500963E2F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		EBDE43741DED814B0019ABF3 /* AudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AudioKit.framework; sourceTree = "<group>"; };
+		EBDB1E4D1EEA546400830852 /* AudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AudioKit.framework; sourceTree = "<group>"; };
 		EBEA05FA1E3C77DF00D3D0F6 /* ab-unpressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ab-unpressed.png"; sourceTree = "<group>"; };
 		EBEA05FD1E3C801F00D3D0F6 /* ab-pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ab-pressed.png"; sourceTree = "<group>"; };
 		EBEA05FF1E3C927A00D3D0F6 /* GBPowerLight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GBPowerLight.swift; sourceTree = "<group>"; };
@@ -106,7 +108,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EBDE43751DED814B0019ABF3 /* AudioKit.framework in Frameworks */,
+				EBDB1E511EEA552E00830852 /* AudioKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,6 +116,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EBDB1E4F1EEA546400830852 /* AudioKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,6 +124,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EBDB1E501EEA546400830852 /* AudioKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -171,7 +175,7 @@
 		EBD958CE1D65802400963E2F = {
 			isa = PBXGroup;
 			children = (
-				EBDE43741DED814B0019ABF3 /* AudioKit.framework */,
+				EBDB1E4D1EEA546400830852 /* AudioKit.framework */,
 				EBB7DA9F1D67C18800C18160 /* gameboy.framework */,
 				EBD958D91D65802400963E2F /* gbsplayer */,
 				EBD958EB1D65802500963E2F /* gbsplayerTests */,

@@ -9,6 +9,7 @@
 import Foundation
 
 
+/// A read-only memory.
 open class ROM: Memory {
     var data: Data
     

@@ -9,6 +9,7 @@
 import Foundation
 
 
+/// A random-access memory.
 open class RAM: Memory, HandlesWrites {
     var data: Array<UInt8>
     

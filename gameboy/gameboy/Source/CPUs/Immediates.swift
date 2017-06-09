@@ -9,6 +9,7 @@
 import Foundation
 
 
+/// An 8-bit constant, interpreted as unsigned.
 struct Immediate8: Readable, OperandType {
     let val: UInt8
     
@@ -21,6 +22,7 @@ struct Immediate8: Readable, OperandType {
     }
 }
 
+/// An 8-bit constant, interpreted as signed.
 struct Immediate8Signed: Readable, OperandType {
     let val: Int8
     
@@ -33,6 +35,7 @@ struct Immediate8Signed: Readable, OperandType {
     }
 }
 
+/// An 16-bit constant, interpreted as unsigned.
 struct Immediate16: Readable, OperandType {
     let val: UInt16
     

@@ -29,6 +29,7 @@ public func getValueOfBits(_ num: UInt8, bits: CountableClosedRange<UInt8>) -> U
     return result
 }
 
+/// A Game Boy audio processing unit; the audio portion of the Game Boy's LR35902.
 public class GameBoyAPU: Memory, HandlesWrites {
     let FIRST_ADDRESS: Address = 0xFF10
     let LAST_ADDRESS: Address = 0xFF3F

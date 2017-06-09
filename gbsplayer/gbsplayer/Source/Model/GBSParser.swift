@@ -7,25 +7,17 @@
 //
 
 import Foundation
+import gameboy
 
 
+/// Get a single byte from a raw data buffer.
 func getByte(_ data: Data, addr: Int) -> UInt8 {
     var readByte: UInt8 = 0
     (data as NSData).getBytes(&readByte, range: NSMakeRange(addr, 1))
     return readByte
 }
 
-//@todo duplicated w/ gameboy
-func make16(high: UInt8, low: UInt8) -> UInt16 {
-    var result = UInt16(high)
-    result <<= 8
-    result |= UInt16(low)
-    
-    return result
-}
-
-//@todo duplicated w/ gameboy
-/// Reads two bytes of memory and returns them in host endianness
+/// Get two bytes from a raw data buffer, returning them in host endianness.
 func getDByte(_ data: Data, addr: Int) -> UInt16 {
     let low = getByte(data, addr: addr)
     let high = getByte(data, addr: addr+1)
@@ -33,6 +25,7 @@ func getDByte(_ data: Data, addr: Int) -> UInt16 {
     return make16(high: high, low: low)
 }
 
+/// Obtain a given number of bytes from a raw data buffer.
 func getBytes(_ data: Data, addr: Int, length: Int) -> [UInt8] {
     var readBytes: [UInt8] = [UInt8](repeating: 0, count: length)
     
@@ -43,6 +36,8 @@ func getBytes(_ data: Data, addr: Int, length: Int) -> [UInt8] {
 
 
 /*
+ GBS header format, pasted here for convenience from the spec.
+ 
  Offset Size Description
  ====== ==== ==========================
  00       3  Identifier string ("GBS")
@@ -81,7 +76,7 @@ let GBS_COPYRIGHT_LENGTH = 0x20
 let GBS_CODE_AND_DATA_OFFSET = 0x70
 
 
-/// A header of a GBS file
+/// A header of a GBS file.
 struct GBSHeader: CustomStringConvertible {
     let id: String
     let version: UInt8
@@ -119,12 +114,13 @@ struct GBSHeader: CustomStringConvertible {
     }
 }
 
+// Trim all null bytes from a string.
 func removeNuls(_ string: String) -> String {
     let set = CharacterSet(charactersIn: "\0")
     return string.trimmingCharacters(in: set)
 }
 
-/// Parse a GBS file to get its header and code+data sections
+/// Deserialize a GBS file given a file path, returning its header and its code+data on success.
 func parseGBSFile(at path: URL) -> (header: GBSHeader, codeAndData: Data)? {
     guard let rawData = try? Data(contentsOf: path) else {
         print("Unable to find file at \(path)")

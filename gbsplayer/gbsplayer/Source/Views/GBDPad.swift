@@ -9,6 +9,7 @@
 import Cocoa
 
 
+/// A Game Boy directional pad view.
 class GBDPad: NSView {
     enum Direction {
         case Neutral

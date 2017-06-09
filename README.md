@@ -8,14 +8,14 @@ This readme captures how to build and use Ostrich. For more technical details, c
 
 ## Status ##
 
-Ostrich emulates both of the Game Boy's pulse wave channels and can play them back for about half of the Game Boy's commercial titles. The other half require emulation of cartridge memory banking, or some of the more obscure LR35902 instructions, which are currently unsupported. The 4-bit wave and noise channels are also currently unsupported.
+Ostrich emulates both of the Game Boy's pulse wave channels, and can play back the music from about half of the Game Boy's commercial titles. The other half require emulation of cartridge memory banking, or some of the less common LR35902 instructions, which are currently unsupported. The 4-bit wave and noise channels are also currently unsupported.
 
-Popular working titles including Tetris, Castlevania, Double Dragon, and Batman.
+Popular working titles include Tetris, Castlevania, Double Dragon, and Batman.
 
 ## Building ##
 
 Ostrich is built using Xcode. It uses [AudioKit](http://audiokit.io/), an open-source audio framework.
-Ostrich is most recently tested using Xcode 8.2.1 (Swift 3.0.2), AudioKit 3.5, and macOS 10.12.3.
+Ostrich is most recently tested using Xcode 8.3.3 (Swift 3.1), AudioKit 3.7, and macOS 10.12.5.
 Ostrich requires macOS 10.11 (El Capitan) or newer.
 
 To build Ostrich:
@@ -26,11 +26,12 @@ To build Ostrich:
 1. Install the AudioKit framework to both the gameboy and gbsplayer Xcode projects as described in [the AudioKit installation guide](https://github.com/audiokit/AudioKit/blob/master/Frameworks/INSTALL.md)
 1. Build the gameboy project
 1. Build the gbsplayer project
-1. Run the gbsplayer project
+
+Run Ostrich by running the gbsplayer project.
 
 ## Usage ##
 
-Open Ostrich and load a GBS file (typically with extension .gbs) using File -> Open.
+Run Ostrich and load a GBS file (typically with extension .gbs) using File -> Open.
 
 Playback controls are at the bottom portion of the interface. From left to right:
 

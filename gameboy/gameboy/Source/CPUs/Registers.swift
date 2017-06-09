@@ -161,7 +161,7 @@ class Pointer<T: Readable>: Readable, Writeable, OperandType where T.ReadType ==
     }
 }
 
-/// An optional 8-bit operand whose value is added to a fixed address to point to an 8-bit value to read from or
+/// A fixed address and an optional 8-bit number whose values sum to an address that's interpreted as an 8-bit value to read from or
 /// write to.
 class PseudoPointer8<T: Readable>: Readable, Writeable, OperandType where T.ReadType == UInt8 {
     let base: Address
@@ -191,6 +191,8 @@ class PseudoPointer8<T: Readable>: Readable, Writeable, OperandType where T.Read
     }
 }
 
+/// A fixed address and an optional 8-bit number whose values sum to an address that's interpreted as an 16-bit value to read from or
+/// write to.
 class PseudoPointer16<T: Readable>: Readable, Writeable, OperandType where T.ReadType == UInt8 {
     let base: Address
     let offset: T

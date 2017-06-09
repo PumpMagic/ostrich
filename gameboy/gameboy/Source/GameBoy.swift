@@ -79,7 +79,7 @@ public class GameBoy {
         let romPeripheral = ROM(data: rom, firstAddress: romStartAddress)
         self.rom = romPeripheral
         
-        // @todo this exists only on a per-cartridge basis
+        // @todo this should exist only on some cartridges
         // but we make it for everything right now
         let externalRAMPeripheral = RAM(size: 0xC000 - 0xA000, fillByte: 0x00, firstAddress: 0xA000)
         self.externalRAM = externalRAMPeripheral

@@ -11,7 +11,7 @@ import Foundation
 
 // Utility
 /// Make a `UInt16` out of two individual bytes
-func make16(high: UInt8, low: UInt8) -> UInt16 {
+public func make16(high: UInt8, low: UInt8) -> UInt16 {
     var result = UInt16(high)
     result <<= 8
     result |= UInt16(low)
@@ -24,7 +24,7 @@ func endianSwap(_ val: UInt16) -> UInt16 {
     return make16(high: low, low: high)
 }
 
-/// Returns (MSB, LSB) of a host-endian 16-bit number
+/// Return (MSB, LSB) of a host-endian 16-bit number
 func getBytes(_ val: UInt16) -> (UInt8, UInt8) {
     return (getHigh(val), getLow(val))
 }

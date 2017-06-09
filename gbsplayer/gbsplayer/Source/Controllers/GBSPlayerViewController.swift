@@ -16,24 +16,25 @@ import AudioKit
 // Good GBS files: Castlevania, Double Dragon, Tetris, Dr. Mario.
 // Iffy: Super Mario Land (track 5 barfs)
 
-let STARTUP_VOLUME = 2 // out of MAX_VOLUME
-let MAX_VOLUME = 5
+// Classwide constants
+fileprivate let STARTUP_VOLUME = 2 // should be in range [0, MAX_VOLUME]
+fileprivate let MAX_VOLUME = 5
 
-let COPYRIGHT_STRING = "©"
-let VOLUME_STRING = "VOL"
-let EMPTY_STRING = ""
-let SCROLL_SUFFIX = "   "
+fileprivate let COPYRIGHT_STRING = "©"
+fileprivate let VOLUME_STRING = "VOL"
+fileprivate let EMPTY_STRING = ""
+fileprivate let SCROLL_SUFFIX = "   "
 
-let WAVE_DISPLAY_REFRESH_PERIOD_MS = 16
-let LABEL_SCROLL_PERIOD_MS = 1000
-let LABEL_SCROLL_CHARACTERS_PER_PERIOD = 1
+fileprivate let WAVE_DISPLAY_REFRESH_PERIOD_MS = 16
+fileprivate let LABEL_SCROLL_PERIOD_MS = 1000
+fileprivate let LABEL_SCROLL_CHARACTERS_PER_PERIOD = 1
 
-let GB_FONT_POINT = 12
-let GB_FONT = NSFont(name: "GameBoy-Super-Mario-Land", size: CGFloat(GB_FONT_POINT))
+fileprivate let GB_FONT_POINT = 12
+fileprivate let GB_FONT = NSFont(name: "GameBoy-Super-Mario-Land", size: CGFloat(GB_FONT_POINT))
 
 
 
-/// Controller for the interface to our GBS player.
+/// Controller of the user interface to our GBS player.
 class GBSPlayerViewController: NSViewController {
     let player = GBSPlayer()
     var volume = STARTUP_VOLUME {

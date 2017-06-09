@@ -14,19 +14,20 @@ import gameboy
 // High on todo list: implement patch RST vectors as indicated in GBS spec 
 
 
-/// Number of nanoseconds in one 256th of a second
+/// Number of nanoseconds in one 256th of a second.
 fileprivate let NS_256HZ = 3906250
-/// Number of nanoseconds in one second
+/// Number of nanoseconds in one second.
 fileprivate let NS_PER_S = 1000000000
-/// An approximation of the Game Boy V-blank rate, in Hz
+/// An approximation of the Game Boy V-blank rate, in Hz.
 fileprivate let VBLANK_HZ = 59.7
-/// Default volume
+/// Default volume. Should be in range [0.0, 1.0].
 fileprivate let DEFAULT_VOLUME = 0.5
-/// The minimum length of time to wait for a clocker's queued events to fire before creating a new one
+/// The minimum length of time to wait for a clocker's queued events to fire before creating a new one.
 fileprivate let DESTROYED_CLOCKER_WAIT_TIME_US: useconds_t = 300000
 
 
-/// A GBS player: a Game Boy manager that loads its memory and clocks its CPU and APU according to a GBS file and user interaction.
+/// A GBS player: a Game Boy manager that loads the Game Boy's memory and clocks its CPU and APU
+/// in response to being given a GBS file and user interaction.
 class GBSPlayer {
     var gameBoy: GameBoy
     var gbsHeader: GBSHeader? // header of most recently loaded GBS file

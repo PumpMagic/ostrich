@@ -16,6 +16,7 @@ protocol DelegatesWrites: HandlesWrites {
     func connectWriteable(_ writeable: BusListener & HandlesWrites)
 }
 
+/// A data bus that connects any numbers of peripherals.
 open class DataBus: DelegatesReads, DelegatesWrites {
     //@todo consider using Intervals instead of Ranges:
     //http://oleb.net/blog/2015/09/swift-ranges-and-intervals/
@@ -79,7 +80,8 @@ open class DataBus: DelegatesReads, DelegatesWrites {
         } while elementFound
     }
     
-    //@todo duplicated code
+    //@todo the logic here is duplicated with disconnectReadable().
+    // This is because there's no common type between self.readables and self.writeables.
     open func disconnectWriteable(id: String) {
         var elementFound: Bool
         
@@ -132,7 +134,7 @@ open class DataBus: DelegatesReads, DelegatesWrites {
             return self.read(addr - 0x2000)
         }
         
-        print("FATAL: no one listening to read of address \(addr.hexString)")
+        //print("WARNING: no one listening to read of address \(addr.hexString)")
         //@todo probably shouldn't return 0
         return 0
         //exit(1)
@@ -162,7 +164,7 @@ open class DataBus: DelegatesReads, DelegatesWrites {
             return
         }
         
-        print("FATAL: no one listening to write of \(val.hexString) to address \(addr.hexString)")
+        print("WARNING: no one listening to write of \(val.hexString) to address \(addr.hexString)")
         //@todo actually exit
 //        exit(1)
     }
